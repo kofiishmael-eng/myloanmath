@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Words to Numbers Converter — Convert Written Numbers to Digits</title>
+<meta name="description" content="Turn written-out numbers like 'one thousand two hundred' back into digits instantly. Free words to numbers converter supporting decimals and negative numbers.">
+<link rel="canonical" href="https://myloanmath.com/words-to-numbers.html">
+<meta property="og:title" content="Words to Numbers Converter — Convert Written Numbers to Digits">
+<meta property="og:description" content="Turn written-out numbers like 'one thousand two hundred' back into digits instantly. Free words to numbers converter supporting decimals and negative numbers.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myloanmath.com/words-to-numbers.html">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Words to Numbers Converter", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can I type numbers with hyphens like \"thirty-four\"?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, both \"thirty-four\" and \"thirty four\" are recognized."}}, {"@type": "Question", "name": "Does it understand \"lakh\" and \"crore\"?", "acceptedAnswer": {"@type": "Answer", "text": "Yes \u2014 Indian number words like lakh and crore are recognized alongside the standard thousand/million/billion words."}}, {"@type": "Question", "name": "What happens if I type a word it doesn't recognize?", "acceptedAnswer": {"@type": "Answer", "text": "You'll get a clear error message naming the exact word it didn't understand, rather than a wrong silent answer."}}]}</script>
+
+<!-- ============================================================
+     GOOGLE ADSENSE: once your site is verified in your AdSense
+     account, paste the auto-ads script tag Google gives you here.
+     It looks like this (with YOUR publisher ID):
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+     ============================================================ -->
+</head>
+<body>
+<nav class="topnav">
+  <a class="brand" href="index.html">// myloanmath</a>
+  <div class="links">
+      <a href="index.html">Home</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="cheque-amount-in-words.html">Cheque Amount in Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+  </div>
+</nav>
+<div class="wrap">
+<div class="fallback-banner" id="fallbackBanner">Something went wrong loading the calculator engine. Open your browser's console (F12) to see the error.</div>
+<header class="page-head">
+  <div class="eyebrow">// myloanmath</div>
+  <h1>Words to Numbers Converter</h1>
+  <p class="sub">Type a number written out in words and get the digits back — the reverse of the numbers to words converter.</p>
+</header>
+
+
+<div class="card">
+  <div class="row">
+    <div class="field">
+      <label for="wordsInput">Number in words</label>
+      <input type="text" id="wordsInput" value="one thousand two hundred thirty-four point five">
+    </div>
+  </div>
+  <div class="result">
+    <div class="result-label">As digits</div>
+    <div class="result-text" id="output">-</div>
+  </div>
+  <div class="actions">
+    <button class="action" id="copyBtn" type="button">Copy</button>
+    <button class="action" id="clearBtn" type="button">Clear</button>
+  </div>
+</div>
+
+
+<div class="ad-slot"><!-- AD SLOT: below the tool. Once approved, paste your AdSense ad unit code here. --></div>
+
+
+<section class="content">
+  <h2>How to convert words to numbers</h2>
+  <p>Type a number the way you'd write it in words — "twelve thousand", "negative fifty", "one lakh" — and this words to numbers converter parses it straight back into digits. It understands "point" for decimals, "negative" or "minus" for negative numbers, and both the international (thousand/million) and Indian (lakh/crore) number word systems.</p>
+</section>
+
+
+<section class="content"><h2>Frequently asked questions</h2><div class="faq-item"><h3>Can I type numbers with hyphens like "thirty-four"?</h3><p>Yes, both "thirty-four" and "thirty four" are recognized.</p></div>
+<div class="faq-item"><h3>Does it understand "lakh" and "crore"?</h3><p>Yes — Indian number words like lakh and crore are recognized alongside the standard thousand/million/billion words.</p></div>
+<div class="faq-item"><h3>What happens if I type a word it doesn't recognize?</h3><p>You'll get a clear error message naming the exact word it didn't understand, rather than a wrong silent answer.</p></div>
+</section>
+
+<div class="related">
+  <p class="label">Related tools</p>
+  <div class="related-list">
+    <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="cheque-amount-in-words.html">Cheque Amount in Words</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+  </div>
+</div>
+
+</div>
+<footer class="site-footer">
+  <div>
+    <a href="index.html">Home</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="cheque-amount-in-words.html">Cheque Amount in Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+  </div>
+  <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
+</footer>
+<script src="numberToWords.js"></script>
+<script src="finance.js"></script>
+
+<script>
+
+(function(){
+  var mod = window.NumberToWords;
+  if (!mod) { document.getElementById('fallbackBanner').style.display='block'; return; }
+  function el(id){ return document.getElementById(id); }
+  function compute(){
+    var out = el('output');
+    try { out.textContent = String(mod.wordsToNumber(el('wordsInput').value)); out.classList.remove('error'); }
+    catch(e){ out.textContent = e.message; out.classList.add('error'); }
+  }
+  el('wordsInput').addEventListener('input', compute);
+  el('copyBtn').addEventListener('click', function(){
+    navigator.clipboard.writeText(el('output').textContent);
+    el('copyBtn').textContent='Copied'; setTimeout(function(){ el('copyBtn').textContent='Copy'; }, 1200);
+  });
+  el('clearBtn').addEventListener('click', function(){ el('wordsInput').value=''; compute(); });
+  compute();
+})();
+
+</script>
+</body>
+</html>

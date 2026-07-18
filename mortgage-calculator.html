@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mortgage Calculator — Monthly Payment Estimator (PITI)</title>
+<meta name="description" content="Estimate your monthly mortgage payment including principal, interest, property tax, insurance, and PMI. Free mortgage calculator.">
+<link rel="canonical" href="https://myloanmath.com/mortgage-calculator.html">
+<meta property="og:title" content="Mortgage Calculator — Monthly Payment Estimator (PITI)">
+<meta property="og:description" content="Estimate your monthly mortgage payment including principal, interest, property tax, insurance, and PMI. Free mortgage calculator.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myloanmath.com/mortgage-calculator.html">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Mortgage Calculator", "applicationCategory": "FinanceApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why do I have a PMI charge?", "acceptedAnswer": {"@type": "Answer", "text": "PMI applies automatically whenever your down payment is under 20% of the home price \u2014 this protects the lender and is standard practice, not a fee this calculator invented."}}, {"@type": "Question", "name": "Are the property tax and insurance numbers accurate for my area?", "acceptedAnswer": {"@type": "Answer", "text": "They start as rough placeholders. Replace them with your local property tax rate and actual insurance quote for a realistic number \u2014 these vary a lot by location."}}, {"@type": "Question", "name": "Does the interest rate here need to be an APR?", "acceptedAnswer": {"@type": "Answer", "text": "Use the note rate (the rate on your loan estimate), not the APR, since APR bakes in fees this calculator doesn't model."}}]}</script>
+
+<!-- ============================================================
+     GOOGLE ADSENSE: once your site is verified in your AdSense
+     account, paste the auto-ads script tag Google gives you here.
+     It looks like this (with YOUR publisher ID):
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+     ============================================================ -->
+</head>
+<body>
+<nav class="topnav">
+  <a class="brand" href="index.html">// myloanmath</a>
+  <div class="links">
+      <a href="index.html">Home</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="cheque-amount-in-words.html">Cheque Amount in Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+  </div>
+</nav>
+<div class="wrap">
+<div class="fallback-banner" id="fallbackBanner">Something went wrong loading the calculator engine. Open your browser's console (F12) to see the error.</div>
+<header class="page-head">
+  <div class="eyebrow">// myloanmath</div>
+  <h1>Mortgage Calculator</h1>
+  <p class="sub">Estimate your full monthly mortgage payment — principal, interest, property tax, insurance, and PMI if your down payment is under 20%.</p>
+</header>
+
+
+<div class="card">
+  <div class="row">
+    <div class="field"><label for="homePrice">Home price</label><input type="text" id="homePrice" value="300000" inputmode="decimal"></div>
+    <div class="field"><label for="downPayment">Down payment</label><input type="text" id="downPayment" value="60000" inputmode="decimal"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="mortgageRate">Annual interest rate (%)</label><input type="text" id="mortgageRate" value="6" inputmode="decimal"></div>
+    <div class="field"><label for="mortgageTerm">Loan term (years)</label><input type="text" id="mortgageTerm" value="30" inputmode="decimal"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="propertyTax">Property tax (% of home value / year)</label><input type="text" id="propertyTax" value="1.1" inputmode="decimal"></div>
+    <div class="field"><label for="homeInsurance">Home insurance ($ / year)</label><input type="text" id="homeInsurance" value="1500" inputmode="decimal"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="hoaFee">HOA dues ($ / month)</label><input type="text" id="hoaFee" value="0" inputmode="decimal"></div>
+  </div>
+  <div class="result">
+    <div class="result-label">Estimated total monthly payment</div>
+    <div class="result-text" id="mortgageOutput">-</div>
+    <div class="stat-grid" id="mortgageStats"></div>
+  </div>
+  <p class="note">Property tax and insurance defaults are rough national-average placeholders — replace them with your actual local rates for an accurate estimate.</p>
+</div>
+
+
+<div class="ad-slot"><!-- AD SLOT: below the tool. Once approved, paste your AdSense ad unit code here. --></div>
+
+
+<section class="content">
+  <h2>What's included in this mortgage payment estimate</h2>
+  <p>This mortgage calculator estimates your full monthly payment using the standard "PITI" breakdown lenders use: Principal &amp; Interest, property Taxes, home Insurance, and — if your down payment is under 20% of the home price — Private Mortgage Insurance (PMI). PMI is not charged once you've put down 20% or more, matching standard US lending practice.</p>
+</section>
+
+
+<section class="content"><h2>Frequently asked questions</h2><div class="faq-item"><h3>Why do I have a PMI charge?</h3><p>PMI applies automatically whenever your down payment is under 20% of the home price — this protects the lender and is standard practice, not a fee this calculator invented.</p></div>
+<div class="faq-item"><h3>Are the property tax and insurance numbers accurate for my area?</h3><p>They start as rough placeholders. Replace them with your local property tax rate and actual insurance quote for a realistic number — these vary a lot by location.</p></div>
+<div class="faq-item"><h3>Does the interest rate here need to be an APR?</h3><p>Use the note rate (the rate on your loan estimate), not the APR, since APR bakes in fees this calculator doesn't model.</p></div>
+</section>
+
+<div class="related">
+  <p class="label">Related tools</p>
+  <div class="related-list">
+    <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+  </div>
+</div>
+
+</div>
+<footer class="site-footer">
+  <div>
+    <a href="index.html">Home</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="cheque-amount-in-words.html">Cheque Amount in Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+  </div>
+  <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
+</footer>
+<script src="numberToWords.js"></script>
+<script src="finance.js"></script>
+
+<script>
+
+(function(){
+  var mod = window.FinanceTools;
+  if (!mod) { document.getElementById('fallbackBanner').style.display='block'; return; }
+  function el(id){ return document.getElementById(id); }
+  function fmtMoney(n){ return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function parseNum(str){ var s=String(str).trim().replace(/,/g,''); if(!/^-?\d+(\.\d+)?$/.test(s)) return NaN; return parseFloat(s); }
+  function compute(){
+    var out = el('mortgageOutput'); var stats = el('mortgageStats');
+    try {
+      var homePrice = parseNum(el('homePrice').value);
+      var downPayment = parseNum(el('downPayment').value);
+      var rate = parseNum(el('mortgageRate').value);
+      var term = parseNum(el('mortgageTerm').value);
+      var tax = parseNum(el('propertyTax').value);
+      var insurance = parseNum(el('homeInsurance').value);
+      var hoa = parseNum(el('hoaFee').value);
+      if ([homePrice, downPayment, rate, term, tax, insurance, hoa].some(isNaN)) throw new Error('Enter valid numbers in every field.');
+      var r = mod.calculateMortgage({ homePrice: homePrice, downPayment: downPayment, annualRatePercent: rate, termYears: term, propertyTaxAnnualPercent: tax, homeInsuranceAnnual: insurance, hoaMonthly: hoa });
+      out.textContent = fmtMoney(r.totalMonthly) + ' / month'; out.classList.remove('error');
+      stats.innerHTML =
+        '<div class="stat"><div class="stat-label">Principal &amp; interest</div><div class="stat-value">' + fmtMoney(r.principalAndInterest) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Property tax</div><div class="stat-value">' + fmtMoney(r.propertyTaxMonthly) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Home insurance</div><div class="stat-value">' + fmtMoney(r.insuranceMonthly) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">PMI</div><div class="stat-value">' + fmtMoney(r.pmiMonthly) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">HOA</div><div class="stat-value">' + fmtMoney(r.hoaMonthly) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Down payment</div><div class="stat-value">' + r.downPaymentPercent + '%</div></div>';
+    } catch(e) { out.textContent = e.message; out.classList.add('error'); stats.innerHTML=''; }
+  }
+  ['homePrice','downPayment','mortgageRate','mortgageTerm','propertyTax','homeInsurance','hoaFee'].forEach(function(id){
+    el(id).addEventListener('input', compute);
+  });
+  compute();
+})();
+
+</script>
+</body>
+</html>

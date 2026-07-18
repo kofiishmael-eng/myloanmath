@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Numbers to Words Converter — Free Online Tool</title>
+<meta name="description" content="Convert any number into words instantly. Free numbers to words converter supporting US, UK, and Indian (Lakh/Crore) numbering systems, decimals, and negative numbers.">
+<link rel="canonical" href="https://myloanmath.com/numbers-to-words.html">
+<meta property="og:title" content="Numbers to Words Converter — Free Online Tool">
+<meta property="og:description" content="Convert any number into words instantly. Free numbers to words converter supporting US, UK, and Indian (Lakh/Crore) numbering systems, decimals, and negative numbers.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myloanmath.com/numbers-to-words.html">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Numbers to Words Converter", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is a number to words converter used for?", "acceptedAnswer": {"@type": "Answer", "text": "It's used any time you need a number written out in full \u2014 legal documents, cheques, contracts, invoices, and forms that require the amount spelled out rather than shown as digits."}}, {"@type": "Question", "name": "Does it support the Indian numbering system?", "acceptedAnswer": {"@type": "Answer", "text": "Yes \u2014 turn on \"Indian numbering\" to get lakh and crore groupings (e.g. 10,00,000 as \"Ten Lakh\") instead of the international thousand/million/billion groupings."}}, {"@type": "Question", "name": "Can it convert decimals and negative numbers?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Decimals are read digit-by-digit after \"point\" (e.g. 12.5 becomes \"Twelve Point Five\"), and negative numbers are prefixed with \"Negative\"."}}]}</script>
+
+<!-- ============================================================
+     GOOGLE ADSENSE: once your site is verified in your AdSense
+     account, paste the auto-ads script tag Google gives you here.
+     It looks like this (with YOUR publisher ID):
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+     ============================================================ -->
+</head>
+<body>
+<nav class="topnav">
+  <a class="brand" href="index.html">// myloanmath</a>
+  <div class="links">
+      <a href="index.html">Home</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="cheque-amount-in-words.html">Cheque Amount in Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+  </div>
+</nav>
+<div class="wrap">
+<div class="fallback-banner" id="fallbackBanner">Something went wrong loading the calculator engine. Open your browser's console (F12) to see the error.</div>
+<header class="page-head">
+  <div class="eyebrow">// myloanmath</div>
+  <h1>Numbers to Words Converter</h1>
+  <p class="sub">Type any number and instantly see it spelled out in plain English — including decimals, negative numbers, and both the international and Indian numbering systems.</p>
+</header>
+
+
+<div class="card">
+  <div class="row">
+    <div class="field">
+      <label for="amount">Number</label>
+      <input type="text" id="amount" value="1234.5" inputmode="decimal">
+    </div>
+  </div>
+  <div class="opts">
+    <label class="opt"><input type="checkbox" id="indianSystem"> Indian numbering (Lakh / Crore)</label>
+    <label class="opt"><input type="checkbox" id="includeAnd"> British "and" (one hundred <em>and</em> twenty)</label>
+  </div>
+  <div class="result">
+    <div class="result-label">In words</div>
+    <div class="result-text" id="output">-</div>
+  </div>
+  <div class="actions">
+    <button class="action" id="copyBtn" type="button">Copy</button>
+    <button class="action" id="clearBtn" type="button">Clear</button>
+  </div>
+</div>
+
+
+<div class="ad-slot"><!-- AD SLOT: below the tool. Once approved, paste your AdSense ad unit code here. --></div>
+
+
+<section class="content">
+  <h2>How to convert a number to words</h2>
+  <p>Type a number into the box above — whole numbers, decimals, and negative numbers all work. This number to words converter reads it back the way you'd say it out loud or write it on a form: "one thousand two hundred thirty-four" instead of "1234". It supports both the international system (thousand, million, billion) and the Indian numbering system (lakh, crore), so it works whether you're writing a Western-style document or an Indian bank form.</p>
+</section>
+
+
+<section class="content"><h2>Frequently asked questions</h2><div class="faq-item"><h3>What is a number to words converter used for?</h3><p>It's used any time you need a number written out in full — legal documents, cheques, contracts, invoices, and forms that require the amount spelled out rather than shown as digits.</p></div>
+<div class="faq-item"><h3>Does it support the Indian numbering system?</h3><p>Yes — turn on "Indian numbering" to get lakh and crore groupings (e.g. 10,00,000 as "Ten Lakh") instead of the international thousand/million/billion groupings.</p></div>
+<div class="faq-item"><h3>Can it convert decimals and negative numbers?</h3><p>Yes. Decimals are read digit-by-digit after "point" (e.g. 12.5 becomes "Twelve Point Five"), and negative numbers are prefixed with "Negative".</p></div>
+</section>
+
+<div class="related">
+  <p class="label">Related tools</p>
+  <div class="related-list">
+    <a href="cheque-amount-in-words.html">Cheque Amount in Words</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+  </div>
+</div>
+
+</div>
+<footer class="site-footer">
+  <div>
+    <a href="index.html">Home</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="cheque-amount-in-words.html">Cheque Amount in Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+  </div>
+  <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
+</footer>
+<script src="numberToWords.js"></script>
+<script src="finance.js"></script>
+
+<script>
+
+(function(){
+  var mod = window.NumberToWords;
+  if (!mod) { document.getElementById('fallbackBanner').style.display='block'; return; }
+  function el(id){ return document.getElementById(id); }
+  function compute(){
+    var out = el('output');
+    try {
+      var result = mod.numberToWords(el('amount').value, {
+        system: el('indianSystem').checked ? 'indian' : 'international',
+        includeAnd: el('includeAnd').checked
+      });
+      out.textContent = result; out.classList.remove('error');
+    } catch(e){ out.textContent = e.message; out.classList.add('error'); }
+  }
+  ['amount'].forEach(function(id){ el(id).addEventListener('input', compute); });
+  ['indianSystem','includeAnd'].forEach(function(id){ el(id).addEventListener('change', compute); });
+  el('copyBtn').addEventListener('click', function(){
+    navigator.clipboard.writeText(el('output').textContent);
+    el('copyBtn').textContent='Copied'; setTimeout(function(){ el('copyBtn').textContent='Copy'; }, 1200);
+  });
+  el('clearBtn').addEventListener('click', function(){ el('amount').value=''; compute(); });
+  compute();
+})();
+
+</script>
+</body>
+</html>

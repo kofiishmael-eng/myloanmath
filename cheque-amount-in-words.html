@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheque Amount in Words Converter — Free & Instant</title>
+<meta name="description" content="Convert any cheque amount into the exact wording banks require, with the standard fraction format and 'Only'. Free, instant, works for 65+ currencies.">
+<link rel="canonical" href="https://myloanmath.com/cheque-amount-in-words.html">
+<meta property="og:title" content="Cheque Amount in Words Converter — Free & Instant">
+<meta property="og:description" content="Convert any cheque amount into the exact wording banks require, with the standard fraction format and 'Only'. Free, instant, works for 65+ currencies.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myloanmath.com/cheque-amount-in-words.html">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Cheque Amount in Words Converter", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why does it show \"50/100\" instead of spelling out the cents?", "acceptedAnswer": {"@type": "Answer", "text": "That's the actual banking convention \u2014 cents appear as a fraction of the currency's smallest unit, not spelled out in words, unlike a legal contract amount."}}, {"@type": "Question", "name": "Why does it say \"00/100\" even when there are no cents?", "acceptedAnswer": {"@type": "Answer", "text": "This is a real anti-fraud standard, not a formatting quirk \u2014 leaving it blank would make the cheque easier to alter."}}, {"@type": "Question", "name": "Can I use this for currencies other than US Dollars?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, all 65+ supported currencies work, including ones with 3 decimal places like the Kuwaiti Dinar, which correctly shows a fraction out of 1000."}}]}</script>
+
+<!-- ============================================================
+     GOOGLE ADSENSE: once your site is verified in your AdSense
+     account, paste the auto-ads script tag Google gives you here.
+     It looks like this (with YOUR publisher ID):
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+     ============================================================ -->
+</head>
+<body>
+<nav class="topnav">
+  <a class="brand" href="index.html">// myloanmath</a>
+  <div class="links">
+      <a href="index.html">Home</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+  </div>
+</nav>
+<div class="wrap">
+<div class="fallback-banner" id="fallbackBanner">Something went wrong loading the calculator engine. Open your browser's console (F12) to see the error.</div>
+<header class="page-head">
+  <div class="eyebrow">// myloanmath</div>
+  <h1>Cheque Amount in Words Converter</h1>
+  <p class="sub">Type the amount, get the exact wording your bank expects — with the standard fraction and 'Only' that prevents alteration.</p>
+</header>
+
+
+<div class="card">
+  <div class="row">
+    <div class="field">
+      <label for="amount">Cheque amount</label>
+      <input type="text" id="amount" value="1234.50" inputmode="decimal">
+    </div>
+    <div class="field" style="max-width:220px;">
+      <label for="currency">Currency</label>
+      <select id="currency"></select>
+    </div>
+  </div>
+  <div class="opts">
+    <label class="opt"><input type="checkbox" id="appendOnly" checked> Append "Only"</label>
+    <label class="opt"><input type="checkbox" id="indianSystem"> Indian numbering (Lakh / Crore)</label>
+  </div>
+  <div class="result">
+    <div class="result-label">Write this on the cheque</div>
+    <div class="result-text" id="output">-</div>
+  </div>
+  <div class="actions">
+    <button class="action" id="copyBtn" type="button">Copy</button>
+    <button class="action" id="clearBtn" type="button">Clear</button>
+  </div>
+  <p class="note" id="currencyNote"></p>
+</div>
+
+
+<div class="ad-slot"><!-- AD SLOT: below the tool. Once approved, paste your AdSense ad unit code here. --></div>
+
+
+<section class="content">
+  <h2>How to write a cheque amount in words</h2>
+  <p>Banks require the amount written in words as a fraud-prevention check against the numeric amount box. The standard format spells out the whole-unit amount, then shows cents (or the relevant subunit) as a fraction — "One Thousand Two Hundred Thirty-Four and 50/100 Dollars Only" — with "Only" at the end so nothing can be added after your writing.</p>
+</section>
+
+
+<section class="content"><h2>Frequently asked questions</h2><div class="faq-item"><h3>Why does it show "50/100" instead of spelling out the cents?</h3><p>That's the actual banking convention — cents appear as a fraction of the currency's smallest unit, not spelled out in words, unlike a legal contract amount.</p></div>
+<div class="faq-item"><h3>Why does it say "00/100" even when there are no cents?</h3><p>This is a real anti-fraud standard, not a formatting quirk — leaving it blank would make the cheque easier to alter.</p></div>
+<div class="faq-item"><h3>Can I use this for currencies other than US Dollars?</h3><p>Yes, all 65+ supported currencies work, including ones with 3 decimal places like the Kuwaiti Dinar, which correctly shows a fraction out of 1000.</p></div>
+</section>
+
+<div class="related">
+  <p class="label">Related tools</p>
+  <div class="related-list">
+    <a href="currency-to-words.html">Currency to Words</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+  </div>
+</div>
+
+</div>
+<footer class="site-footer">
+  <div>
+    <a href="index.html">Home</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+  </div>
+  <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
+</footer>
+<script src="numberToWords.js"></script>
+<script src="finance.js"></script>
+
+<script>
+
+(function(){
+  var mod = window.NumberToWords;
+  if (!mod) { document.getElementById('fallbackBanner').style.display='block'; return; }
+  function el(id){ return document.getElementById(id); }
+  var select = el('currency');
+  mod.listCurrencies().forEach(function(code){
+    var opt = document.createElement('option');
+    opt.value = code; opt.textContent = code + ' - ' + mod.CURRENCIES[code].majorPlural;
+    if (code === 'USD') opt.selected = true;
+    select.appendChild(opt);
+  });
+  function compute(){
+    var out = el('output'); var note = el('currencyNote');
+    try {
+      var result = mod.chequeAmountToWords(el('amount').value, el('currency').value, {
+        system: el('indianSystem').checked ? 'indian' : 'international',
+        appendOnly: el('appendOnly').checked
+      });
+      out.textContent = result; out.classList.remove('error');
+      var c = mod.CURRENCIES[el('currency').value];
+      note.textContent = c.decimals === 0 ? 'This currency has no minor unit, so no fraction is shown.' :
+        (c.decimals === 3 ? 'This currency uses 3 decimal places, so the fraction is out of 1000, not 100.' : '');
+    } catch(e){ out.textContent = e.message; out.classList.add('error'); note.textContent=''; }
+  }
+  ['amount','currency'].forEach(function(id){ el(id).addEventListener('input', compute); el(id).addEventListener('change', compute); });
+  ['appendOnly','indianSystem'].forEach(function(id){ el(id).addEventListener('change', compute); });
+  el('copyBtn').addEventListener('click', function(){
+    navigator.clipboard.writeText(el('output').textContent);
+    el('copyBtn').textContent='Copied'; setTimeout(function(){ el('copyBtn').textContent='Copy'; }, 1200);
+  });
+  el('clearBtn').addEventListener('click', function(){ el('amount').value=''; compute(); });
+  compute();
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loan Calculator — Free Monthly Payment Calculator</title>
+<meta name="description" content="Calculate your monthly loan payment, total interest, and total cost instantly. Free loan calculator with yearly amortization breakdown.">
+<link rel="canonical" href="https://myloanmath.com/loan-calculator.html">
+<meta property="og:title" content="Loan Calculator — Free Monthly Payment Calculator">
+<meta property="og:description" content="Calculate your monthly loan payment, total interest, and total cost instantly. Free loan calculator with yearly amortization breakdown.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myloanmath.com/loan-calculator.html">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Loan Calculator", "applicationCategory": "FinanceApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How is my monthly loan payment calculated?", "acceptedAnswer": {"@type": "Answer", "text": "Using the standard fixed-rate amortization formula, based on your loan amount, annual interest rate, and term. The same math banks and lenders use."}}, {"@type": "Question", "name": "Why does the yearly breakdown show more interest in early years?", "acceptedAnswer": {"@type": "Answer", "text": "Amortized loans front-load interest \u2014 in the first year you owe interest on nearly the full balance, so more of each payment goes to interest. As the balance shrinks, more of each payment goes to principal."}}, {"@type": "Question", "name": "Does this work for 0% interest loans?", "acceptedAnswer": {"@type": "Answer", "text": "Yes \u2014 it's handled as a special case, since the general loan formula is mathematically undefined at exactly 0% interest."}}]}</script>
+
+<!-- ============================================================
+     GOOGLE ADSENSE: once your site is verified in your AdSense
+     account, paste the auto-ads script tag Google gives you here.
+     It looks like this (with YOUR publisher ID):
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+     ============================================================ -->
+</head>
+<body>
+<nav class="topnav">
+  <a class="brand" href="index.html">// myloanmath</a>
+  <div class="links">
+      <a href="index.html">Home</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="cheque-amount-in-words.html">Cheque Amount in Words</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+  </div>
+</nav>
+<div class="wrap">
+<div class="fallback-banner" id="fallbackBanner">Something went wrong loading the calculator engine. Open your browser's console (F12) to see the error.</div>
+<header class="page-head">
+  <div class="eyebrow">// myloanmath</div>
+  <h1>Loan Calculator</h1>
+  <p class="sub">Find your monthly payment, total interest, and total cost for any fixed-rate loan.</p>
+</header>
+
+
+<div class="card">
+  <div class="row">
+    <div class="field"><label for="loanPrincipal">Loan amount</label><input type="text" id="loanPrincipal" value="200000" inputmode="decimal"></div>
+    <div class="field"><label for="loanRate">Annual interest rate (%)</label><input type="text" id="loanRate" value="6" inputmode="decimal"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="loanTermValue">Loan term</label><input type="text" id="loanTermValue" value="30" inputmode="decimal"></div>
+    <div class="field" style="max-width:160px;"><label for="loanTermUnit">Term unit</label>
+      <select id="loanTermUnit"><option value="years" selected>Years</option><option value="months">Months</option></select>
+    </div>
+  </div>
+  <div class="result">
+    <div class="result-label">Monthly payment</div>
+    <div class="result-text" id="loanOutput">-</div>
+    <div class="stat-grid" id="loanStats"></div>
+  </div>
+  <div class="actions"><button class="action" id="loanScheduleBtn" type="button">Show yearly breakdown</button></div>
+  <div class="schedule-wrap" id="scheduleWrap" style="display:none;"><table class="schedule-table" id="scheduleTable"></table></div>
+  <p class="note">Uses the standard amortization formula. The final year's numbers may differ by a few cents from a pure formula calculation because real lenders round each monthly payment, and this calculator does too.</p>
+</div>
+
+
+<div class="ad-slot"><!-- AD SLOT: below the tool. Once approved, paste your AdSense ad unit code here. --></div>
+
+
+<section class="content">
+  <h2>How this loan payment calculator works</h2>
+  <p>This loan calculator uses the standard amortization formula lenders use to compute a fixed monthly payment: M = P × r(1+r)^n / ((1+r)^n − 1), where P is the loan amount, r is the monthly interest rate, and n is the number of payments. It correctly handles 0% interest loans as a special case, since the standard formula breaks down mathematically at exactly zero interest.</p>
+</section>
+
+
+<section class="content"><h2>Frequently asked questions</h2><div class="faq-item"><h3>How is my monthly loan payment calculated?</h3><p>Using the standard fixed-rate amortization formula, based on your loan amount, annual interest rate, and term. The same math banks and lenders use.</p></div>
+<div class="faq-item"><h3>Why does the yearly breakdown show more interest in early years?</h3><p>Amortized loans front-load interest — in the first year you owe interest on nearly the full balance, so more of each payment goes to interest. As the balance shrinks, more of each payment goes to principal.</p></div>
+<div class="faq-item"><h3>Does this work for 0% interest loans?</h3><p>Yes — it's handled as a special case, since the general loan formula is mathematically undefined at exactly 0% interest.</p></div>
+</section>
+
+<div class="related">
+  <p class="label">Related tools</p>
+  <div class="related-list">
+    <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+  </div>
+</div>
+
+</div>
+<footer class="site-footer">
+  <div>
+    <a href="index.html">Home</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="cheque-amount-in-words.html">Cheque Amount in Words</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+  </div>
+  <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
+</footer>
+<script src="numberToWords.js"></script>
+<script src="finance.js"></script>
+
+<script>
+
+(function(){
+  var mod = window.FinanceTools;
+  if (!mod) { document.getElementById('fallbackBanner').style.display='block'; return; }
+  function el(id){ return document.getElementById(id); }
+  function fmtMoney(n){ return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function parseNum(str){ var s=String(str).trim().replace(/,/g,''); if(!/^-?\d+(\.\d+)?$/.test(s)) return NaN; return parseFloat(s); }
+  var scheduleVisible = false;
+  function compute(){
+    var principal = parseNum(el('loanPrincipal').value);
+    var rate = parseNum(el('loanRate').value);
+    var termValue = parseNum(el('loanTermValue').value);
+    var unit = el('loanTermUnit').value;
+    var termMonths = unit === 'years' ? termValue*12 : termValue;
+    var out = el('loanOutput'); var stats = el('loanStats');
+    try {
+      if (isNaN(principal) || isNaN(rate) || isNaN(termValue)) throw new Error('Enter valid numbers for loan amount, rate, and term.');
+      var result = mod.calculateLoan({ principal: principal, annualRatePercent: rate, termMonths: termMonths });
+      out.textContent = fmtMoney(result.monthlyPayment) + ' / month';
+      out.classList.remove('error');
+      stats.innerHTML =
+        '<div class="stat"><div class="stat-label">Total paid</div><div class="stat-value">' + fmtMoney(result.totalPayment) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Total interest</div><div class="stat-value">' + fmtMoney(result.totalInterest) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Number of payments</div><div class="stat-value">' + result.numberOfPayments + '</div></div>';
+      if (scheduleVisible) renderSchedule(principal, rate, termMonths);
+    } catch(e) {
+      out.textContent = e.message; out.classList.add('error'); stats.innerHTML='';
+      el('scheduleWrap').style.display='none'; scheduleVisible=false;
+    }
+  }
+  function renderSchedule(principal, rate, termMonths){
+    var years = mod.amortizationScheduleByYear({ principal: principal, annualRatePercent: rate, termMonths: termMonths });
+    var rows = '<tr><th>Year</th><th>Principal paid</th><th>Interest paid</th><th>Remaining balance</th></tr>';
+    years.forEach(function(y){ rows += '<tr><td>'+y.year+'</td><td>'+fmtMoney(y.principalPaid)+'</td><td>'+fmtMoney(y.interestPaid)+'</td><td>'+fmtMoney(y.remainingBalance)+'</td></tr>'; });
+    el('scheduleTable').innerHTML = rows; el('scheduleWrap').style.display='block';
+  }
+  ['loanPrincipal','loanRate','loanTermValue','loanTermUnit'].forEach(function(id){ el(id).addEventListener('input', compute); el(id).addEventListener('change', compute); });
+  el('loanScheduleBtn').addEventListener('click', function(){
+    scheduleVisible = !scheduleVisible;
+    el('loanScheduleBtn').textContent = scheduleVisible ? 'Hide yearly breakdown' : 'Show yearly breakdown';
+    compute();
+  });
+  compute();
+})();
+
+</script>
+</body>
+</html>

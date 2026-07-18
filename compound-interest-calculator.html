@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compound Interest Calculator — With Monthly Contributions</title>
+<meta name="description" content="Calculate how your savings or investments grow over time with compound interest, including optional monthly contributions. Free compound interest calculator.">
+<link rel="canonical" href="https://myloanmath.com/compound-interest-calculator.html">
+<meta property="og:title" content="Compound Interest Calculator — With Monthly Contributions">
+<meta property="og:description" content="Calculate how your savings or investments grow over time with compound interest, including optional monthly contributions. Free compound interest calculator.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myloanmath.com/compound-interest-calculator.html">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Compound Interest Calculator", "applicationCategory": "FinanceApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does adding monthly contributions actually make a big difference?", "acceptedAnswer": {"@type": "Answer", "text": "Often more than the starting amount does over long time horizons \u2014 consistent contributions compound alongside your principal. Try comparing the result with and without a contribution to see the gap."}}, {"@type": "Question", "name": "What compounding frequency should I choose?", "acceptedAnswer": {"@type": "Answer", "text": "Match what your actual account uses \u2014 most savings accounts and investment accounts compound daily or monthly. Annual compounding is mostly for simple illustrative comparisons."}}, {"@type": "Question", "name": "Is this the same as an investment return calculator?", "acceptedAnswer": {"@type": "Answer", "text": "Conceptually yes \u2014 this models any growth process where interest is calculated on an increasing balance, which covers both savings accounts and investment growth."}}]}</script>
+
+<!-- ============================================================
+     GOOGLE ADSENSE: once your site is verified in your AdSense
+     account, paste the auto-ads script tag Google gives you here.
+     It looks like this (with YOUR publisher ID):
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+     ============================================================ -->
+</head>
+<body>
+<nav class="topnav">
+  <a class="brand" href="index.html">// myloanmath</a>
+  <div class="links">
+      <a href="index.html">Home</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="cheque-amount-in-words.html">Cheque Amount in Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+  </div>
+</nav>
+<div class="wrap">
+<div class="fallback-banner" id="fallbackBanner">Something went wrong loading the calculator engine. Open your browser's console (F12) to see the error.</div>
+<header class="page-head">
+  <div class="eyebrow">// myloanmath</div>
+  <h1>Compound Interest Calculator</h1>
+  <p class="sub">See how a starting amount — plus optional monthly contributions — grows over time with compound interest.</p>
+</header>
+
+
+<div class="card">
+  <div class="row">
+    <div class="field"><label for="ciPrincipal">Starting amount</label><input type="text" id="ciPrincipal" value="10000" inputmode="decimal"></div>
+    <div class="field"><label for="ciRate">Annual interest rate (%)</label><input type="text" id="ciRate" value="5" inputmode="decimal"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="ciYears">Time period (years)</label><input type="text" id="ciYears" value="10" inputmode="decimal"></div>
+    <div class="field" style="max-width:200px;"><label for="ciCompounds">Compounding frequency</label>
+      <select id="ciCompounds">
+        <option value="12" selected>Monthly</option>
+        <option value="4">Quarterly</option>
+        <option value="1">Annually</option>
+        <option value="365">Daily</option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="ciContribution">Monthly contribution (optional)</label><input type="text" id="ciContribution" value="0" inputmode="decimal"></div>
+  </div>
+  <div class="result">
+    <div class="result-label">Future value</div>
+    <div class="result-text" id="ciOutput">-</div>
+    <div class="stat-grid" id="ciStats"></div>
+  </div>
+</div>
+
+
+<div class="ad-slot"><!-- AD SLOT: below the tool. Once approved, paste your AdSense ad unit code here. --></div>
+
+
+<section class="content">
+  <h2>How compound interest is calculated here</h2>
+  <p>This calculator uses the standard compound interest formula A = P(1 + r/n)^(nt) for your starting amount, plus the future-value-of-an-annuity formula for any regular monthly contributions you add on top. More frequent compounding (daily vs. annually) produces a slightly higher return at the same stated interest rate — that's why the compounding frequency option matters.</p>
+</section>
+
+
+<section class="content"><h2>Frequently asked questions</h2><div class="faq-item"><h3>Does adding monthly contributions actually make a big difference?</h3><p>Often more than the starting amount does over long time horizons — consistent contributions compound alongside your principal. Try comparing the result with and without a contribution to see the gap.</p></div>
+<div class="faq-item"><h3>What compounding frequency should I choose?</h3><p>Match what your actual account uses — most savings accounts and investment accounts compound daily or monthly. Annual compounding is mostly for simple illustrative comparisons.</p></div>
+<div class="faq-item"><h3>Is this the same as an investment return calculator?</h3><p>Conceptually yes — this models any growth process where interest is calculated on an increasing balance, which covers both savings accounts and investment growth.</p></div>
+</section>
+
+<div class="related">
+  <p class="label">Related tools</p>
+  <div class="related-list">
+    <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+  </div>
+</div>
+
+</div>
+<footer class="site-footer">
+  <div>
+    <a href="index.html">Home</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="cheque-amount-in-words.html">Cheque Amount in Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+  </div>
+  <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
+</footer>
+<script src="numberToWords.js"></script>
+<script src="finance.js"></script>
+
+<script>
+
+(function(){
+  var mod = window.FinanceTools;
+  if (!mod) { document.getElementById('fallbackBanner').style.display='block'; return; }
+  function el(id){ return document.getElementById(id); }
+  function fmtMoney(n){ return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function parseNum(str){ var s=String(str).trim().replace(/,/g,''); if(!/^-?\d+(\.\d+)?$/.test(s)) return NaN; return parseFloat(s); }
+  function compute(){
+    var out = el('ciOutput'); var stats = el('ciStats');
+    try {
+      var principal = parseNum(el('ciPrincipal').value);
+      var rate = parseNum(el('ciRate').value);
+      var years = parseNum(el('ciYears').value);
+      var compounds = parseNum(el('ciCompounds').value);
+      var contribution = parseNum(el('ciContribution').value);
+      if ([principal, rate, years, compounds, contribution].some(isNaN)) throw new Error('Enter valid numbers in every field.');
+      var r = mod.compoundInterest({ principal: principal, annualRatePercent: rate, years: years, compoundsPerYear: compounds, monthlyContribution: contribution });
+      out.textContent = fmtMoney(r.futureValue); out.classList.remove('error');
+      stats.innerHTML =
+        '<div class="stat"><div class="stat-label">Total contributed</div><div class="stat-value">' + fmtMoney(r.totalContributed) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Interest earned</div><div class="stat-value">' + fmtMoney(r.totalInterestEarned) + '</div></div>';
+    } catch(e) { out.textContent = e.message; out.classList.add('error'); stats.innerHTML=''; }
+  }
+  ['ciPrincipal','ciRate','ciYears','ciCompounds','ciContribution'].forEach(function(id){
+    el(id).addEventListener('input', compute); el(id).addEventListener('change', compute);
+  });
+  compute();
+})();
+
+</script>
+</body>
+</html>
