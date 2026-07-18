@@ -1,4 +1,1 @@
-# Replace pub-0000000000000000 below with YOUR real AdSense publisher ID.
-# You'll find the exact line to paste here inside your AdSense account
-# under Sites > (your site) > ads.txt snippet.
-google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
+google.com, pub-9412143347948347, DIRECT, f08c47fec0942fa0
