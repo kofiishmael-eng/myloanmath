@@ -84,6 +84,13 @@ section.content p{color:var(--ink-soft);font-size:15px;}
 .skip-link{position:absolute;left:-9999px;top:0;background:var(--accent);color:#fff;padding:10px 16px;border-radius:0 0 8px 0;z-index:1000;text-decoration:none;font-size:14px;}
 .skip-link:focus{left:0;}
 
+.brand-logo{width:22px;height:22px;vertical-align:-6px;margin-right:6px;border-radius:5px;}
+
+.tip-box{display:flex;gap:12px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;padding:14px 16px;margin:18px 0;}
+.tip-box .tip-icon{font-size:20px;flex-shrink:0;line-height:1;}
+.tip-box .tip-label{font-weight:600;font-size:13px;color:var(--accent);display:block;margin-bottom:3px;}
+.tip-box p{margin:0;font-size:13.5px;color:var(--ink-soft);}
+
 footer.site-footer{margin-top:40px;padding:24px 20px;border-top:1px solid var(--line);font-size:12px;color:var(--ink-soft);text-align:center;}
 footer.site-footer a{color:var(--ink-soft);margin:0 6px;}
 
