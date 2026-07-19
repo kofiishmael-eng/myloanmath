@@ -10,6 +10,11 @@
 <meta property="og:description" content="Estimate your 2026 Canadian federal income tax using current CRA tax brackets and the Basic Personal Amount. Free CRA tax calculator.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://myloanmath.com/canada-tax-calculator.html">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta property="og:image" content="https://myloanmath.com/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myloanmath.com/assets/og-image.png">
+<link rel="preconnect" href="https://pagead2.googlesyndication.com">
 <link rel="stylesheet" href="style.css">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Canada Federal Income Tax Calculator (CRA)", "applicationCategory": "FinanceApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why is the Basic Personal Amount a credit and not a deduction?", "acceptedAnswer": {"@type": "Answer", "text": "That's how the CRA structures it \u2014 the BPA is multiplied by the lowest federal tax rate (14%) to produce a credit amount, which is then subtracted directly from your tax bill, rather than being subtracted from your income before tax is calculated."}}, {"@type": "Question", "name": "Does this include provincial tax?", "acceptedAnswer": {"@type": "Answer", "text": "No \u2014 this calculator covers CRA federal tax only. Provincial or territorial tax is calculated separately and added on top, and rates vary significantly by province."}}, {"@type": "Question", "name": "Why did my Basic Personal Amount show as less than $16,452?", "acceptedAnswer": {"@type": "Answer", "text": "The BPA phases out for higher earners \u2014 between $181,440 and $258,482 of taxable income, it gradually shrinks from $16,452 down to a minimum of $14,829. Above $258,482, the minimum amount applies."}}, {"@type": "Question", "name": "What income counts toward the tax brackets?", "acceptedAnswer": {"@type": "Answer", "text": "Taxable income \u2014 your gross income minus any deductions you're claiming, such as RRSP contributions. Enter those in the \"additional deductions\" field."}}]}</script>
@@ -23,6 +28,7 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9412143347948347" crossorigin="anonymous"></script>
 </head>
 <body>
+<a href="#main-heading" class="skip-link">Skip to content</a>
 <nav class="topnav">
   <a class="brand" href="index.html">// numbers &amp; cheques</a>
   <div class="links">
@@ -42,7 +48,7 @@
 <div class="fallback-banner" id="fallbackBanner">Something went wrong loading the calculator engine. Open your browser's console (F12) to see the error.</div>
 <header class="page-head">
   <div class="eyebrow">// numbers &amp; cheques</div>
-  <h1>Canada Federal Income Tax Calculator (CRA, 2026)</h1>
+  <h1 id="main-heading">Canada Federal Income Tax Calculator (CRA, 2026)</h1>
   <p class="sub">Estimate your Canadian federal income tax using current CRA tax brackets and the Basic Personal Amount for tax year 2026.</p>
 </header>
 
