@@ -78,7 +78,39 @@ section.content p{color:var(--ink-soft);font-size:15px;}
 .tax-year-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;}
 .tax-year-badge strong{color:var(--accent);}
 
+.trust-strip{display:flex;flex-wrap:wrap;gap:10px 20px;margin-bottom:24px;padding:12px 16px;background:var(--card);border:1px solid var(--line);border-radius:8px;}
+.trust-strip span{font-size:12.5px;color:var(--ink-soft);}
+
 footer.site-footer{margin-top:40px;padding:24px 20px;border-top:1px solid var(--line);font-size:12px;color:var(--ink-soft);text-align:center;}
 footer.site-footer a{color:var(--ink-soft);margin:0 6px;}
 
 .fallback-banner{display:none;background:#FBEAF0;border:1px solid var(--error);color:var(--error);padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:13px;}
+
+/* ===== Mobile responsiveness ===== */
+@media (max-width: 640px) {
+  .wrap{padding:20px 14px 60px;}
+  h1{font-size:24px;}
+  .sub{font-size:14px;}
+  .topnav{padding:12px 14px;gap:8px;}
+  .topnav .links{gap:10px;font-size:12px;}
+  .card{padding:16px;}
+  .row{gap:10px;margin-bottom:10px;}
+  .field{min-width:100%;}
+  input[type=text], input[type=number], select{font-size:16px;padding:12px;} /* 16px prevents iOS auto-zoom on focus */
+  .result-text{font-size:16px;}
+  .stat-grid{grid-template-columns:1fr 1fr;gap:8px;}
+  .stat{padding:8px 10px;}
+  .actions{flex-direction:column;}
+  .actions button{width:100%;}
+  .tool-grid{grid-template-columns:1fr;}
+  .schedule-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .schedule-table{font-size:12px;min-width:480px;}
+  .tax-year-badge{font-size:12px;padding:10px;}
+  footer.site-footer .links, footer.site-footer div{font-size:12px;}
+}
+
+@media (max-width: 400px) {
+  .topnav .brand{font-size:13px;}
+  .eyebrow{font-size:11px;}
+  h1{font-size:21px;}
+}
