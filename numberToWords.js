@@ -193,7 +193,7 @@ function parseAmount(raw, locale = 'us') {
 
   const value = parseFloat(s);
   if (!Number.isFinite(value)) throw new Error('Number is too large or invalid.');
-  if (Math.abs(value) >= 1e18) throw new Error('Number exceeds supported range (max: 999 quadrillion).');
+  if (Math.abs(value) > Number.MAX_SAFE_INTEGER) throw new Error('Number is too large to convert precisely (max: about 9 quadrillion).');
 
   return value;
 }
@@ -347,9 +347,11 @@ function wordsToNumber(input) {
   if (pointIdx !== -1) {
     const tokens = text.split(' ');
     integerText = tokens.slice(0, pointIdx).join(' ');
-    const decimalTokens = tokens.slice(pointIdx + 1);
+    const decimalTokens = tokens.slice(pointIdx + 1).filter(Boolean);
+    if (decimalTokens.length === 0) {
+      throw new Error('Expected digits after "point" — e.g. "twelve point five".');
+    }
     for (const t of decimalTokens) {
-      if (t === '' ) continue;
       if (!Object.prototype.hasOwnProperty.call(WORD_TO_VALUE, t) || WORD_TO_VALUE[t] > 9) {
         throw new Error(`After "point", expected single digits (zero-nine), got "${t}".`);
       }
@@ -362,6 +364,14 @@ function wordsToNumber(input) {
 
   if (decimalDigits) value = parseFloat(`${value}.${decimalDigits}`);
   if (isNegative) value = -value;
+
+  // Cap at Number.MAX_SAFE_INTEGER, not an arbitrary round number — beyond
+  // this boundary JavaScript's floating-point doubles silently lose integer
+  // precision, which would otherwise produce a plausible-looking but wrong
+  // answer rather than an honest error.
+  if (!Number.isFinite(value) || Math.abs(value) > Number.MAX_SAFE_INTEGER) {
+    throw new Error('Number is too large to convert precisely (max: about 9 quadrillion).');
+  }
 
   return value;
 }
