@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canada Tax Calculator (CRA) — 2026 Federal Income Tax Estimator</title>
+<meta name="description" content="Estimate your 2026 Canadian federal income tax using current CRA tax brackets and the Basic Personal Amount. Free CRA tax calculator.">
+<link rel="canonical" href="https://myloanmath.com/canada-tax-calculator.html">
+<meta property="og:title" content="Canada Tax Calculator (CRA) — 2026 Federal Income Tax Estimator">
+<meta property="og:description" content="Estimate your 2026 Canadian federal income tax using current CRA tax brackets and the Basic Personal Amount. Free CRA tax calculator.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myloanmath.com/canada-tax-calculator.html">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Canada Federal Income Tax Calculator (CRA)", "applicationCategory": "FinanceApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why is the Basic Personal Amount a credit and not a deduction?", "acceptedAnswer": {"@type": "Answer", "text": "That's how the CRA structures it \u2014 the BPA is multiplied by the lowest federal tax rate (14%) to produce a credit amount, which is then subtracted directly from your tax bill, rather than being subtracted from your income before tax is calculated."}}, {"@type": "Question", "name": "Does this include provincial tax?", "acceptedAnswer": {"@type": "Answer", "text": "No \u2014 this calculator covers CRA federal tax only. Provincial or territorial tax is calculated separately and added on top, and rates vary significantly by province."}}, {"@type": "Question", "name": "Why did my Basic Personal Amount show as less than $16,452?", "acceptedAnswer": {"@type": "Answer", "text": "The BPA phases out for higher earners \u2014 between $181,440 and $258,482 of taxable income, it gradually shrinks from $16,452 down to a minimum of $14,829. Above $258,482, the minimum amount applies."}}, {"@type": "Question", "name": "What income counts toward the tax brackets?", "acceptedAnswer": {"@type": "Answer", "text": "Taxable income \u2014 your gross income minus any deductions you're claiming, such as RRSP contributions. Enter those in the \"additional deductions\" field."}}]}</script>
+
+<!-- ============================================================
+     GOOGLE ADSENSE: once your site is verified in your AdSense
+     account, paste the auto-ads script tag Google gives you here.
+     It looks like this (with YOUR publisher ID):
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+     ============================================================ -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9412143347948347" crossorigin="anonymous"></script>
+</head>
+<body>
+<nav class="topnav">
+  <a class="brand" href="index.html">// numbers &amp; cheques</a>
+  <div class="links">
+      <a href="index.html">Home</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="cheque-amount-in-words.html">Cheque Amount in Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+      <a href="tax-calculator.html">Tax Calculator (US - IRS)</a>
+  </div>
+</nav>
+<div class="wrap">
+<div class="fallback-banner" id="fallbackBanner">Something went wrong loading the calculator engine. Open your browser's console (F12) to see the error.</div>
+<header class="page-head">
+  <div class="eyebrow">// numbers &amp; cheques</div>
+  <h1>Canada Federal Income Tax Calculator (CRA, 2026)</h1>
+  <p class="sub">Estimate your Canadian federal income tax using current CRA tax brackets and the Basic Personal Amount for tax year 2026.</p>
+</header>
+
+
+<div class="card">
+  <div class="row">
+    <div class="field"><label for="craIncome">Gross annual income (CAD)</label><input type="text" id="craIncome" value="75000" inputmode="decimal"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="craAdditionalDeductions">Additional deductions (RRSP contributions, etc.)</label><input type="text" id="craAdditionalDeductions" value="0" inputmode="decimal"></div>
+  </div>
+  <div class="result">
+    <div class="result-label">Estimated federal tax owed</div>
+    <div class="result-text" id="craOutput">-</div>
+    <div class="stat-grid" id="craStats"></div>
+  </div>
+  <div class="actions"><button class="action" id="craBreakdownBtn" type="button">Show bracket-by-bracket breakdown</button></div>
+  <div class="schedule-wrap" id="craBreakdownWrap" style="display:none;"><table class="schedule-table" id="craBreakdownTable"></table></div>
+  <p class="note" id="craPhaseOutNote"></p>
+  <p class="note">Federal tax only — does not include provincial/territorial tax (which stacks on top and varies by province), CPP, or EI. Figures use 2026 CRA federal brackets and Basic Personal Amount. For your actual filing, consult a CPA or tax professional — this is an estimate, not tax advice.</p>
+</div>
+
+
+<div class="ad-slot"><!-- AD SLOT: below the tool. Once approved, paste your AdSense ad unit code here. --></div>
+
+
+<section class="content">
+  <h2>How Canadian federal tax actually works: credit, not deduction</h2>
+  <p>Canada's federal tax system works differently from the US system in one important way: the Basic Personal Amount (BPA) — $16,452 for 2026 — is applied as a non-refundable <strong>tax credit</strong>, not a deduction from income. That distinction matters. A deduction reduces the income that gets taxed in the first place. A credit is calculated separately (BPA × the lowest tax rate, 14%) and then subtracted directly from the tax you'd otherwise owe. The practical result: anyone earning $16,452 or less in 2026 owes no federal income tax at all, since the credit exactly cancels out the tax on that amount.</p>
+  <p>Canada's federal brackets for 2026 use five progressive rates: 14% on the first $58,523 of taxable income, 20.5% up to $117,045, 26% up to $181,440, 29% up to $258,482, and 33% above that. Like any progressive system, these are marginal — only the income within each band is taxed at that band's rate, not your whole income at your top rate.</p>
+  <p>There's a genuine wrinkle worth understanding if your income falls between $181,440 and $258,482: the Basic Personal Amount itself starts shrinking in that range, phasing down from its full $16,452 value toward a minimum of $14,829. Because the credit gets smaller as income rises through that band, each additional dollar earned there effectively faces a slightly higher true tax rate than the stated 29% bracket rate — the extra bite comes from the shrinking credit, not a separate published rate. This calculator accounts for that automatically and flags it when it applies to your numbers.</p>
+  <p>This tool calculates federal tax only. Canada layers provincial or territorial tax on top of the federal amount, and each province sets its own brackets, rates, and basic personal amount — Ontario, Alberta, Quebec, and the others are all meaningfully different from each other, and from the federal numbers here. Your total income tax bill is federal plus provincial combined, not federal alone.</p>
+</section>
+
+
+<section class="content"><h2>Frequently asked questions</h2><div class="faq-item"><h3>Why is the Basic Personal Amount a credit and not a deduction?</h3><p>That's how the CRA structures it — the BPA is multiplied by the lowest federal tax rate (14%) to produce a credit amount, which is then subtracted directly from your tax bill, rather than being subtracted from your income before tax is calculated.</p></div>
+<div class="faq-item"><h3>Does this include provincial tax?</h3><p>No — this calculator covers CRA federal tax only. Provincial or territorial tax is calculated separately and added on top, and rates vary significantly by province.</p></div>
+<div class="faq-item"><h3>Why did my Basic Personal Amount show as less than $16,452?</h3><p>The BPA phases out for higher earners — between $181,440 and $258,482 of taxable income, it gradually shrinks from $16,452 down to a minimum of $14,829. Above $258,482, the minimum amount applies.</p></div>
+<div class="faq-item"><h3>What income counts toward the tax brackets?</h3><p>Taxable income — your gross income minus any deductions you're claiming, such as RRSP contributions. Enter those in the "additional deductions" field.</p></div>
+</section>
+
+<div class="related">
+  <p class="label">Related tools</p>
+  <div class="related-list">
+    <a href="tax-calculator.html">Tax Calculator (US - IRS)</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+  </div>
+</div>
+
+</div>
+<footer class="site-footer">
+  <div>
+    <a href="index.html">Home</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="cheque-amount-in-words.html">Cheque Amount in Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+      <a href="tax-calculator.html">Tax Calculator (US - IRS)</a>
+  </div>
+  <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
+</footer>
+<script src="numberToWords.js"></script>
+<script src="finance.js"></script>
+
+<script>
+
+(function(){
+  var mod = window.FinanceTools;
+  if (!mod) { document.getElementById('fallbackBanner').style.display='block'; return; }
+  function el(id){ return document.getElementById(id); }
+  function fmtMoney(n){ return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function parseNum(str){ var s=String(str).trim().replace(/,/g,''); if(!/^-?\d+(\.\d+)?$/.test(s)) return NaN; return parseFloat(s); }
+  var breakdownVisible = false;
+  function compute(){
+    var income = parseNum(el('craIncome').value);
+    var extra = parseNum(el('craAdditionalDeductions').value);
+    var out = el('craOutput'); var stats = el('craStats'); var note = el('craPhaseOutNote');
+    try {
+      if (isNaN(income) || isNaN(extra)) throw new Error('Enter valid numbers for income and deductions.');
+      var r = mod.calculateFederalIncomeTaxCRA({ grossIncome: income, additionalDeductions: extra });
+      out.textContent = fmtMoney(r.netTax); out.classList.remove('error');
+      stats.innerHTML =
+        '<div class="stat"><div class="stat-label">Taxable income</div><div class="stat-value">' + fmtMoney(r.taxableIncome) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Effective rate</div><div class="stat-value">' + r.effectiveRatePercent + '%</div></div>' +
+        '<div class="stat"><div class="stat-label">Bracket rate</div><div class="stat-value">' + r.statedMarginalRatePercent + '%</div></div>' +
+        '<div class="stat"><div class="stat-label">Basic Personal Amount</div><div class="stat-value">' + fmtMoney(r.bpaAmount) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">BPA credit</div><div class="stat-value">' + fmtMoney(r.bpaCredit) + '</div></div>';
+      note.textContent = r.inBpaPhaseOutBand
+        ? 'At this income, the Basic Personal Amount is partially phased out, which makes your true marginal rate on the next dollar earned slightly higher than the stated bracket rate shown above.'
+        : '';
+      if (breakdownVisible) renderBreakdown(r.breakdown);
+    } catch(e) {
+      out.textContent = e.message; out.classList.add('error'); stats.innerHTML=''; note.textContent='';
+      el('craBreakdownWrap').style.display='none'; breakdownVisible=false;
+    }
+  }
+  function renderBreakdown(breakdown){
+    var rows = '<tr><th>Bracket rate</th><th>Amount taxed at this rate</th><th>Tax owed at this rate</th></tr>';
+    breakdown.forEach(function(b){ rows += '<tr><td>'+b.ratePercent+'%</td><td>'+fmtMoney(b.amountTaxed)+'</td><td>'+fmtMoney(b.taxOwed)+'</td></tr>'; });
+    el('craBreakdownTable').innerHTML = rows; el('craBreakdownWrap').style.display='block';
+  }
+  ['craIncome','craAdditionalDeductions'].forEach(function(id){ el(id).addEventListener('input', compute); el(id).addEventListener('change', compute); });
+  el('craBreakdownBtn').addEventListener('click', function(){
+    breakdownVisible = !breakdownVisible;
+    el('craBreakdownBtn').textContent = breakdownVisible ? 'Hide bracket-by-bracket breakdown' : 'Show bracket-by-bracket breakdown';
+    compute();
+  });
+  compute();
+})();
+
+</script>
+</body>
+</html>

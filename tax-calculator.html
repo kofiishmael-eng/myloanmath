@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tax Calculator — 2026 Federal Income Tax Estimator</title>
+<meta name="description" content="Estimate your 2026 federal income tax using current IRS tax brackets and standard deductions. Free tax calculator for Single, Married Filing Jointly, Head of Household, and Married Filing Separately.">
+<link rel="canonical" href="https://myloanmath.com/tax-calculator.html">
+<meta property="og:title" content="Tax Calculator — 2026 Federal Income Tax Estimator">
+<meta property="og:description" content="Estimate your 2026 federal income tax using current IRS tax brackets and standard deductions. Free tax calculator for Single, Married Filing Jointly, Head of Household, and Married Filing Separately.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myloanmath.com/tax-calculator.html">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Federal Income Tax Calculator", "applicationCategory": "FinanceApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What tax year do these brackets apply to?", "acceptedAnswer": {"@type": "Answer", "text": "Tax year 2026 \u2014 the brackets and standard deductions the IRS set under Revenue Procedure 2025-32, which apply to income earned during 2026 and reported on returns filed in 2027."}}, {"@type": "Question", "name": "Does this include state tax?", "acceptedAnswer": {"@type": "Answer", "text": "No \u2014 this calculator covers federal income tax only. State income tax rules and rates vary by state and aren't included here."}}, {"@type": "Question", "name": "Why is my effective tax rate lower than my tax bracket?", "acceptedAnswer": {"@type": "Answer", "text": "Because federal tax brackets are marginal \u2014 only the income within each bracket's range is taxed at that bracket's rate, not your entire income. Your effective rate blends all the brackets your income passed through, which is always lower than your top (marginal) rate."}}, {"@type": "Question", "name": "Does this calculator account for itemized deductions?", "acceptedAnswer": {"@type": "Answer", "text": "No, it assumes the standard deduction, which is what the large majority of filers use. If you plan to itemize, use the \"additional deductions\" field to approximate the difference, or consult a tax professional for an accurate calculation."}}]}</script>
+
+<!-- ============================================================
+     GOOGLE ADSENSE: once your site is verified in your AdSense
+     account, paste the auto-ads script tag Google gives you here.
+     It looks like this (with YOUR publisher ID):
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+     ============================================================ -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9412143347948347" crossorigin="anonymous"></script>
+</head>
+<body>
+<nav class="topnav">
+  <a class="brand" href="index.html">// numbers &amp; cheques</a>
+  <div class="links">
+      <a href="index.html">Home</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="cheque-amount-in-words.html">Cheque Amount in Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+      <a href="canada-tax-calculator.html">Tax Calculator (Canada - CRA)</a>
+  </div>
+</nav>
+<div class="wrap">
+<div class="fallback-banner" id="fallbackBanner">Something went wrong loading the calculator engine. Open your browser's console (F12) to see the error.</div>
+<header class="page-head">
+  <div class="eyebrow">// numbers &amp; cheques</div>
+  <h1>Federal Income Tax Calculator (2026)</h1>
+  <p class="sub">Estimate your federal income tax using current IRS tax brackets and standard deductions for tax year 2026.</p>
+</header>
+
+
+<div class="card">
+  <div class="row">
+    <div class="field"><label for="taxIncome">Gross annual income</label><input type="text" id="taxIncome" value="85000" inputmode="decimal"></div>
+    <div class="field" style="max-width:240px;"><label for="taxFilingStatus">Filing status</label>
+      <select id="taxFilingStatus">
+        <option value="single" selected>Single</option>
+        <option value="marriedJointly">Married Filing Jointly</option>
+        <option value="headOfHousehold">Head of Household</option>
+        <option value="marriedSeparately">Married Filing Separately</option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="taxAdditionalDeductions">Additional deductions (optional, beyond the standard deduction)</label><input type="text" id="taxAdditionalDeductions" value="0" inputmode="decimal"></div>
+  </div>
+  <div class="result">
+    <div class="result-label">Estimated federal tax owed</div>
+    <div class="result-text" id="taxOutput">-</div>
+    <div class="stat-grid" id="taxStats"></div>
+  </div>
+  <div class="actions"><button class="action" id="taxBreakdownBtn" type="button">Show bracket-by-bracket breakdown</button></div>
+  <div class="schedule-wrap" id="taxBreakdownWrap" style="display:none;"><table class="schedule-table" id="taxBreakdownTable"></table></div>
+  <p class="note">Federal income tax only — does not include state tax, FICA/Social Security, Medicare, or tax credits. Assumes the standard deduction (not itemized). Figures use IRS tax year 2026 brackets (Revenue Procedure 2025-32). For your actual filing, consult a CPA or tax professional — this is an estimate, not tax advice.</p>
+</div>
+
+
+<div class="ad-slot"><!-- AD SLOT: below the tool. Once approved, paste your AdSense ad unit code here. --></div>
+
+
+<section class="content">
+  <h2>How federal income tax brackets actually work</h2>
+  <p>Federal income tax is marginal, not flat — this is the single most misunderstood part of how US taxes work. Being "in the 22% bracket" doesn't mean 22% of your entire income goes to tax. It means only the portion of your income that falls within that bracket's range is taxed at 22%; the income below it was already taxed at the lower rates (10%, then 12%) that apply to those lower ranges first. Every dollar moves up through the brackets in sequence, each taxed at the rate for its own slice, not the whole amount taxed at whatever rate the top dollar happens to reach.</p>
+  <p>This is why your effective tax rate — total tax divided by total income — is always lower than your marginal rate, often substantially so. A single filer with $85,000 of gross income in 2026, after the $16,100 standard deduction, has $68,900 of taxable income. That income touches the 10%, 12%, and 22% brackets, but works out to $9,870 in total tax — an effective rate of about 11.6%, well below the 22% marginal rate that applies to their last dollar earned. This calculator shows both numbers, plus a full bracket-by-bracket breakdown, so you can see exactly which dollars were taxed at which rate.</p>
+  <p>The standard deduction is the amount subtracted from gross income before any tax brackets apply at all — for 2026, that's $16,100 for single filers, $32,200 for married couples filing jointly, and $24,150 for head of household. Nearly all filers use the standard deduction rather than itemizing, since itemizing only makes sense if your specific deductible expenses (mortgage interest, large charitable donations, certain medical costs) exceed that standard amount.</p>
+  <p>This calculator covers federal income tax only. It does not include state income tax (which varies enormously by state, from 0% to over 13%), FICA payroll tax (Social Security and Medicare, which are calculated separately from income tax), or tax credits, which can reduce your final bill further. Treat this as a starting-point estimate for federal tax specifically, not a complete picture of total tax liability.</p>
+</section>
+
+
+<section class="content"><h2>Frequently asked questions</h2><div class="faq-item"><h3>What tax year do these brackets apply to?</h3><p>Tax year 2026 — the brackets and standard deductions the IRS set under Revenue Procedure 2025-32, which apply to income earned during 2026 and reported on returns filed in 2027.</p></div>
+<div class="faq-item"><h3>Does this include state tax?</h3><p>No — this calculator covers federal income tax only. State income tax rules and rates vary by state and aren't included here.</p></div>
+<div class="faq-item"><h3>Why is my effective tax rate lower than my tax bracket?</h3><p>Because federal tax brackets are marginal — only the income within each bracket's range is taxed at that bracket's rate, not your entire income. Your effective rate blends all the brackets your income passed through, which is always lower than your top (marginal) rate.</p></div>
+<div class="faq-item"><h3>Does this calculator account for itemized deductions?</h3><p>No, it assumes the standard deduction, which is what the large majority of filers use. If you plan to itemize, use the "additional deductions" field to approximate the difference, or consult a tax professional for an accurate calculation.</p></div>
+</section>
+
+<div class="related">
+  <p class="label">Related tools</p>
+  <div class="related-list">
+    <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+      <a href="canada-tax-calculator.html">Tax Calculator (Canada - CRA)</a>
+  </div>
+</div>
+
+</div>
+<footer class="site-footer">
+  <div>
+    <a href="index.html">Home</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="cheque-amount-in-words.html">Cheque Amount in Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+      <a href="canada-tax-calculator.html">Tax Calculator (Canada - CRA)</a>
+  </div>
+  <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
+</footer>
+<script src="numberToWords.js"></script>
+<script src="finance.js"></script>
+
+<script>
+
+(function(){
+  var mod = window.FinanceTools;
+  if (!mod) { document.getElementById('fallbackBanner').style.display='block'; return; }
+  function el(id){ return document.getElementById(id); }
+  function fmtMoney(n){ return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function parseNum(str){ var s=String(str).trim().replace(/,/g,''); if(!/^-?\d+(\.\d+)?$/.test(s)) return NaN; return parseFloat(s); }
+  var breakdownVisible = false;
+  function compute(){
+    var income = parseNum(el('taxIncome').value);
+    var status = el('taxFilingStatus').value;
+    var extra = parseNum(el('taxAdditionalDeductions').value);
+    var out = el('taxOutput'); var stats = el('taxStats');
+    try {
+      if (isNaN(income) || isNaN(extra)) throw new Error('Enter valid numbers for income and deductions.');
+      var r = mod.calculateFederalIncomeTax({ grossIncome: income, filingStatus: status, additionalDeductions: extra });
+      out.textContent = fmtMoney(r.totalTax); out.classList.remove('error');
+      stats.innerHTML =
+        '<div class="stat"><div class="stat-label">Taxable income</div><div class="stat-value">' + fmtMoney(r.taxableIncome) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Effective rate</div><div class="stat-value">' + r.effectiveRatePercent + '%</div></div>' +
+        '<div class="stat"><div class="stat-label">Marginal rate</div><div class="stat-value">' + r.marginalRatePercent + '%</div></div>' +
+        '<div class="stat"><div class="stat-label">Standard deduction</div><div class="stat-value">' + fmtMoney(r.standardDeduction) + '</div></div>';
+      if (breakdownVisible) renderBreakdown(r.breakdown);
+    } catch(e) {
+      out.textContent = e.message; out.classList.add('error'); stats.innerHTML='';
+      el('taxBreakdownWrap').style.display='none'; breakdownVisible=false;
+    }
+  }
+  function renderBreakdown(breakdown){
+    var rows = '<tr><th>Bracket rate</th><th>Amount taxed at this rate</th><th>Tax owed at this rate</th></tr>';
+    breakdown.forEach(function(b){ rows += '<tr><td>'+b.ratePercent+'%</td><td>'+fmtMoney(b.amountTaxed)+'</td><td>'+fmtMoney(b.taxOwed)+'</td></tr>'; });
+    el('taxBreakdownTable').innerHTML = rows; el('taxBreakdownWrap').style.display='block';
+  }
+  ['taxIncome','taxFilingStatus','taxAdditionalDeductions'].forEach(function(id){ el(id).addEventListener('input', compute); el(id).addEventListener('change', compute); });
+  el('taxBreakdownBtn').addEventListener('click', function(){
+    breakdownVisible = !breakdownVisible;
+    el('taxBreakdownBtn').textContent = breakdownVisible ? 'Hide bracket-by-bracket breakdown' : 'Show bracket-by-bracket breakdown';
+    compute();
+  });
+  compute();
+})();
+
+</script>
+</body>
+</html>

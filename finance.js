@@ -191,6 +191,215 @@ function compoundInterest(input) {
 // ---------------------------------------------------------------------
 
 /**
+ * Federal income tax calculator — 2026 tax year.
+ * Source: IRS Revenue Procedure 2025-32 (verified against three independently
+ * published worked examples before use — see build notes).
+ * Covers federal income tax only: no state tax, no FICA/payroll tax, no
+ * credits, and assumes the standard deduction (not itemizing).
+ */
+const STANDARD_DEDUCTION_2026 = {
+  single: 16100,
+  marriedJointly: 32200,
+  headOfHousehold: 24150,
+  marriedSeparately: 16100,
+};
+
+const TAX_BRACKETS_2026 = {
+  single: [
+    { rate: 0.10, upTo: 12400 },
+    { rate: 0.12, upTo: 50400 },
+    { rate: 0.22, upTo: 105700 },
+    { rate: 0.24, upTo: 201775 },
+    { rate: 0.32, upTo: 256225 },
+    { rate: 0.35, upTo: 640600 },
+    { rate: 0.37, upTo: Infinity },
+  ],
+  marriedJointly: [
+    { rate: 0.10, upTo: 24800 },
+    { rate: 0.12, upTo: 100800 },
+    { rate: 0.22, upTo: 211400 },
+    { rate: 0.24, upTo: 403550 },
+    { rate: 0.32, upTo: 512450 },
+    { rate: 0.35, upTo: 768700 },
+    { rate: 0.37, upTo: Infinity },
+  ],
+  headOfHousehold: [
+    { rate: 0.10, upTo: 17700 },
+    { rate: 0.12, upTo: 67450 },
+    { rate: 0.22, upTo: 105700 },
+    { rate: 0.24, upTo: 201775 },
+    { rate: 0.32, upTo: 256200 },
+    { rate: 0.35, upTo: 640600 },
+    { rate: 0.37, upTo: Infinity },
+  ],
+  marriedSeparately: [
+    { rate: 0.10, upTo: 12400 },
+    { rate: 0.12, upTo: 50400 },
+    { rate: 0.22, upTo: 105700 },
+    { rate: 0.24, upTo: 201775 },
+    { rate: 0.32, upTo: 256225 },
+    { rate: 0.35, upTo: 384350 },
+    { rate: 0.37, upTo: Infinity },
+  ],
+};
+
+const FILING_STATUS_LABELS = {
+  single: 'Single',
+  marriedJointly: 'Married Filing Jointly',
+  headOfHousehold: 'Head of Household',
+  marriedSeparately: 'Married Filing Separately',
+};
+
+function calculateFederalIncomeTax(input) {
+  const { grossIncome, filingStatus, additionalDeductions = 0 } = input;
+
+  if (!(grossIncome >= 0)) throw new Error('Gross income cannot be negative.');
+  if (!TAX_BRACKETS_2026[filingStatus]) {
+    throw new Error(`Filing status must be one of: ${Object.keys(TAX_BRACKETS_2026).join(', ')}`);
+  }
+  if (additionalDeductions < 0) throw new Error('Additional deductions cannot be negative.');
+
+  const standardDeduction = STANDARD_DEDUCTION_2026[filingStatus];
+  const totalDeductions = standardDeduction + additionalDeductions;
+  const taxableIncome = Math.max(0, grossIncome - totalDeductions);
+
+  const brackets = TAX_BRACKETS_2026[filingStatus];
+  let tax = 0;
+  let lastCap = 0;
+  let marginalRatePercent = brackets[0].rate * 100;
+  const breakdown = [];
+
+  for (const b of brackets) {
+    if (taxableIncome > lastCap) {
+      const amountInBracket = Math.min(taxableIncome, b.upTo) - lastCap;
+      const taxInBracket = amountInBracket * b.rate;
+      tax += taxInBracket;
+      marginalRatePercent = b.rate * 100;
+      breakdown.push({
+        ratePercent: round2(b.rate * 100),
+        amountTaxed: round2(amountInBracket),
+        taxOwed: round2(taxInBracket),
+      });
+    }
+    lastCap = b.upTo;
+    if (taxableIncome <= b.upTo) break;
+  }
+
+  const effectiveRatePercent = grossIncome > 0 ? round2((tax / grossIncome) * 100) : 0;
+
+  return {
+    taxableIncome: round2(taxableIncome),
+    totalTax: round2(tax),
+    effectiveRatePercent,
+    marginalRatePercent: round2(marginalRatePercent),
+    standardDeduction,
+    breakdown,
+    filingStatusLabel: FILING_STATUS_LABELS[filingStatus],
+  };
+}
+
+// ---------------------------------------------------------------------
+
+/**
+ * Canada federal income tax calculator (CRA) — 2026 tax year.
+ * Source: CRA 2026 indexation (2.0% factor), confirmed against multiple
+ * independently published sources — verified against the CRA's own stated
+ * fact that income at or below the Basic Personal Amount owes zero federal tax.
+ *
+ * Structurally different from the US model: Canada's Basic Personal Amount
+ * (BPA) is a non-refundable CREDIT applied at the lowest bracket rate (14%),
+ * not a deduction subtracted from taxable income before brackets apply.
+ * The BPA itself also phases out for high earners between two income
+ * thresholds, which effectively creates a hidden higher marginal rate in
+ * that income band — this emerges naturally from the credit calculation
+ * below rather than being hard-coded as a separate rate.
+ *
+ * This covers FEDERAL tax only — provincial/territorial tax is separate,
+ * stacks on top, and is not included here.
+ */
+const CRA_FEDERAL_BRACKETS_2026 = [
+  { rate: 0.14, upTo: 58523 },
+  { rate: 0.205, upTo: 117045 },
+  { rate: 0.26, upTo: 181440 },
+  { rate: 0.29, upTo: 258482 },
+  { rate: 0.33, upTo: Infinity },
+];
+
+const CRA_BPA_2026 = {
+  max: 16452,      // full BPA for net income at or below phaseOutStart
+  min: 14829,      // minimum BPA for net income at or above phaseOutEnd
+  phaseOutStart: 181440,
+  phaseOutEnd: 258482,
+  creditRate: 0.14, // BPA is credited at the lowest federal bracket rate
+};
+
+function calculateCRABasicPersonalAmount(netIncome) {
+  const { max, min, phaseOutStart, phaseOutEnd } = CRA_BPA_2026;
+  if (netIncome <= phaseOutStart) return max;
+  if (netIncome >= phaseOutEnd) return min;
+  const additional = max - min;
+  const reduction = additional * (netIncome - phaseOutStart) / (phaseOutEnd - phaseOutStart);
+  return max - reduction;
+}
+
+function calculateFederalIncomeTaxCRA(input) {
+  const { grossIncome, additionalDeductions = 0 } = input;
+
+  if (!(grossIncome >= 0)) throw new Error('Gross income cannot be negative.');
+  if (additionalDeductions < 0) throw new Error('Additional deductions cannot be negative.');
+
+  // Canada has no standard-deduction equivalent — RRSP contributions and
+  // similar registered deductions reduce taxable income directly, which is
+  // what "additional deductions" represents here.
+  const taxableIncome = Math.max(0, grossIncome - additionalDeductions);
+
+  const brackets = CRA_FEDERAL_BRACKETS_2026;
+  let grossTax = 0;
+  let lastCap = 0;
+  let statedMarginalRatePercent = brackets[0].rate * 100;
+  const breakdown = [];
+
+  for (const b of brackets) {
+    if (taxableIncome > lastCap) {
+      const amountInBracket = Math.min(taxableIncome, b.upTo) - lastCap;
+      const taxInBracket = amountInBracket * b.rate;
+      grossTax += taxInBracket;
+      statedMarginalRatePercent = b.rate * 100;
+      breakdown.push({
+        ratePercent: round2(b.rate * 100),
+        amountTaxed: round2(amountInBracket),
+        taxOwed: round2(taxInBracket),
+      });
+    }
+    lastCap = b.upTo;
+    if (taxableIncome <= b.upTo) break;
+  }
+
+  const bpaAmount = round2(calculateCRABasicPersonalAmount(taxableIncome));
+  const bpaCredit = round2(bpaAmount * CRA_BPA_2026.creditRate);
+  const netTax = Math.max(0, round2(grossTax - bpaCredit));
+
+  const effectiveRatePercent = grossIncome > 0 ? round2((netTax / grossIncome) * 100) : 0;
+  // Flag the BPA phase-out band, where the true marginal rate is higher than
+  // the stated bracket rate because each extra dollar also shrinks the credit.
+  const inBpaPhaseOutBand = taxableIncome > CRA_BPA_2026.phaseOutStart && taxableIncome < CRA_BPA_2026.phaseOutEnd;
+
+  return {
+    taxableIncome: round2(taxableIncome),
+    grossTax: round2(grossTax),
+    bpaAmount,
+    bpaCredit,
+    netTax,
+    effectiveRatePercent,
+    statedMarginalRatePercent: round2(statedMarginalRatePercent),
+    inBpaPhaseOutBand,
+    breakdown,
+  };
+}
+
+// ---------------------------------------------------------------------
+
+/**
  * Percentage Calculator — four standard modes.
  * All functions validate inputs and throw a clear Error rather than
  * returning NaN or Infinity.
@@ -233,7 +442,7 @@ function assertFiniteNumbers(fields) {
 
 // ---------------------------------------------------------------------
 
-const FinanceTools = { calculateLoan, amortizationScheduleByYear, calculateMortgage, compoundInterest, PercentageTools, round2 };
+const FinanceTools = { calculateLoan, amortizationScheduleByYear, calculateMortgage, compoundInterest, calculateFederalIncomeTax, TAX_BRACKETS_2026, STANDARD_DEDUCTION_2026, FILING_STATUS_LABELS, calculateFederalIncomeTaxCRA, CRA_FEDERAL_BRACKETS_2026, CRA_BPA_2026, PercentageTools, round2 };
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = FinanceTools;
