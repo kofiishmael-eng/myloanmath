@@ -68,8 +68,12 @@
 
 <section class="content">
   <h2>How to convert words to numbers</h2>
-  <p>Type a number the way you'd write it in words — "twelve thousand", "negative fifty", "one lakh" — and this words to numbers converter parses it straight back into digits. It understands "point" for decimals, "negative" or "minus" for negative numbers, and both the international (thousand/million) and Indian (lakh/crore) number word systems.</p>
+  <p>Type a number the way you'd write it in words — "twelve thousand", "negative fifty", "one lakh" — and this words to numbers converter parses it straight back into digits.</p>
+  <p>This is the reverse problem of writing a number out in words, and it comes up more often than people expect. If you've ever received a document, contract, or old handwritten cheque where the amount is spelled out but you need the actual digit value — to enter into a spreadsheet, double-check a total, or verify that the written amount matches the numeric one — you need exactly this kind of conversion. It's also useful for anyone transcribing dictated numbers, checking legal document accuracy, or working with data that was originally captured as text rather than digits.</p>
+  <p>The parser understands "point" as the marker for decimals (so "twelve point five" becomes 12.5), and "negative" or "minus" as a prefix for negative numbers. It also recognizes both the international number words (thousand, million, billion) and the Indian system words (lakh, crore) in the same box — you don't need to tell it which system you're using, it figures that out from the words themselves. Hyphenated numbers like "thirty-four" and their spaced equivalent "thirty four" are both understood identically, so formatting quirks in how the text was originally written won't trip it up.</p>
+  <p>If you type something the tool doesn't recognize — a typo, an unsupported word, or a non-numeric term — you'll get a specific error naming the exact word it couldn't parse, rather than a wrong answer or a generic failure. That's a deliberate design choice: a silent wrong answer is worse than no answer at all when you're working with numbers that matter.</p>
 </section>
+
 
 
 <section class="content"><h2>Frequently asked questions</h2><div class="faq-item"><h3>Can I type numbers with hyphens like "thirty-four"?</h3><p>Yes, both "thirty-four" and "thirty four" are recognized.</p></div>

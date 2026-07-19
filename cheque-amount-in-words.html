@@ -78,7 +78,11 @@
 <section class="content">
   <h2>How to write a cheque amount in words</h2>
   <p>Banks require the amount written in words as a fraud-prevention check against the numeric amount box. The standard format spells out the whole-unit amount, then shows cents (or the relevant subunit) as a fraction — "One Thousand Two Hundred Thirty-Four and 50/100 Dollars Only" — with "Only" at the end so nothing can be added after your writing.</p>
+  <p>This convention exists for a genuinely practical reason. The numeric box on a cheque ("$1,234.50") is fast to write but also fast to alter — a single stroke can turn a 1 into a 4 or a 7. The written-word line is much harder to tamper with undetected, which is exactly why banks have required both for as long as cheques have existed. If the two don't match, the bank is required to treat the written amount as authoritative, which is why getting the wording exactly right matters — an error here isn't just a formatting slip, it can change how much money actually moves.</p>
+  <p>The fraction format for cents ("50/100") rather than spelling them out ("fifty cents") is also deliberate — it's the specific convention banks expect on a cheque, distinct from how you'd write an amount in a contract or legal document. Even when there are no cents at all, the fraction still shows as "00/100" rather than being left blank. That's not a quirk of this tool, it's standard banking practice: leaving that space blank would make it easier for someone to write in a fraudulent amount after the fact. The trailing "Only" serves the same purpose, closing off the line so nothing can be appended.</p>
+  <p>Every currency handled by this tool uses its own correct fraction denominator — most use "/100" since they split into 100 subunits, but currencies like the Kuwaiti Dinar correctly show "/1000" since they split into 1,000. Currencies with no minor unit at all, like the Japanese Yen, skip the fraction entirely and show just the whole amount followed by "Only".</p>
 </section>
+
 
 
 <section class="content"><h2>Frequently asked questions</h2><div class="faq-item"><h3>Why does it show "50/100" instead of spelling out the cents?</h3><p>That's the actual banking convention — cents appear as a fraction of the currency's smallest unit, not spelled out in words, unlike a legal contract amount.</p></div>
