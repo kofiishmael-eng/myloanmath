@@ -425,26 +425,44 @@ const STATE_TAX_2026 = {
   AK: { name: 'Alaska', type: 'none' },
   AZ: { name: 'Arizona', type: 'flat', rate: 2.5 },
   AR: { name: 'Arkansas', type: 'pending' },
-  CA: { name: 'California', type: 'pending' },
+  CA: {
+    name: 'California', type: 'graduated',
+    // Verified against the California Franchise Tax Board's own published rate
+    // schedule (ftb.ca.gov, 2025-540-tax-rate-schedules.pdf) — cross-checked
+    // against the FTB's own cumulative-tax formula ($3,201.97 at $72,724 for
+    // single filers), which matched exactly. Uses the most recently published
+    // FTB brackets (tax year 2025); California has confirmed the 2026 rate
+    // structure is unchanged but has not yet published final 2026 inflation-
+    // indexed dollar thresholds (expected fall 2026) — noted directly to users.
+    bracketsByStatus: {
+      single: [{ rate: 1, upTo: 11079 }, { rate: 2, upTo: 26264 }, { rate: 4, upTo: 41452 }, { rate: 6, upTo: 57542 }, { rate: 8, upTo: 72724 }, { rate: 9.3, upTo: 371479 }, { rate: 10.3, upTo: 445771 }, { rate: 11.3, upTo: 742953 }, { rate: 12.3, upTo: Infinity }],
+      marriedJointly: [{ rate: 1, upTo: 22158 }, { rate: 2, upTo: 52528 }, { rate: 4, upTo: 82904 }, { rate: 6, upTo: 115084 }, { rate: 8, upTo: 145448 }, { rate: 9.3, upTo: 742958 }, { rate: 10.3, upTo: 891542 }, { rate: 11.3, upTo: 1485906 }, { rate: 12.3, upTo: Infinity }],
+      headOfHousehold: [{ rate: 1, upTo: 22173 }, { rate: 2, upTo: 52530 }, { rate: 4, upTo: 67716 }, { rate: 6, upTo: 83805 }, { rate: 8, upTo: 98990 }, { rate: 9.3, upTo: 505208 }, { rate: 10.3, upTo: 606251 }, { rate: 11.3, upTo: 1010417 }, { rate: 12.3, upTo: Infinity }],
+      marriedSeparately: [{ rate: 1, upTo: 11079 }, { rate: 2, upTo: 26264 }, { rate: 4, upTo: 41452 }, { rate: 6, upTo: 57542 }, { rate: 8, upTo: 72724 }, { rate: 9.3, upTo: 371479 }, { rate: 10.3, upTo: 445771 }, { rate: 11.3, upTo: 742953 }, { rate: 12.3, upTo: Infinity }],
+    },
+    standardDeduction: { single: 5706, marriedJointly: 11412, headOfHousehold: 11412, marriedSeparately: 5706 },
+    surcharge: { threshold: 1000000, rate: 1 }, // Mental Health Services Tax: +1% on taxable income over $1M, computed separately per FTB's own formula table
+    dataVintageNote: "Uses California's most recently published brackets (tax year 2025) — the FTB has not yet released final 2026 inflation-adjusted thresholds (expected fall 2026). The rate structure itself is confirmed unchanged.",
+  },
   CO: { name: 'Colorado', type: 'flat', rate: 4.4 },
   CT: { name: 'Connecticut', type: 'pending' },
   DE: { name: 'Delaware', type: 'pending' },
   FL: { name: 'Florida', type: 'none' },
   GA: { name: 'Georgia', type: 'flat', rate: 4.99 },
   HI: { name: 'Hawaii', type: 'pending' },
-  ID: { name: 'Idaho', type: 'pending' },
+  ID: { name: 'Idaho', type: 'flat', rate: 5.695 },
   IL: { name: 'Illinois', type: 'flat', rate: 4.95 },
-  IN: { name: 'Indiana', type: 'flat', rate: 3.05 },
+  IN: { name: 'Indiana', type: 'flat', rate: 2.95 },
   IA: { name: 'Iowa', type: 'flat', rate: 3.9 },
   KS: { name: 'Kansas', type: 'pending' },
   KY: { name: 'Kentucky', type: 'flat', rate: 3.5 },
-  LA: { name: 'Louisiana', type: 'pending' },
+  LA: { name: 'Louisiana', type: 'flat', rate: 3.0 },
   ME: { name: 'Maine', type: 'pending' },
   MD: { name: 'Maryland', type: 'pending' },
   MA: { name: 'Massachusetts', type: 'graduated', brackets: [{ rate: 5, upTo: 1000000 }, { rate: 9, upTo: Infinity }] },
-  MI: { name: 'Michigan', type: 'flat', rate: 4.05 },
+  MI: { name: 'Michigan', type: 'flat', rate: 4.25 },
   MN: { name: 'Minnesota', type: 'pending' },
-  MS: { name: 'Mississippi', type: 'flat', rate: 4.4 },
+  MS: { name: 'Mississippi', type: 'flat', rate: 4.0 },
   MO: { name: 'Missouri', type: 'pending' },
   MT: { name: 'Montana', type: 'pending' },
   NE: { name: 'Nebraska', type: 'pending' },
@@ -452,7 +470,6 @@ const STATE_TAX_2026 = {
   NH: { name: 'New Hampshire', type: 'none' },
   NJ: { name: 'New Jersey', type: 'pending' },
   NM: { name: 'New Mexico', type: 'pending' },
-  NY: { name: 'New York', type: 'pending' },
   NY: {
     name: 'New York', type: 'graduated',
     // Verified: 2026 rate cut (0.1pp off the bottom 5 brackets vs 2025) confirmed by two
@@ -468,7 +485,7 @@ const STATE_TAX_2026 = {
   },
   NC: { name: 'North Carolina', type: 'flat', rate: 3.99 },
   ND: { name: 'North Dakota', type: 'flat', rate: 1.95 },
-  OH: { name: 'Ohio', type: 'pending' },
+  OH: { name: 'Ohio', type: 'flatWithExemption', rate: 2.75, exemption: 26050 },
   OK: { name: 'Oklahoma', type: 'pending' },
   OR: { name: 'Oregon', type: 'pending' },
   PA: { name: 'Pennsylvania', type: 'flat', rate: 3.07 },
@@ -477,7 +494,7 @@ const STATE_TAX_2026 = {
   SD: { name: 'South Dakota', type: 'none' },
   TN: { name: 'Tennessee', type: 'none' },
   TX: { name: 'Texas', type: 'none' },
-  UT: { name: 'Utah', type: 'flat', rate: 4.45 },
+  UT: { name: 'Utah', type: 'flat', rate: 4.55 },
   VT: { name: 'Vermont', type: 'pending' },
   VA: { name: 'Virginia', type: 'pending' },
   WA: { name: 'Washington', type: 'none' },
@@ -499,6 +516,11 @@ function calculateStateTax(stateCode, taxableIncome, filingStatus) {
     const tax = round2(taxableIncome * (state.rate / 100));
     return { stateName: state.name, stateTax: tax, available: true, note: `${state.name} applies a flat ${state.rate}% rate. This is an approximation — it doesn't account for state-specific deductions or exemptions, which could lower the result slightly.` };
   }
+  if (state.type === 'flatWithExemption') {
+    const taxableAboveExemption = Math.max(0, taxableIncome - state.exemption);
+    const tax = round2(taxableAboveExemption * (state.rate / 100));
+    return { stateName: state.name, stateTax: tax, available: true, note: `${state.name} applies a flat ${state.rate}% rate only to income above $${state.exemption.toLocaleString()} — income at or below that is untaxed.` };
+  }
   if (state.type === 'graduated') {
     // States with filing-status-specific brackets and their own standard deduction (e.g. New York)
     if (state.bracketsByStatus) {
@@ -515,7 +537,17 @@ function calculateStateTax(stateCode, taxableIncome, filingStatus) {
         lastCap = b.upTo;
         if (stateTaxableIncome <= b.upTo) break;
       }
-      return { stateName: state.name, stateTax: round2(tax), available: true, note: `${state.name} uses its own graduated brackets and standard deduction ($${stateDeduction.toLocaleString()} for this filing status), separate from the federal ones above.` };
+      let surchargeTax = 0;
+      if (state.surcharge) {
+        surchargeTax = round2(Math.max(0, stateTaxableIncome - state.surcharge.threshold) * (state.surcharge.rate / 100));
+        tax += surchargeTax;
+      }
+      let note = `${state.name} uses its own graduated brackets and standard deduction ($${stateDeduction.toLocaleString()} for this filing status), separate from the federal ones above.`;
+      if (state.surcharge && surchargeTax > 0) {
+        note += ` Includes an additional ${state.surcharge.rate}% surcharge on income over $${state.surcharge.threshold.toLocaleString()}.`;
+      }
+      if (state.dataVintageNote) note += ` ${state.dataVintageNote}`;
+      return { stateName: state.name, stateTax: round2(tax), available: true, note };
     }
     // Simpler states with one bracket array applied directly to federal taxable income (e.g. Massachusetts)
     let tax = 0, lastCap = 0;
