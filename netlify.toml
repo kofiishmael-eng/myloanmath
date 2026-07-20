@@ -35,6 +35,12 @@
   [headers.values]
     Cache-Control = "public, max-age=86400, must-revalidate"
 
+# Removed tool — redirect anyone with a bookmark or old search result
+[[redirects]]
+  from = "/cheque-amount-in-words.html"
+  to = "/currency-to-words.html"
+  status = 301
+
 # Custom 404 page (Netlify serves this automatically for any unmatched path)
 [[redirects]]
   from = "/*"
