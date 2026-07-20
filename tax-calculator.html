@@ -67,11 +67,25 @@
   </div>
   <div class="row">
     <div class="field"><label for="taxAdditionalDeductions">Additional deductions (optional, beyond the standard deduction)</label><input type="text" id="taxAdditionalDeductions" value="0" inputmode="decimal"></div>
+    <div class="field" style="max-width:240px;"><label for="taxState">State (optional)</label>
+      <select id="taxState">
+        <option value="">— Federal only —</option>
+      </select>
+    </div>
   </div>
   <div class="result">
     <div class="result-label">Estimated federal tax owed</div>
     <div class="result-text" id="taxOutput">-</div>
     <div class="stat-grid" id="taxStats"></div>
+  </div>
+  <div class="result" id="stateResultBox" style="display:none;">
+    <div class="result-label" id="stateResultLabel">Estimated state tax owed</div>
+    <div class="result-text" id="stateOutput">-</div>
+    <p class="note" id="stateNote"></p>
+  </div>
+  <div class="result" id="combinedResultBox" style="display:none; background:var(--accent); border-color:var(--accent);">
+    <div class="result-label" style="color:#fff;">Estimated total tax (federal + state)</div>
+    <div class="result-text" id="combinedOutput" style="color:#fff;">-</div>
   </div>
   <div class="actions"><button class="action" id="taxBreakdownBtn" type="button">Show bracket-by-bracket breakdown</button></div>
   <div class="schedule-wrap" id="taxBreakdownWrap" style="display:none;"><table class="schedule-table" id="taxBreakdownTable"></table></div>
@@ -149,10 +163,25 @@
   function fmtMoney(n){ return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
   function parseNum(str){ var s=String(str).trim().replace(/,/g,''); if(!/^-?\d+(\.\d+)?$/.test(s)) return NaN; return parseFloat(s); }
   var breakdownVisible = false;
+
+  // Populate state dropdown, alphabetically, from the verified data set
+  var stateSelect = el('taxState');
+  Object.keys(mod.STATE_TAX_2026).sort(function(a,b){
+    return mod.STATE_TAX_2026[a].name.localeCompare(mod.STATE_TAX_2026[b].name);
+  }).forEach(function(code){
+    var s = mod.STATE_TAX_2026[code];
+    var opt = document.createElement('option');
+    opt.value = code;
+    var tag = s.type === 'pending' ? ' (coming soon)' : (s.type === 'none' ? ' (no income tax)' : '');
+    opt.textContent = s.name + tag;
+    stateSelect.appendChild(opt);
+  });
+
   function compute(){
     var income = parseNum(el('taxIncome').value);
     var status = el('taxFilingStatus').value;
     var extra = parseNum(el('taxAdditionalDeductions').value);
+    var stateCode = el('taxState').value;
     var out = el('taxOutput'); var stats = el('taxStats');
     try {
       if (isNaN(income) || isNaN(extra)) throw new Error('Enter valid numbers for income and deductions.');
@@ -164,9 +193,31 @@
         '<div class="stat"><div class="stat-label">Marginal rate</div><div class="stat-value">' + r.marginalRatePercent + '%</div></div>' +
         '<div class="stat"><div class="stat-label">Standard deduction</div><div class="stat-value">' + fmtMoney(r.standardDeduction) + '</div></div>';
       if (breakdownVisible) renderBreakdown(r.breakdown);
+
+      // State tax
+      var stateBox = el('stateResultBox'); var combinedBox = el('combinedResultBox');
+      if (stateCode) {
+        var stateResult = mod.calculateStateTax(stateCode, r.taxableIncome);
+        stateBox.style.display = 'block';
+        el('stateResultLabel').textContent = 'Estimated ' + stateResult.stateName + ' state tax owed';
+        el('stateNote').textContent = stateResult.note;
+        if (stateResult.available) {
+          el('stateOutput').textContent = fmtMoney(stateResult.stateTax);
+          el('stateOutput').classList.remove('error');
+          combinedBox.style.display = 'block';
+          el('combinedOutput').textContent = fmtMoney(r.totalTax + stateResult.stateTax);
+        } else {
+          el('stateOutput').textContent = 'Not yet available';
+          combinedBox.style.display = 'none';
+        }
+      } else {
+        stateBox.style.display = 'none';
+        combinedBox.style.display = 'none';
+      }
     } catch(e) {
       out.textContent = e.message; out.classList.add('error'); stats.innerHTML='';
       el('taxBreakdownWrap').style.display='none'; breakdownVisible=false;
+      el('stateResultBox').style.display='none'; el('combinedResultBox').style.display='none';
     }
   }
   function renderBreakdown(breakdown){
@@ -174,7 +225,7 @@
     breakdown.forEach(function(b){ rows += '<tr><td>'+b.ratePercent+'%</td><td>'+fmtMoney(b.amountTaxed)+'</td><td>'+fmtMoney(b.taxOwed)+'</td></tr>'; });
     el('taxBreakdownTable').innerHTML = rows; el('taxBreakdownWrap').style.display='block';
   }
-  ['taxIncome','taxFilingStatus','taxAdditionalDeductions'].forEach(function(id){ el(id).addEventListener('input', compute); el(id).addEventListener('change', compute); });
+  ['taxIncome','taxFilingStatus','taxAdditionalDeductions','taxState'].forEach(function(id){ el(id).addEventListener('input', compute); el(id).addEventListener('change', compute); });
   el('taxBreakdownBtn').addEventListener('click', function(){
     breakdownVisible = !breakdownVisible;
     el('taxBreakdownBtn').textContent = breakdownVisible ? 'Hide bracket-by-bracket breakdown' : 'Show bracket-by-bracket breakdown';

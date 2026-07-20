@@ -59,11 +59,21 @@
   </div>
   <div class="row">
     <div class="field"><label for="craAdditionalDeductions">Additional deductions (RRSP contributions, etc.)</label><input type="text" id="craAdditionalDeductions" value="0" inputmode="decimal"></div>
+    <div class="field" style="max-width:260px;"><label for="craProvince">Province / territory (optional)</label>
+      <select id="craProvince">
+        <option value="">— Federal only —</option>
+      </select>
+    </div>
   </div>
   <div class="result">
     <div class="result-label">Estimated federal tax owed</div>
     <div class="result-text" id="craOutput">-</div>
     <div class="stat-grid" id="craStats"></div>
+  </div>
+  <div class="result" id="provinceResultBox" style="display:none;">
+    <div class="result-label" id="provinceResultLabel">Estimated provincial tax owed</div>
+    <div class="result-text" id="provinceOutput">-</div>
+    <p class="note" id="provinceNote"></p>
   </div>
   <div class="actions"><button class="action" id="craBreakdownBtn" type="button">Show bracket-by-bracket breakdown</button></div>
   <div class="schedule-wrap" id="craBreakdownWrap" style="display:none;"><table class="schedule-table" id="craBreakdownTable"></table></div>
@@ -133,9 +143,22 @@
   function fmtMoney(n){ return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
   function parseNum(str){ var s=String(str).trim().replace(/,/g,''); if(!/^-?\d+(\.\d+)?$/.test(s)) return NaN; return parseFloat(s); }
   var breakdownVisible = false;
+
+  // Populate province dropdown alphabetically
+  var provinceSelect = el('craProvince');
+  Object.keys(mod.PROVINCE_TAX_2026).sort(function(a,b){
+    return mod.PROVINCE_TAX_2026[a].name.localeCompare(mod.PROVINCE_TAX_2026[b].name);
+  }).forEach(function(code){
+    var opt = document.createElement('option');
+    opt.value = code;
+    opt.textContent = mod.PROVINCE_TAX_2026[code].name + ' (coming soon)';
+    provinceSelect.appendChild(opt);
+  });
+
   function compute(){
     var income = parseNum(el('craIncome').value);
     var extra = parseNum(el('craAdditionalDeductions').value);
+    var provinceCode = el('craProvince').value;
     var out = el('craOutput'); var stats = el('craStats'); var note = el('craPhaseOutNote');
     try {
       if (isNaN(income) || isNaN(extra)) throw new Error('Enter valid numbers for income and deductions.');
@@ -151,9 +174,21 @@
         ? 'At this income, the Basic Personal Amount is partially phased out, which makes your true marginal rate on the next dollar earned slightly higher than the stated bracket rate shown above.'
         : '';
       if (breakdownVisible) renderBreakdown(r.breakdown);
+
+      var provinceBox = el('provinceResultBox');
+      if (provinceCode) {
+        var provinceResult = mod.getProvinceTaxStatus(provinceCode);
+        provinceBox.style.display = 'block';
+        el('provinceResultLabel').textContent = 'Estimated ' + provinceResult.provinceName + ' tax owed';
+        el('provinceOutput').textContent = 'Not yet available';
+        el('provinceNote').textContent = provinceResult.note;
+      } else {
+        provinceBox.style.display = 'none';
+      }
     } catch(e) {
       out.textContent = e.message; out.classList.add('error'); stats.innerHTML=''; note.textContent='';
       el('craBreakdownWrap').style.display='none'; breakdownVisible=false;
+      el('provinceResultBox').style.display='none';
     }
   }
   function renderBreakdown(breakdown){
@@ -161,7 +196,7 @@
     breakdown.forEach(function(b){ rows += '<tr><td>'+b.ratePercent+'%</td><td>'+fmtMoney(b.amountTaxed)+'</td><td>'+fmtMoney(b.taxOwed)+'</td></tr>'; });
     el('craBreakdownTable').innerHTML = rows; el('craBreakdownWrap').style.display='block';
   }
-  ['craIncome','craAdditionalDeductions'].forEach(function(id){ el(id).addEventListener('input', compute); el(id).addEventListener('change', compute); });
+  ['craIncome','craAdditionalDeductions','craProvince'].forEach(function(id){ el(id).addEventListener('input', compute); el(id).addEventListener('change', compute); });
   el('craBreakdownBtn').addEventListener('click', function(){
     breakdownVisible = !breakdownVisible;
     el('craBreakdownBtn').textContent = breakdownVisible ? 'Hide bracket-by-bracket breakdown' : 'Show bracket-by-bracket breakdown';

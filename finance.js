@@ -401,6 +401,148 @@ function calculateFederalIncomeTaxCRA(input) {
 // ---------------------------------------------------------------------
 
 /**
+ * US State Income Tax — Phase 1.
+ * Source: cross-referenced against Tax Foundation State Income Tax Rates 2026,
+ * Federation of Tax Administrators bracket table, and each state's own
+ * statutory rate where cited.
+ *
+ * IMPORTANT SCOPE NOTE: this covers the 9 no-income-tax states and the 13
+ * genuinely flat-rate states with full confidence. The ~27 graduated-bracket
+ * states + DC are marked "pending" rather than estimated — cross-checking
+ * multiple sources during development turned up real disagreement on exact
+ * 2026 dollar thresholds even for California (the best-documented state),
+ * since several states have not yet published final 2026 figures. Rather
+ * than ship confidently-wrong numbers for a tax calculator, those states
+ * are flagged clearly as not yet available and will be added as each one's
+ * official state Department of Revenue schedule is verified individually.
+ *
+ * Flat-rate calculation applies the rate directly to federal taxable income
+ * as a reasonable approximation — it does not account for state-specific
+ * standard deductions/exemptions, which could lower the result slightly.
+ */
+const STATE_TAX_2026 = {
+  AL: { name: 'Alabama', type: 'pending' },
+  AK: { name: 'Alaska', type: 'none' },
+  AZ: { name: 'Arizona', type: 'flat', rate: 2.5 },
+  AR: { name: 'Arkansas', type: 'pending' },
+  CA: { name: 'California', type: 'pending' },
+  CO: { name: 'Colorado', type: 'flat', rate: 4.4 },
+  CT: { name: 'Connecticut', type: 'pending' },
+  DE: { name: 'Delaware', type: 'pending' },
+  FL: { name: 'Florida', type: 'none' },
+  GA: { name: 'Georgia', type: 'flat', rate: 4.99 },
+  HI: { name: 'Hawaii', type: 'pending' },
+  ID: { name: 'Idaho', type: 'pending' },
+  IL: { name: 'Illinois', type: 'flat', rate: 4.95 },
+  IN: { name: 'Indiana', type: 'flat', rate: 3.05 },
+  IA: { name: 'Iowa', type: 'flat', rate: 3.9 },
+  KS: { name: 'Kansas', type: 'pending' },
+  KY: { name: 'Kentucky', type: 'flat', rate: 3.5 },
+  LA: { name: 'Louisiana', type: 'pending' },
+  ME: { name: 'Maine', type: 'pending' },
+  MD: { name: 'Maryland', type: 'pending' },
+  MA: { name: 'Massachusetts', type: 'graduated', brackets: [{ rate: 5, upTo: 1000000 }, { rate: 9, upTo: Infinity }] },
+  MI: { name: 'Michigan', type: 'flat', rate: 4.05 },
+  MN: { name: 'Minnesota', type: 'pending' },
+  MS: { name: 'Mississippi', type: 'flat', rate: 4.4 },
+  MO: { name: 'Missouri', type: 'pending' },
+  MT: { name: 'Montana', type: 'pending' },
+  NE: { name: 'Nebraska', type: 'pending' },
+  NV: { name: 'Nevada', type: 'none' },
+  NH: { name: 'New Hampshire', type: 'none' },
+  NJ: { name: 'New Jersey', type: 'pending' },
+  NM: { name: 'New Mexico', type: 'pending' },
+  NY: { name: 'New York', type: 'pending' },
+  NC: { name: 'North Carolina', type: 'flat', rate: 3.99 },
+  ND: { name: 'North Dakota', type: 'flat', rate: 1.95 },
+  OH: { name: 'Ohio', type: 'pending' },
+  OK: { name: 'Oklahoma', type: 'pending' },
+  OR: { name: 'Oregon', type: 'pending' },
+  PA: { name: 'Pennsylvania', type: 'flat', rate: 3.07 },
+  RI: { name: 'Rhode Island', type: 'pending' },
+  SC: { name: 'South Carolina', type: 'pending' },
+  SD: { name: 'South Dakota', type: 'none' },
+  TN: { name: 'Tennessee', type: 'none' },
+  TX: { name: 'Texas', type: 'none' },
+  UT: { name: 'Utah', type: 'flat', rate: 4.45 },
+  VT: { name: 'Vermont', type: 'pending' },
+  VA: { name: 'Virginia', type: 'pending' },
+  WA: { name: 'Washington', type: 'none' },
+  WV: { name: 'West Virginia', type: 'pending' },
+  WI: { name: 'Wisconsin', type: 'pending' },
+  WY: { name: 'Wyoming', type: 'none' },
+  DC: { name: 'Washington DC', type: 'pending' },
+};
+
+function calculateStateTax(stateCode, taxableIncome) {
+  const state = STATE_TAX_2026[stateCode];
+  if (!state) throw new Error(`Unrecognized state code: ${stateCode}`);
+  if (!(taxableIncome >= 0)) throw new Error('Taxable income cannot be negative.');
+
+  if (state.type === 'none') {
+    return { stateName: state.name, stateTax: 0, available: true, note: `${state.name} has no state income tax.` };
+  }
+  if (state.type === 'flat') {
+    const tax = round2(taxableIncome * (state.rate / 100));
+    return { stateName: state.name, stateTax: tax, available: true, note: `${state.name} applies a flat ${state.rate}% rate. This is an approximation — it doesn't account for state-specific deductions or exemptions, which could lower the result slightly.` };
+  }
+  if (state.type === 'graduated') {
+    let tax = 0, lastCap = 0;
+    for (const b of state.brackets) {
+      if (taxableIncome > lastCap) {
+        const amt = Math.min(taxableIncome, b.upTo) - lastCap;
+        tax += amt * (b.rate / 100);
+      }
+      lastCap = b.upTo;
+      if (taxableIncome <= b.upTo) break;
+    }
+    return { stateName: state.name, stateTax: round2(tax), available: true, note: `${state.name} uses graduated brackets.` };
+  }
+  // pending
+  return { stateName: state.name, stateTax: null, available: false, note: `${state.name}'s graduated bracket schedule is still being verified against official sources and isn't available yet. Your federal estimate above is still accurate.` };
+}
+
+// ---------------------------------------------------------------------
+
+/**
+ * Canadian Provincial/Territorial Tax — Phase 1.
+ * All 13 jurisdictions are marked "pending" for the same reason as the US
+ * graduated states: each province sets its own brackets, basic personal
+ * amount, and (in Ontario's and PEI's case) a separate surtax layered on
+ * top of the bracket calculation, and getting these right requires
+ * verifying each one individually against its own provincial tax
+ * authority rather than a secondary aggregator. Federal CRA tax (above)
+ * is fully accurate and unaffected by this.
+ */
+const PROVINCE_TAX_2026 = {
+  AB: { name: 'Alberta', type: 'pending' },
+  BC: { name: 'British Columbia', type: 'pending' },
+  MB: { name: 'Manitoba', type: 'pending' },
+  NB: { name: 'New Brunswick', type: 'pending' },
+  NL: { name: 'Newfoundland and Labrador', type: 'pending' },
+  NS: { name: 'Nova Scotia', type: 'pending' },
+  NT: { name: 'Northwest Territories', type: 'pending' },
+  NU: { name: 'Nunavut', type: 'pending' },
+  ON: { name: 'Ontario', type: 'pending' },
+  PE: { name: 'Prince Edward Island', type: 'pending' },
+  QC: { name: 'Quebec', type: 'pending' },
+  SK: { name: 'Saskatchewan', type: 'pending' },
+  YT: { name: 'Yukon', type: 'pending' },
+};
+
+function getProvinceTaxStatus(provinceCode) {
+  const province = PROVINCE_TAX_2026[provinceCode];
+  if (!province) throw new Error(`Unrecognized province code: ${provinceCode}`);
+  return {
+    provinceName: province.name,
+    available: false,
+    note: `${province.name}'s provincial tax brackets are still being verified against official sources and aren't available yet. Your federal CRA estimate above is still accurate.`,
+  };
+}
+
+// ---------------------------------------------------------------------
+
+/**
  * Percentage Calculator — four standard modes.
  * All functions validate inputs and throw a clear Error rather than
  * returning NaN or Infinity.
@@ -443,7 +585,7 @@ function assertFiniteNumbers(fields) {
 
 // ---------------------------------------------------------------------
 
-const FinanceTools = { calculateLoan, amortizationScheduleByYear, calculateMortgage, compoundInterest, calculateFederalIncomeTax, TAX_BRACKETS_2026, STANDARD_DEDUCTION_2026, FILING_STATUS_LABELS, calculateFederalIncomeTaxCRA, CRA_FEDERAL_BRACKETS_2026, CRA_BPA_2026, PercentageTools, round2 };
+const FinanceTools = { calculateLoan, amortizationScheduleByYear, calculateMortgage, compoundInterest, calculateFederalIncomeTax, TAX_BRACKETS_2026, STANDARD_DEDUCTION_2026, FILING_STATUS_LABELS, calculateFederalIncomeTaxCRA, CRA_FEDERAL_BRACKETS_2026, CRA_BPA_2026, calculateStateTax, STATE_TAX_2026, getProvinceTaxStatus, PROVINCE_TAX_2026, PercentageTools, round2 };
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = FinanceTools;
