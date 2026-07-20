@@ -197,7 +197,7 @@
       // State tax
       var stateBox = el('stateResultBox'); var combinedBox = el('combinedResultBox');
       if (stateCode) {
-        var stateResult = mod.calculateStateTax(stateCode, r.taxableIncome);
+        var stateResult = mod.calculateStateTax(stateCode, r.taxableIncome, status);
         stateBox.style.display = 'block';
         el('stateResultLabel').textContent = 'Estimated ' + stateResult.stateName + ' state tax owed';
         el('stateNote').textContent = stateResult.note;

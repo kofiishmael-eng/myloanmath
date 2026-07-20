@@ -453,6 +453,19 @@ const STATE_TAX_2026 = {
   NJ: { name: 'New Jersey', type: 'pending' },
   NM: { name: 'New Mexico', type: 'pending' },
   NY: { name: 'New York', type: 'pending' },
+  NY: {
+    name: 'New York', type: 'graduated',
+    // Verified: 2026 rate cut (0.1pp off the bottom 5 brackets vs 2025) confirmed by two
+    // independent sources citing the same thresholds; cross-checked against a worked
+    // example that (after correcting for a source using stale 2025 rates) matched exactly.
+    bracketsByStatus: {
+      single: [{ rate: 3.90, upTo: 8500 }, { rate: 4.40, upTo: 11700 }, { rate: 5.15, upTo: 13900 }, { rate: 5.40, upTo: 80650 }, { rate: 5.90, upTo: 215400 }, { rate: 6.85, upTo: 1077550 }, { rate: 9.65, upTo: 5000000 }, { rate: 10.30, upTo: 25000000 }, { rate: 10.90, upTo: Infinity }],
+      marriedJointly: [{ rate: 3.90, upTo: 17150 }, { rate: 4.40, upTo: 23600 }, { rate: 5.15, upTo: 27900 }, { rate: 5.40, upTo: 161550 }, { rate: 5.90, upTo: 323200 }, { rate: 6.85, upTo: 2155350 }, { rate: 9.65, upTo: 5000000 }, { rate: 10.30, upTo: 25000000 }, { rate: 10.90, upTo: Infinity }],
+      headOfHousehold: [{ rate: 3.90, upTo: 12800 }, { rate: 4.40, upTo: 17650 }, { rate: 5.15, upTo: 20900 }, { rate: 5.40, upTo: 107650 }, { rate: 5.90, upTo: 269300 }, { rate: 6.85, upTo: 1616450 }, { rate: 9.65, upTo: 5000000 }, { rate: 10.30, upTo: 25000000 }, { rate: 10.90, upTo: Infinity }],
+      marriedSeparately: [{ rate: 3.90, upTo: 8500 }, { rate: 4.40, upTo: 11700 }, { rate: 5.15, upTo: 13900 }, { rate: 5.40, upTo: 80650 }, { rate: 5.90, upTo: 215400 }, { rate: 6.85, upTo: 1077550 }, { rate: 9.65, upTo: 5000000 }, { rate: 10.30, upTo: 25000000 }, { rate: 10.90, upTo: Infinity }],
+    },
+    standardDeduction: { single: 8000, marriedJointly: 16050, headOfHousehold: 11200, marriedSeparately: 8000 },
+  },
   NC: { name: 'North Carolina', type: 'flat', rate: 3.99 },
   ND: { name: 'North Dakota', type: 'flat', rate: 1.95 },
   OH: { name: 'Ohio', type: 'pending' },
@@ -474,7 +487,7 @@ const STATE_TAX_2026 = {
   DC: { name: 'Washington DC', type: 'pending' },
 };
 
-function calculateStateTax(stateCode, taxableIncome) {
+function calculateStateTax(stateCode, taxableIncome, filingStatus) {
   const state = STATE_TAX_2026[stateCode];
   if (!state) throw new Error(`Unrecognized state code: ${stateCode}`);
   if (!(taxableIncome >= 0)) throw new Error('Taxable income cannot be negative.');
@@ -487,6 +500,24 @@ function calculateStateTax(stateCode, taxableIncome) {
     return { stateName: state.name, stateTax: tax, available: true, note: `${state.name} applies a flat ${state.rate}% rate. This is an approximation — it doesn't account for state-specific deductions or exemptions, which could lower the result slightly.` };
   }
   if (state.type === 'graduated') {
+    // States with filing-status-specific brackets and their own standard deduction (e.g. New York)
+    if (state.bracketsByStatus) {
+      const status = state.standardDeduction[filingStatus] !== undefined ? filingStatus : 'single';
+      const stateDeduction = state.standardDeduction[status] || 0;
+      const stateTaxableIncome = Math.max(0, taxableIncome - stateDeduction);
+      const brackets = state.bracketsByStatus[status] || state.bracketsByStatus.single;
+      let tax = 0, lastCap = 0;
+      for (const b of brackets) {
+        if (stateTaxableIncome > lastCap) {
+          const amt = Math.min(stateTaxableIncome, b.upTo) - lastCap;
+          tax += amt * (b.rate / 100);
+        }
+        lastCap = b.upTo;
+        if (stateTaxableIncome <= b.upTo) break;
+      }
+      return { stateName: state.name, stateTax: round2(tax), available: true, note: `${state.name} uses its own graduated brackets and standard deduction ($${stateDeduction.toLocaleString()} for this filing status), separate from the federal ones above.` };
+    }
+    // Simpler states with one bracket array applied directly to federal taxable income (e.g. Massachusetts)
     let tax = 0, lastCap = 0;
     for (const b of state.brackets) {
       if (taxableIncome > lastCap) {
