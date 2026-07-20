@@ -545,30 +545,69 @@ function calculateStateTax(stateCode, taxableIncome, filingStatus) {
  * authority rather than a secondary aggregator. Federal CRA tax (above)
  * is fully accurate and unaffected by this.
  */
+/**
+ * Canadian Provincial/Territorial Tax — Phase 2.
+ * Source: Canada Revenue Agency's own official published rate table
+ * (canada.ca "Current year tax rates and income brackets"), fetched directly
+ * — not a secondary aggregator. This is the same standard applied to federal.
+ *
+ * Two honest limitations, disclosed directly on the calculator page rather
+ * than silently absorbed into the number:
+ *  1. Each province sets its own basic-personal-amount-equivalent credit or
+ *     low-income tax reduction, and the CRA's rate table (by design) doesn't
+ *     include those dollar amounts — only the bracket rates themselves. This
+ *     means these estimates run slightly HIGH at lower incomes (the safer
+ *     direction for an estimate to err) since no such reduction is applied.
+ *  2. Ontario and Prince Edward Island layer an additional provincial surtax
+ *     on top of these brackets for higher earners, which is not included.
+ *
+ * Quebec is administered separately by Revenu Québec under a genuinely
+ * different tax base (not the federal one), and is not yet implemented here.
+ */
 const PROVINCE_TAX_2026 = {
-  AB: { name: 'Alberta', type: 'pending' },
-  BC: { name: 'British Columbia', type: 'pending' },
-  MB: { name: 'Manitoba', type: 'pending' },
-  NB: { name: 'New Brunswick', type: 'pending' },
-  NL: { name: 'Newfoundland and Labrador', type: 'pending' },
-  NS: { name: 'Nova Scotia', type: 'pending' },
-  NT: { name: 'Northwest Territories', type: 'pending' },
-  NU: { name: 'Nunavut', type: 'pending' },
-  ON: { name: 'Ontario', type: 'pending' },
-  PE: { name: 'Prince Edward Island', type: 'pending' },
+  AB: { name: 'Alberta', type: 'graduated', brackets: [{ rate: 8, upTo: 61200 }, { rate: 10, upTo: 154259 }, { rate: 12, upTo: 185111 }, { rate: 13, upTo: 246813 }, { rate: 14, upTo: 370220 }, { rate: 15, upTo: Infinity }] },
+  BC: { name: 'British Columbia', type: 'graduated', brackets: [{ rate: 5.6, upTo: 50363 }, { rate: 7.7, upTo: 100728 }, { rate: 10.5, upTo: 115648 }, { rate: 12.29, upTo: 140430 }, { rate: 14.7, upTo: 190405 }, { rate: 16.8, upTo: 265545 }, { rate: 20.5, upTo: Infinity }] },
+  MB: { name: 'Manitoba', type: 'graduated', brackets: [{ rate: 10.8, upTo: 47564 }, { rate: 12.75, upTo: 101200 }, { rate: 17.4, upTo: Infinity }] },
+  NB: { name: 'New Brunswick', type: 'graduated', brackets: [{ rate: 9.4, upTo: 52333 }, { rate: 14, upTo: 104666 }, { rate: 16, upTo: 193861 }, { rate: 19.5, upTo: Infinity }] },
+  NL: { name: 'Newfoundland and Labrador', type: 'graduated', brackets: [{ rate: 8.7, upTo: 44678 }, { rate: 14.5, upTo: 89354 }, { rate: 15.8, upTo: 159528 }, { rate: 17.8, upTo: 223340 }, { rate: 19.8, upTo: 285319 }, { rate: 20.8, upTo: 570638 }, { rate: 21.3, upTo: 1141275 }, { rate: 21.8, upTo: Infinity }] },
+  NS: { name: 'Nova Scotia', type: 'graduated', brackets: [{ rate: 8.79, upTo: 30995 }, { rate: 14.95, upTo: 61991 }, { rate: 16.67, upTo: 97417 }, { rate: 17.5, upTo: 157124 }, { rate: 21, upTo: Infinity }] },
+  NT: { name: 'Northwest Territories', type: 'graduated', brackets: [{ rate: 5.9, upTo: 53003 }, { rate: 8.6, upTo: 106009 }, { rate: 12.2, upTo: 172346 }, { rate: 14.05, upTo: Infinity }] },
+  NU: { name: 'Nunavut', type: 'graduated', brackets: [{ rate: 4, upTo: 55801 }, { rate: 7, upTo: 111602 }, { rate: 9, upTo: 181439 }, { rate: 11.5, upTo: Infinity }] },
+  ON: { name: 'Ontario', type: 'graduated', hasSurtax: true, brackets: [{ rate: 5.05, upTo: 53891 }, { rate: 9.15, upTo: 107785 }, { rate: 11.16, upTo: 150000 }, { rate: 12.16, upTo: 220000 }, { rate: 13.16, upTo: Infinity }] },
+  PE: { name: 'Prince Edward Island', type: 'graduated', hasSurtax: true, brackets: [{ rate: 9.5, upTo: 33928 }, { rate: 13.47, upTo: 65820 }, { rate: 16.6, upTo: 106890 }, { rate: 17.62, upTo: 142520 }, { rate: 19, upTo: 200000 }, { rate: 20, upTo: Infinity }] },
   QC: { name: 'Quebec', type: 'pending' },
-  SK: { name: 'Saskatchewan', type: 'pending' },
-  YT: { name: 'Yukon', type: 'pending' },
+  SK: { name: 'Saskatchewan', type: 'graduated', brackets: [{ rate: 10.5, upTo: 54532 }, { rate: 12.5, upTo: 155805 }, { rate: 14.5, upTo: Infinity }] },
+  YT: { name: 'Yukon', type: 'graduated', brackets: [{ rate: 6.4, upTo: 58523 }, { rate: 9, upTo: 117045 }, { rate: 10.9, upTo: 181440 }, { rate: 12.8, upTo: 500000 }, { rate: 15, upTo: Infinity }] },
 };
 
-function getProvinceTaxStatus(provinceCode) {
+function getProvinceTaxStatus(provinceCode, taxableIncome) {
   const province = PROVINCE_TAX_2026[provinceCode];
   if (!province) throw new Error(`Unrecognized province code: ${provinceCode}`);
-  return {
-    provinceName: province.name,
-    available: false,
-    note: `${province.name}'s provincial tax brackets are still being verified against official sources and aren't available yet. Your federal CRA estimate above is still accurate.`,
-  };
+  if (!(taxableIncome >= 0)) throw new Error('Taxable income cannot be negative.');
+
+  if (province.type === 'pending') {
+    return {
+      provinceName: province.name, available: false, provinceTax: null,
+      note: `${province.name}'s tax system is administered separately (Revenu Québec) on a different tax base and isn't available yet. Your federal CRA estimate above is still accurate.`,
+    };
+  }
+
+  let tax = 0, lastCap = 0;
+  for (const b of province.brackets) {
+    if (taxableIncome > lastCap) {
+      const amt = Math.min(taxableIncome, b.upTo) - lastCap;
+      tax += amt * (b.rate / 100);
+    }
+    lastCap = b.upTo;
+    if (taxableIncome <= b.upTo) break;
+  }
+
+  let note = `${province.name}'s official 2026 bracket rates (Canada Revenue Agency). This does not yet apply ${province.name}'s basic-personal-amount-equivalent credit or low-income tax reduction, so the real amount owed is likely somewhat lower than shown, especially at lower incomes.`;
+  if (province.hasSurtax) {
+    note += ` It also does not include ${province.name}'s additional provincial surtax, which applies on top for higher earners.`;
+  }
+
+  return { provinceName: province.name, available: true, provinceTax: round2(tax), note };
 }
 
 // ---------------------------------------------------------------------

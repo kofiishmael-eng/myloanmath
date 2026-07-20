@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://pagead2.googlesyndication.com">
 <link rel="stylesheet" href="style.css">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Canada Federal Income Tax Calculator (CRA)", "applicationCategory": "FinanceApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0"}}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why is the Basic Personal Amount a credit and not a deduction?", "acceptedAnswer": {"@type": "Answer", "text": "That's how the CRA structures it \u2014 the BPA is multiplied by the lowest federal tax rate (14%) to produce a credit amount, which is then subtracted directly from your tax bill, rather than being subtracted from your income before tax is calculated."}}, {"@type": "Question", "name": "Does this include provincial tax?", "acceptedAnswer": {"@type": "Answer", "text": "No \u2014 this calculator covers CRA federal tax only. Provincial or territorial tax is calculated separately and added on top, and rates vary significantly by province."}}, {"@type": "Question", "name": "Why did my Basic Personal Amount show as less than $16,452?", "acceptedAnswer": {"@type": "Answer", "text": "The BPA phases out for higher earners \u2014 between $181,440 and $258,482 of taxable income, it gradually shrinks from $16,452 down to a minimum of $14,829. Above $258,482, the minimum amount applies."}}, {"@type": "Question", "name": "What income counts toward the tax brackets?", "acceptedAnswer": {"@type": "Answer", "text": "Taxable income \u2014 your gross income minus any deductions you're claiming, such as RRSP contributions. Enter those in the \"additional deductions\" field."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why is the Basic Personal Amount a credit and not a deduction?", "acceptedAnswer": {"@type": "Answer", "text": "That's how the CRA structures it \u2014 the BPA is multiplied by the lowest federal tax rate (14%) to produce a credit amount, which is then subtracted directly from your tax bill, rather than being subtracted from your income before tax is calculated."}}, {"@type": "Question", "name": "Does this include provincial tax?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, for 12 of 13 provinces and territories, using official 2026 CRA-published bracket rates. It doesn't yet include each province's basic-personal-amount-equivalent credit or the Ontario/PEI provincial surtax. Quebec isn't available yet since it's administered separately by Revenu Qu\u00e9bec."}}, {"@type": "Question", "name": "Why did my Basic Personal Amount show as less than $16,452?", "acceptedAnswer": {"@type": "Answer", "text": "The BPA phases out for higher earners \u2014 between $181,440 and $258,482 of taxable income, it gradually shrinks from $16,452 down to a minimum of $14,829. Above $258,482, the minimum amount applies."}}, {"@type": "Question", "name": "What income counts toward the tax brackets?", "acceptedAnswer": {"@type": "Answer", "text": "Taxable income \u2014 your gross income minus any deductions you're claiming, such as RRSP contributions. Enter those in the \"additional deductions\" field."}}]}</script>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9412143347948347" crossorigin="anonymous"></script>
 </head>
@@ -77,6 +77,10 @@
     <div class="result-text" id="provinceOutput">-</div>
     <p class="note" id="provinceNote"></p>
   </div>
+  <div class="result" id="combinedResultBox" style="display:none; background:var(--accent); border-color:var(--accent);">
+    <div class="result-label" style="color:#fff;">Estimated total tax (federal + provincial)</div>
+    <div class="result-text" id="combinedOutput" style="color:#fff;">-</div>
+  </div>
   <div class="actions"><button class="action" id="craBreakdownBtn" type="button">Show bracket-by-bracket breakdown</button></div>
   <div class="schedule-wrap" id="craBreakdownWrap" style="display:none;"><table class="schedule-table" id="craBreakdownTable"></table></div>
   <p class="note" id="craPhaseOutNote"></p>
@@ -92,12 +96,12 @@
   <p>Canada's federal tax system works differently from the US system in one important way: the Basic Personal Amount (BPA) — $16,452 for 2026 — is applied as a non-refundable <strong>tax credit</strong>, not a deduction from income. That distinction matters. A deduction reduces the income that gets taxed in the first place. A credit is calculated separately (BPA × the lowest tax rate, 14%) and then subtracted directly from the tax you'd otherwise owe. The practical result: anyone earning $16,452 or less in 2026 owes no federal income tax at all, since the credit exactly cancels out the tax on that amount.</p>
   <p>Canada's federal brackets for 2026 use five progressive rates: 14% on the first $58,523 of taxable income, 20.5% up to $117,045, 26% up to $181,440, 29% up to $258,482, and 33% above that. Like any progressive system, these are marginal — only the income within each band is taxed at that band's rate, not your whole income at your top rate.</p>
   <p>There's a genuine wrinkle worth understanding if your income falls between $181,440 and $258,482: the Basic Personal Amount itself starts shrinking in that range, phasing down from its full $16,452 value toward a minimum of $14,829. Because the credit gets smaller as income rises through that band, each additional dollar earned there effectively faces a slightly higher true tax rate than the stated 29% bracket rate — the extra bite comes from the shrinking credit, not a separate published rate. This calculator accounts for that automatically and flags it when it applies to your numbers.</p>
-  <p>This tool calculates federal tax only. Canada layers provincial or territorial tax on top of the federal amount, and each province sets its own brackets, rates, and basic personal amount — Ontario, Alberta, Quebec, and the others are all meaningfully different from each other, and from the federal numbers here. Your total income tax bill is federal plus provincial combined, not federal alone.</p>
+  <p>This tool now includes provincial and territorial tax for 12 of Canada's 13 jurisdictions, using each one's official 2026 bracket rates published by the Canada Revenue Agency. Two honest limitations apply: these provincial estimates don't yet account for each province's own basic-personal-amount-equivalent credit or low-income tax reduction (meaning the real amount owed is likely somewhat lower, especially at lower incomes), and Ontario and Prince Edward Island both apply an additional provincial surtax on top of these brackets for higher earners, which isn't included yet. Quebec is administered separately by Revenu Québec on a different tax base entirely and isn't available here yet.</p>
 </section>
 
 
 <section class="content"><h2>Frequently asked questions</h2><div class="faq-item"><h3>Why is the Basic Personal Amount a credit and not a deduction?</h3><p>That's how the CRA structures it — the BPA is multiplied by the lowest federal tax rate (14%) to produce a credit amount, which is then subtracted directly from your tax bill, rather than being subtracted from your income before tax is calculated.</p></div>
-<div class="faq-item"><h3>Does this include provincial tax?</h3><p>No — this calculator covers CRA federal tax only. Provincial or territorial tax is calculated separately and added on top, and rates vary significantly by province.</p></div>
+<div class="faq-item"><h3>Does this include provincial tax?</h3><p>Yes, for 12 of 13 provinces and territories, using official 2026 CRA-published bracket rates. It doesn't yet include each province's basic-personal-amount-equivalent credit (so the real amount owed is likely a bit lower) or the Ontario/PEI provincial surtax. Quebec isn't available yet since it's administered separately by Revenu Québec.</p></div>
 <div class="faq-item"><h3>Why did my Basic Personal Amount show as less than $16,452?</h3><p>The BPA phases out for higher earners — between $181,440 and $258,482 of taxable income, it gradually shrinks from $16,452 down to a minimum of $14,829. Above $258,482, the minimum amount applies.</p></div>
 <div class="faq-item"><h3>What income counts toward the tax brackets?</h3><p>Taxable income — your gross income minus any deductions you're claiming, such as RRSP contributions. Enter those in the "additional deductions" field.</p></div>
 </section>
@@ -152,7 +156,8 @@
   }).forEach(function(code){
     var opt = document.createElement('option');
     opt.value = code;
-    opt.textContent = mod.PROVINCE_TAX_2026[code].name + ' (coming soon)';
+    var p = mod.PROVINCE_TAX_2026[code];
+    opt.textContent = p.name + (p.type === 'pending' ? ' (coming soon)' : '');
     provinceSelect.appendChild(opt);
   });
 
@@ -176,19 +181,29 @@
         : '';
       if (breakdownVisible) renderBreakdown(r.breakdown);
 
-      var provinceBox = el('provinceResultBox');
+      var provinceBox = el('provinceResultBox'); var combinedBox = el('combinedResultBox');
       if (provinceCode) {
-        var provinceResult = mod.getProvinceTaxStatus(provinceCode);
+        var provinceResult = mod.getProvinceTaxStatus(provinceCode, r.taxableIncome);
         provinceBox.style.display = 'block';
         el('provinceResultLabel').textContent = 'Estimated ' + provinceResult.provinceName + ' tax owed';
-        el('provinceOutput').textContent = 'Not yet available';
         el('provinceNote').textContent = provinceResult.note;
+        if (provinceResult.available) {
+          el('provinceOutput').textContent = fmtMoney(provinceResult.provinceTax);
+          el('provinceOutput').classList.remove('error');
+          combinedBox.style.display = 'block';
+          el('combinedOutput').textContent = fmtMoney(r.netTax + provinceResult.provinceTax);
+        } else {
+          el('provinceOutput').textContent = 'Not yet available';
+          combinedBox.style.display = 'none';
+        }
       } else {
         provinceBox.style.display = 'none';
+        combinedBox.style.display = 'none';
       }
     } catch(e) {
       out.textContent = e.message; out.classList.add('error'); stats.innerHTML=''; note.textContent='';
       el('craBreakdownWrap').style.display='none'; breakdownVisible=false;
+      el('provinceResultBox').style.display='none'; el('combinedResultBox').style.display='none';
       el('provinceResultBox').style.display='none';
     }
   }
