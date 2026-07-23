@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Free Number, Currency &amp; Financial Calculators | MyLoanMath</title>
-<meta name="description" content="Free online tools: numbers to words, words to numbers, currency to words, cheque amount in words, loan calculator, mortgage calculator, percentage calculator, compound interest calculator.">
+<meta name="description" content="Free calculators: loan, mortgage, US &amp; Canada tax, percentage, compound interest, numbers to words, and currency to words. No sign-up.">
 <link rel="canonical" href="https://myloanmath.com/">
 <meta property="og:title" content="Free Number, Currency &amp; Financial Calculators">
-<meta property="og:description" content="Numbers to words, cheque amount in words, loan and mortgage calculators, and more — all free, all instant.">
+<meta property="og:description" content="Free loan, mortgage, tax, and number-conversion calculators — no sign-up, runs entirely in your browser.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://myloanmath.com/">
 <meta property="og:image" content="https://myloanmath.com/assets/og-image.png">
@@ -59,7 +59,15 @@
   <span>&#10003; Tax calculators verified against official IRS &amp; CRA figures</span>
 </div>
 
-<div class="tool-grid">
+<div class="row" style="margin-bottom:8px;">
+  <div class="field">
+    <label for="siteSearch">Search tools</label>
+    <input type="text" id="siteSearch" placeholder="Try 'mortgage', 'tax', or 'percentage'...">
+  </div>
+</div>
+<p class="note" id="searchStatus" style="margin-bottom:20px;"></p>
+
+<div class="tool-grid" id="toolGrid">
 <a class="tool-card" href="numbers-to-words.html">
   <span class="tag">Free tool</span>
   <h3>Numbers to Words</h3>
@@ -137,5 +145,34 @@
   </div>
   <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
 </footer>
+<script>
+(function(){
+  function el(id){ return document.getElementById(id); }
+  function applyFilter(query){
+    var q = query.trim().toLowerCase();
+    var cards = document.querySelectorAll('#toolGrid .tool-card');
+    var visibleCount = 0;
+    cards.forEach(function(card){
+      var text = card.textContent.toLowerCase();
+      var match = q === '' || text.indexOf(q) !== -1;
+      card.style.display = match ? '' : 'none';
+      if (match) visibleCount++;
+    });
+    var status = el('searchStatus');
+    if (q === '') { status.textContent = ''; }
+    else { status.textContent = visibleCount + ' tool' + (visibleCount === 1 ? '' : 's') + ' matching "' + query.trim() + '"' + (visibleCount === 0 ? ' — try a different word' : ''); }
+  }
+  var input = el('siteSearch');
+  input.addEventListener('input', function(){ applyFilter(input.value); });
+
+  // If the page was loaded with ?q=... (matching this site's own SearchAction schema), apply it on load.
+  var params = new URLSearchParams(window.location.search);
+  var initialQuery = params.get('q');
+  if (initialQuery) {
+    input.value = initialQuery;
+    applyFilter(initialQuery);
+  }
+})();
+</script>
 </body>
 </html>
