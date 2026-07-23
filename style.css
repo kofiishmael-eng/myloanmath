@@ -1,7 +1,7 @@
 :root{
   --paper:#F2EFE4; --card:#FFFDF8; --ink:#191F1B; --ink-soft:#5A6559;
   --line:#DCD5C0; --accent:#1F5C43; --accent-soft:#E6EEE7; --error:#9C3B2E;
-  --brass:#9C7A3C; --brass-soft:#F1E9D4;
+  --brass:#7A5D2A; --brass-soft:#F1E9D4;
   --font-display:Georgia,'Iowan Old Style','Palatino Linotype','Book Antiqua',serif;
   --font-mono:ui-monospace,'SF Mono','Cascadia Code','Roboto Mono','Consolas','Courier New',monospace;
   --shadow-card:0 1px 2px rgba(25,31,27,0.04), 0 4px 14px rgba(25,31,27,0.06);
