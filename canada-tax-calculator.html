@@ -82,6 +82,23 @@
     <div class="result-label" style="color:#fff;">Estimated total tax (federal + provincial)</div>
     <div class="result-text" id="combinedOutput" style="color:#fff;">-</div>
   </div>
+
+  <div class="row" style="margin-top:20px;">
+    <div class="field" style="max-width:220px;">
+      <label for="craPayFrequency">Break net income down by</label>
+      <select id="craPayFrequency">
+        <option value="52">Weekly</option>
+        <option value="26" selected>Biweekly</option>
+        <option value="12">Monthly</option>
+      </select>
+    </div>
+  </div>
+  <div class="result" style="background:var(--brass-soft); border-color:var(--brass); border-left:3px solid var(--brass);">
+    <div class="result-label" style="color:var(--brass);" id="netPayLabel">Estimated net income — biweekly</div>
+    <div class="result-text" id="netPayOutput">-</div>
+    <p class="note" id="netPayNote"></p>
+  </div>
+
   <div class="actions"><button class="action" id="craBreakdownBtn" type="button">Show bracket-by-bracket breakdown</button></div>
   <div class="schedule-wrap" id="craBreakdownWrap" style="display:none;"><table class="schedule-table" id="craBreakdownTable"></table></div>
   <p class="note" id="craPhaseOutNote"></p>
@@ -183,6 +200,8 @@
       if (breakdownVisible) renderBreakdown(r.breakdown);
 
       var provinceBox = el('provinceResultBox'); var combinedBox = el('combinedResultBox');
+      var totalTaxDeducted = r.netTax;
+      var taxScopeLabel = 'federal';
       if (provinceCode) {
         var provinceResult = mod.getProvinceTaxStatus(provinceCode, r.taxableIncome);
         provinceBox.style.display = 'block';
@@ -193,6 +212,8 @@
           el('provinceOutput').classList.remove('error');
           combinedBox.style.display = 'block';
           el('combinedOutput').textContent = fmtMoney(r.netTax + provinceResult.provinceTax);
+          totalTaxDeducted = r.netTax + provinceResult.provinceTax;
+          taxScopeLabel = 'federal + ' + provinceResult.provinceName;
         } else {
           el('provinceOutput').textContent = 'Not yet available';
           combinedBox.style.display = 'none';
@@ -201,11 +222,21 @@
         provinceBox.style.display = 'none';
         combinedBox.style.display = 'none';
       }
+
+      // Net income pay-period breakdown
+      var netAnnual = Math.max(0, income - totalTaxDeducted);
+      var periodsPerYear = parseInt(el('craPayFrequency').value, 10);
+      var periodLabel = periodsPerYear === 52 ? 'weekly' : (periodsPerYear === 26 ? 'biweekly' : 'monthly');
+      var netPerPeriod = netAnnual / periodsPerYear;
+      el('netPayLabel').textContent = 'Estimated net income — ' + periodLabel;
+      el('netPayOutput').textContent = fmtMoney(netPerPeriod) + ' / ' + periodLabel.replace('ly', '');
+      el('netPayOutput').classList.remove('error');
+      el('netPayNote').textContent = 'This is your income after ' + taxScopeLabel + ' income tax only, divided evenly across pay periods. It does not yet include payroll deductions like CPP or EI, so your actual paycheque deposit will be somewhat lower than this figure.';
     } catch(e) {
       out.textContent = e.message; out.classList.add('error'); stats.innerHTML=''; note.textContent='';
       el('craBreakdownWrap').style.display='none'; breakdownVisible=false;
       el('provinceResultBox').style.display='none'; el('combinedResultBox').style.display='none';
-      el('provinceResultBox').style.display='none';
+      el('netPayOutput').textContent = '—'; el('netPayNote').textContent = '';
     }
   }
   function renderBreakdown(breakdown){
@@ -213,7 +244,7 @@
     breakdown.forEach(function(b){ rows += '<tr><td>'+b.ratePercent+'%</td><td>'+fmtMoney(b.amountTaxed)+'</td><td>'+fmtMoney(b.taxOwed)+'</td></tr>'; });
     el('craBreakdownTable').innerHTML = rows; el('craBreakdownWrap').style.display='block';
   }
-  ['craIncome','craAdditionalDeductions','craProvince'].forEach(function(id){ el(id).addEventListener('input', compute); el(id).addEventListener('change', compute); });
+  ['craIncome','craAdditionalDeductions','craProvince','craPayFrequency'].forEach(function(id){ el(id).addEventListener('input', compute); el(id).addEventListener('change', compute); });
   el('craBreakdownBtn').addEventListener('click', function(){
     breakdownVisible = !breakdownVisible;
     el('craBreakdownBtn').textContent = breakdownVisible ? 'Hide bracket-by-bracket breakdown' : 'Show bracket-by-bracket breakdown';

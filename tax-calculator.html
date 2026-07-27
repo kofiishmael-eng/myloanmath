@@ -90,6 +90,23 @@
     <div class="result-label" style="color:#fff;">Estimated total tax (federal + state)</div>
     <div class="result-text" id="combinedOutput" style="color:#fff;">-</div>
   </div>
+
+  <div class="row" style="margin-top:20px;">
+    <div class="field" style="max-width:220px;">
+      <label for="taxPayFrequency">Break net income down by</label>
+      <select id="taxPayFrequency">
+        <option value="52">Weekly</option>
+        <option value="26" selected>Biweekly</option>
+        <option value="12">Monthly</option>
+      </select>
+    </div>
+  </div>
+  <div class="result" style="background:var(--brass-soft); border-color:var(--brass); border-left:3px solid var(--brass);">
+    <div class="result-label" style="color:var(--brass);" id="netPayLabel">Estimated net income — biweekly</div>
+    <div class="result-text" id="netPayOutput">-</div>
+    <p class="note" id="netPayNote"></p>
+  </div>
+
   <div class="actions"><button class="action" id="taxBreakdownBtn" type="button">Show bracket-by-bracket breakdown</button></div>
   <div class="schedule-wrap" id="taxBreakdownWrap" style="display:none;"><table class="schedule-table" id="taxBreakdownTable"></table></div>
   <p class="note">Federal income tax only — does not include state tax, FICA/Social Security, Medicare, or tax credits. Assumes the standard deduction (not itemized). Figures use IRS tax year 2026 brackets (Revenue Procedure 2025-32). For your actual filing, consult a CPA or tax professional — this is an estimate, not tax advice.</p>
@@ -198,6 +215,8 @@
 
       // State tax
       var stateBox = el('stateResultBox'); var combinedBox = el('combinedResultBox');
+      var totalTaxDeducted = r.totalTax;
+      var taxScopeLabel = 'federal';
       if (stateCode) {
         var stateResult = mod.calculateStateTax(stateCode, r.taxableIncome, status);
         stateBox.style.display = 'block';
@@ -208,6 +227,8 @@
           el('stateOutput').classList.remove('error');
           combinedBox.style.display = 'block';
           el('combinedOutput').textContent = fmtMoney(r.totalTax + stateResult.stateTax);
+          totalTaxDeducted = r.totalTax + stateResult.stateTax;
+          taxScopeLabel = 'federal + ' + stateResult.stateName + ' state';
         } else {
           el('stateOutput').textContent = 'Not yet available';
           combinedBox.style.display = 'none';
@@ -216,10 +237,21 @@
         stateBox.style.display = 'none';
         combinedBox.style.display = 'none';
       }
+
+      // Net income pay-period breakdown
+      var netAnnual = Math.max(0, income - totalTaxDeducted);
+      var periodsPerYear = parseInt(el('taxPayFrequency').value, 10);
+      var periodLabel = periodsPerYear === 52 ? 'weekly' : (periodsPerYear === 26 ? 'biweekly' : 'monthly');
+      var netPerPeriod = netAnnual / periodsPerYear;
+      el('netPayLabel').textContent = 'Estimated net income — ' + periodLabel;
+      el('netPayOutput').textContent = fmtMoney(netPerPeriod) + ' / ' + periodLabel.replace('ly', '');
+      el('netPayOutput').classList.remove('error');
+      el('netPayNote').textContent = 'This is your income after ' + taxScopeLabel + ' income tax only, divided evenly across pay periods. It does not yet include payroll deductions like Social Security or Medicare, so your actual paycheck deposit will be somewhat lower than this figure.';
     } catch(e) {
       out.textContent = e.message; out.classList.add('error'); stats.innerHTML='';
       el('taxBreakdownWrap').style.display='none'; breakdownVisible=false;
       el('stateResultBox').style.display='none'; el('combinedResultBox').style.display='none';
+      el('netPayOutput').textContent = '—'; el('netPayNote').textContent = '';
     }
   }
   function renderBreakdown(breakdown){
@@ -227,7 +259,7 @@
     breakdown.forEach(function(b){ rows += '<tr><td>'+b.ratePercent+'%</td><td>'+fmtMoney(b.amountTaxed)+'</td><td>'+fmtMoney(b.taxOwed)+'</td></tr>'; });
     el('taxBreakdownTable').innerHTML = rows; el('taxBreakdownWrap').style.display='block';
   }
-  ['taxIncome','taxFilingStatus','taxAdditionalDeductions','taxState'].forEach(function(id){ el(id).addEventListener('input', compute); el(id).addEventListener('change', compute); });
+  ['taxIncome','taxFilingStatus','taxAdditionalDeductions','taxState','taxPayFrequency'].forEach(function(id){ el(id).addEventListener('input', compute); el(id).addEventListener('change', compute); });
   el('taxBreakdownBtn').addEventListener('click', function(){
     breakdownVisible = !breakdownVisible;
     el('taxBreakdownBtn').textContent = breakdownVisible ? 'Hide bracket-by-bracket breakdown' : 'Show bracket-by-bracket breakdown';
