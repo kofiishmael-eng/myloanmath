@@ -186,7 +186,7 @@
     var out = el('craOutput'); var stats = el('craStats'); var note = el('craPhaseOutNote');
     try {
       if (isNaN(income) || isNaN(extra)) throw new Error('Enter valid numbers for income and deductions.');
-      var r = mod.calculateFederalIncomeTaxCRA({ grossIncome: income, additionalDeductions: extra });
+      var r = mod.calculateFederalIncomeTaxCRA({ grossIncome: income, additionalDeductions: extra, applyQuebecAbatement: provinceCode === 'QC' });
       out.textContent = fmtMoney(r.netTax); out.classList.remove('error');
       stats.innerHTML =
         '<div class="stat"><div class="stat-label">Taxable income</div><div class="stat-value">' + fmtMoney(r.taxableIncome) + '</div></div>' +
@@ -194,9 +194,10 @@
         '<div class="stat"><div class="stat-label">Bracket rate</div><div class="stat-value">' + r.statedMarginalRatePercent + '%</div></div>' +
         '<div class="stat"><div class="stat-label">Basic Personal Amount</div><div class="stat-value">' + fmtMoney(r.bpaAmount) + '</div></div>' +
         '<div class="stat"><div class="stat-label">BPA credit</div><div class="stat-value">' + fmtMoney(r.bpaCredit) + '</div></div>';
-      note.textContent = r.inBpaPhaseOutBand
-        ? 'At this income, the Basic Personal Amount is partially phased out, which makes your true marginal rate on the next dollar earned slightly higher than the stated bracket rate shown above.'
-        : '';
+      var noteParts = [];
+      if (r.inBpaPhaseOutBand) noteParts.push('At this income, the Basic Personal Amount is partially phased out, which makes your true marginal rate on the next dollar earned slightly higher than the stated bracket rate shown above.');
+      if (r.quebecAbatementApplied) noteParts.push('This federal figure already includes the 16.5% Quebec abatement — a federal tax reduction that only Quebec residents receive, since Quebec collects its own provincial tax separately.');
+      note.textContent = noteParts.join(' ');
       if (breakdownVisible) renderBreakdown(r.breakdown);
 
       var provinceBox = el('provinceResultBox'); var combinedBox = el('combinedResultBox');

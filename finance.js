@@ -344,7 +344,7 @@ function calculateCRABasicPersonalAmount(netIncome) {
 }
 
 function calculateFederalIncomeTaxCRA(input) {
-  const { grossIncome, additionalDeductions = 0 } = input;
+  const { grossIncome, additionalDeductions = 0, applyQuebecAbatement = false } = input;
 
   if (!(grossIncome >= 0)) throw new Error('Gross income cannot be negative.');
   if (additionalDeductions < 0) throw new Error('Additional deductions cannot be negative.');
@@ -378,7 +378,15 @@ function calculateFederalIncomeTaxCRA(input) {
 
   const bpaAmount = round2(calculateCRABasicPersonalAmount(taxableIncome));
   const bpaCredit = round2(bpaAmount * CRA_BPA_2026.creditRate);
-  const netTax = Math.max(0, round2(grossTax - bpaCredit));
+  let netTax = Math.max(0, round2(grossTax - bpaCredit));
+
+  // Quebec abatement: a 16.5% reduction of federal tax, applied after the BPA
+  // credit — confirmed consistently by PwC and EY's own published Canadian tax
+  // guides, since Quebec administers its own separate provincial tax system.
+  const QUEBEC_ABATEMENT_RATE = 0.165;
+  if (applyQuebecAbatement) {
+    netTax = round2(netTax * (1 - QUEBEC_ABATEMENT_RATE));
+  }
 
   const effectiveRatePercent = grossIncome > 0 ? round2((netTax / grossIncome) * 100) : 0;
   // Flag the BPA phase-out band, where the true marginal rate is higher than
@@ -395,6 +403,7 @@ function calculateFederalIncomeTaxCRA(input) {
     statedMarginalRatePercent: round2(statedMarginalRatePercent),
     inBpaPhaseOutBand,
     breakdown,
+    quebecAbatementApplied: applyQuebecAbatement,
   };
 }
 
@@ -421,10 +430,10 @@ function calculateFederalIncomeTaxCRA(input) {
  * standard deductions/exemptions, which could lower the result slightly.
  */
 const STATE_TAX_2026 = {
-  AL: { name: 'Alabama', type: 'pending' },
+  AL: { name: 'Alabama', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 2, upTo: 500 }, { rate: 4, upTo: 3000 }, { rate: 5, upTo: Infinity }] },
   AK: { name: 'Alaska', type: 'none' },
   AZ: { name: 'Arizona', type: 'flat', rate: 2.5 },
-  AR: { name: 'Arkansas', type: 'pending' },
+  AR: { name: 'Arkansas', type: 'graduated', brackets: [{ rate: 2, upTo: 4600 }, { rate: 3.9, upTo: Infinity }] },
   CA: {
     name: 'California', type: 'graduated',
     // Verified against the California Franchise Tax Board's own published rate
@@ -445,31 +454,37 @@ const STATE_TAX_2026 = {
     dataVintageNote: "Uses California's most recently published brackets (tax year 2025) — the FTB has not yet released final 2026 inflation-adjusted thresholds (expected fall 2026). The rate structure itself is confirmed unchanged.",
   },
   CO: { name: 'Colorado', type: 'flat', rate: 4.4 },
-  CT: { name: 'Connecticut', type: 'pending' },
-  DE: { name: 'Delaware', type: 'pending' },
+  CT: { name: 'Connecticut', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 2, upTo: 10000 }, { rate: 4.5, upTo: 50000 }, { rate: 5.5, upTo: 100000 }, { rate: 6, upTo: 200000 }, { rate: 6.5, upTo: 250000 }, { rate: 6.99, upTo: Infinity }] },
+  DE: { name: 'Delaware', type: 'graduated', brackets: [{ rate: 2.2, upTo: 2000 }, { rate: 3.9, upTo: 5000 }, { rate: 4.8, upTo: 10000 }, { rate: 5.2, upTo: 20000 }, { rate: 5.55, upTo: 25000 }, { rate: 6.6, upTo: Infinity }] },
   FL: { name: 'Florida', type: 'none' },
   GA: { name: 'Georgia', type: 'flat', rate: 4.99 },
-  HI: { name: 'Hawaii', type: 'pending' },
-  ID: { name: 'Idaho', type: 'flat', rate: 5.695 },
+  HI: { name: 'Hawaii', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 1.4, upTo: 9600 }, { rate: 3.2, upTo: 14400 }, { rate: 5.5, upTo: 19200 }, { rate: 6.4, upTo: 24000 }, { rate: 6.8, upTo: 36000 }, { rate: 7.2, upTo: 48000 }, { rate: 7.6, upTo: 125000 }, { rate: 7.9, upTo: 175000 }, { rate: 8.25, upTo: 225000 }, { rate: 9, upTo: 275000 }, { rate: 10, upTo: 325000 }, { rate: 11, upTo: Infinity }] },
+  ID: { name: 'Idaho', type: 'flat', rate: 5.3 },
   IL: { name: 'Illinois', type: 'flat', rate: 4.95 },
   IN: { name: 'Indiana', type: 'flat', rate: 2.95 },
   IA: { name: 'Iowa', type: 'flat', rate: 3.9 },
-  KS: { name: 'Kansas', type: 'pending' },
+  KS: { name: 'Kansas', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 5.2, upTo: 23000 }, { rate: 5.58, upTo: Infinity }] },
   KY: { name: 'Kentucky', type: 'flat', rate: 3.5 },
   LA: { name: 'Louisiana', type: 'flat', rate: 3.0 },
-  ME: { name: 'Maine', type: 'pending' },
-  MD: { name: 'Maryland', type: 'pending' },
-  MA: { name: 'Massachusetts', type: 'graduated', brackets: [{ rate: 5, upTo: 1000000 }, { rate: 9, upTo: Infinity }] },
+  ME: { name: 'Maine', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 5.8, upTo: 27399 }, { rate: 6.75, upTo: 64849 }, { rate: 7.15, upTo: Infinity }] },
+  MD: { name: 'Maryland', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 2, upTo: 1000 }, { rate: 3, upTo: 2000 }, { rate: 4, upTo: 3000 }, { rate: 4.75, upTo: 100000 }, { rate: 5, upTo: 125000 }, { rate: 5.25, upTo: 150000 }, { rate: 5.5, upTo: 250000 }, { rate: 6.25, upTo: 500000 }, { rate: 6.5, upTo: Infinity }] },
+  MA: { name: 'Massachusetts', type: 'graduated', brackets: [{ rate: 5, upTo: 1083150 }, { rate: 9, upTo: Infinity }] },
   MI: { name: 'Michigan', type: 'flat', rate: 4.25 },
-  MN: { name: 'Minnesota', type: 'pending' },
+  MN: { name: 'Minnesota', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 5.35, upTo: 33310 }, { rate: 6.8, upTo: 109430 }, { rate: 7.85, upTo: 203150 }, { rate: 9.85, upTo: Infinity }] },
   MS: { name: 'Mississippi', type: 'flat', rate: 4.0 },
-  MO: { name: 'Missouri', type: 'pending' },
-  MT: { name: 'Montana', type: 'pending' },
-  NE: { name: 'Nebraska', type: 'pending' },
+  MO: { name: 'Missouri', type: 'graduated', brackets: [{ rate: 2, upTo: 1348 }, { rate: 2.5, upTo: 2696 }, { rate: 3, upTo: 4044 }, { rate: 3.5, upTo: 5392 }, { rate: 4, upTo: 6740 }, { rate: 4.5, upTo: 8088 }, { rate: 4.7, upTo: Infinity }] },
+  MT: { name: 'Montana', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 4.7, upTo: 47500 }, { rate: 5.65, upTo: Infinity }] },
+  NE: { name: 'Nebraska', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 2.46, upTo: 4130 }, { rate: 3.51, upTo: 24760 }, { rate: 4.55, upTo: Infinity }] },
   NV: { name: 'Nevada', type: 'none' },
   NH: { name: 'New Hampshire', type: 'none' },
-  NJ: { name: 'New Jersey', type: 'pending' },
-  NM: { name: 'New Mexico', type: 'pending' },
+  NJ: {
+    name: 'New Jersey', type: 'graduated', usesSingleFilerOnly: true,
+    // New Jersey's married-filing-jointly brackets are NOT just doubled single thresholds —
+    // genuinely different rate/threshold combinations per NJ Division of Taxation. Using
+    // single-filer brackets as the approximation here, same as other flagged states.
+    brackets: [{ rate: 1.4, upTo: 20000 }, { rate: 1.75, upTo: 35000 }, { rate: 3.5, upTo: 40000 }, { rate: 5.53, upTo: 75000 }, { rate: 6.37, upTo: 500000 }, { rate: 8.97, upTo: 1000000 }, { rate: 10.75, upTo: Infinity }],
+  },
+  NM: { name: 'New Mexico', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 1.5, upTo: 5500 }, { rate: 3.2, upTo: 16500 }, { rate: 4.3, upTo: 33500 }, { rate: 4.7, upTo: 66500 }, { rate: 4.9, upTo: 210000 }, { rate: 5.9, upTo: Infinity }] },
   NY: {
     name: 'New York', type: 'graduated',
     // Verified: 2026 rate cut (0.1pp off the bottom 5 brackets vs 2025) confirmed by two
@@ -486,22 +501,22 @@ const STATE_TAX_2026 = {
   NC: { name: 'North Carolina', type: 'flat', rate: 3.99 },
   ND: { name: 'North Dakota', type: 'flat', rate: 1.95 },
   OH: { name: 'Ohio', type: 'flatWithExemption', rate: 2.75, exemption: 26050 },
-  OK: { name: 'Oklahoma', type: 'pending' },
-  OR: { name: 'Oregon', type: 'pending' },
+  OK: { name: 'Oklahoma', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 2.5, upTo: 3750 }, { rate: 3.5, upTo: 4900 }, { rate: 4.5, upTo: Infinity }] },
+  OR: { name: 'Oregon', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 4.75, upTo: 4550 }, { rate: 6.75, upTo: 11400 }, { rate: 8.75, upTo: 125000 }, { rate: 9.9, upTo: Infinity }] },
   PA: { name: 'Pennsylvania', type: 'flat', rate: 3.07 },
-  RI: { name: 'Rhode Island', type: 'pending' },
-  SC: { name: 'South Carolina', type: 'pending' },
+  RI: { name: 'Rhode Island', type: 'graduated', brackets: [{ rate: 3.75, upTo: 82050 }, { rate: 4.75, upTo: 186450 }, { rate: 5.99, upTo: Infinity }] },
+  SC: { name: 'South Carolina', type: 'graduated', brackets: [{ rate: 0, upTo: 3640 }, { rate: 3, upTo: 18230 }, { rate: 6, upTo: Infinity }] },
   SD: { name: 'South Dakota', type: 'none' },
   TN: { name: 'Tennessee', type: 'none' },
   TX: { name: 'Texas', type: 'none' },
-  UT: { name: 'Utah', type: 'flat', rate: 4.55 },
-  VT: { name: 'Vermont', type: 'pending' },
-  VA: { name: 'Virginia', type: 'pending' },
+  UT: { name: 'Utah', type: 'flat', rate: 4.5 },
+  VT: { name: 'Vermont', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 3.35, upTo: 49400 }, { rate: 6.6, upTo: 119700 }, { rate: 7.6, upTo: 249700 }, { rate: 8.75, upTo: Infinity }] },
+  VA: { name: 'Virginia', type: 'graduated', brackets: [{ rate: 2, upTo: 3000 }, { rate: 3, upTo: 5000 }, { rate: 5, upTo: 17000 }, { rate: 5.75, upTo: Infinity }] },
   WA: { name: 'Washington', type: 'none' },
-  WV: { name: 'West Virginia', type: 'pending' },
-  WI: { name: 'Wisconsin', type: 'pending' },
+  WV: { name: 'West Virginia', type: 'graduated', brackets: [{ rate: 2.22, upTo: 10000 }, { rate: 2.96, upTo: 25000 }, { rate: 3.33, upTo: 40000 }, { rate: 4.44, upTo: 60000 }, { rate: 4.82, upTo: Infinity }] },
+  WI: { name: 'Wisconsin', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 3.5, upTo: 15110 }, { rate: 4.4, upTo: 51950 }, { rate: 5.3, upTo: 332720 }, { rate: 7.65, upTo: Infinity }] },
   WY: { name: 'Wyoming', type: 'none' },
-  DC: { name: 'Washington DC', type: 'pending' },
+  DC: { name: 'Washington DC', type: 'graduated', brackets: [{ rate: 4, upTo: 10000 }, { rate: 6, upTo: 40000 }, { rate: 6.5, upTo: 60000 }, { rate: 8.5, upTo: 250000 }, { rate: 9.25, upTo: 500000 }, { rate: 9.75, upTo: 1000000 }, { rate: 10.75, upTo: Infinity }] },
 };
 
 function calculateStateTax(stateCode, taxableIncome, filingStatus) {
@@ -559,7 +574,11 @@ function calculateStateTax(stateCode, taxableIncome, filingStatus) {
       lastCap = b.upTo;
       if (taxableIncome <= b.upTo) break;
     }
-    return { stateName: state.name, stateTax: round2(tax), available: true, note: `${state.name} uses graduated brackets.` };
+    let simpleNote = `${state.name} uses graduated brackets.`;
+    if (state.usesSingleFilerOnly) {
+      simpleNote += ` Uses single-filer bracket thresholds as an approximation regardless of filing status selected above, since married/joint brackets differ in this state — the real amount may vary somewhat if you're not filing single.`;
+    }
+    return { stateName: state.name, stateTax: round2(tax), available: true, note: simpleNote };
   }
   // pending
   return { stateName: state.name, stateTax: null, available: false, note: `${state.name}'s graduated bracket schedule is still being verified against official sources and isn't available yet. Your federal estimate above is still accurate.` };
@@ -620,7 +639,7 @@ function getProvinceTaxStatus(provinceCode, taxableIncome) {
   if (province.type === 'pending') {
     return {
       provinceName: province.name, available: false, provinceTax: null,
-      note: `${province.name}'s tax system is administered separately (Revenu Québec) on a different tax base and isn't available yet. Your federal CRA estimate above is still accurate.`,
+      note: `${province.name}'s provincial brackets and Basic Personal Amount are not shown here because independent sources currently disagree on the exact 2026 figures — rather than guess, this is left honestly unavailable until confirmed directly against Revenu Qu\u00e9bec's own published schedule. Your federal estimate above already correctly applies the 16.5% Quebec abatement that reduces federal tax for Quebec residents specifically.`,
     };
   }
 
