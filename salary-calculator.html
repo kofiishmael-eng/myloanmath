@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XL6TXYDCLD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XL6TXYDCLD');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salary Calculator — Free Paycheck & Take-Home Pay Calculator</title>
+<meta name="description" content="See your real take-home pay after federal tax, state tax, and FICA — by paycheck, not just by year. Free US salary and paycheck calculator.">
+<link rel="canonical" href="https://myloanmath.com/salary-calculator.html">
+<meta property="og:title" content="Salary Calculator — Free Paycheck & Take-Home Pay Calculator">
+<meta property="og:description" content="See your real take-home pay after federal tax, state tax, and FICA — by paycheck, not just by year. Free US salary and paycheck calculator.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myloanmath.com/salary-calculator.html">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta property="og:image" content="https://myloanmath.com/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myloanmath.com/assets/og-image.png">
+<link rel="preconnect" href="https://pagead2.googlesyndication.com">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Salary Calculator", "applicationCategory": "FinanceApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why is my paycheck less than salary divided by pay periods?", "acceptedAnswer": {"@type": "Answer", "text": "Federal tax, state tax (if your state has one), and FICA payroll taxes (Social Security and Medicare) all come out before you see the money — this calculator subtracts all three to show your real take-home pay per paycheck."}}, {"@type": "Question", "name": "What's the difference between biweekly and semi-monthly pay?", "acceptedAnswer": {"@type": "Answer", "text": "Biweekly means every two weeks — 26 paychecks a year. Semi-monthly means twice a month, typically the 1st and 15th — 24 paychecks a year. They sound similar but produce a genuinely different per-paycheck amount for the same salary."}}, {"@type": "Question", "name": "Does this include 401(k) or health insurance deductions?", "acceptedAnswer": {"@type": "Answer", "text": "Not yet — this shows take-home pay after federal tax, state tax, and FICA only. Pre-tax deductions like 401(k) contributions or health insurance premiums would reduce your paycheck further and aren't factored in here."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9412143347948347" crossorigin="anonymous"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://myloanmath.com/"}, {"@type": "ListItem", "position": 2, "name": "Salary Calculator", "item": "https://myloanmath.com/salary-calculator.html"}]}</script>
+</head>
+<body>
+<a href="#main-heading" class="skip-link">Skip to content</a>
+<nav class="topnav">
+  <a class="brand" href="index.html"><svg class="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+    <rect width="64" height="64" rx="14" fill="#1F5C43"/>
+    <text x="32" y="45" font-family="Georgia, serif" font-size="36" font-weight="700" fill="#F2EFE4" text-anchor="middle">M</text>
+  </svg> myloanmath</a>
+  <div class="links">
+      <a href="index.html">Home</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="auto-loan-calculator.html">Auto Loan Calculator</a>
+      <a href="debt-payoff-calculator.html">Debt Payoff Calculator</a>
+      <a href="discount-calculator.html">Discount Calculator</a>
+      <a href="salary-calculator.html">Salary Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+      <a href="tax-calculator.html">Tax Calculator (US - IRS)</a>
+      <a href="canada-tax-calculator.html">Tax Calculator (Canada - CRA)</a>
+      <a href="blog.html">Blog</a>
+  </div>
+</nav>
+<div class="wrap">
+<div class="fallback-banner" id="fallbackBanner">Something went wrong loading the calculator engine. Open your browser's console (F12) to see the error.</div>
+<header class="page-head">
+  <div class="eyebrow">// myloanmath</div>
+  <h1 id="main-heading">Salary Calculator</h1>
+  <p class="sub">See what actually lands in your bank account — by paycheck, not just by year.</p>
+</header>
+
+<div class="card">
+  <div class="row">
+    <div class="field"><label for="salAnnual">Annual salary</label><input type="text" id="salAnnual" value="65000" inputmode="decimal"></div>
+    <div class="field" style="max-width:200px;"><label for="salFrequency">Paid</label>
+      <select id="salFrequency">
+        <option value="52">Weekly</option>
+        <option value="26" selected>Biweekly</option>
+        <option value="24">Semi-monthly</option>
+        <option value="12">Monthly</option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="field" style="max-width:220px;"><label for="salFilingStatus">Filing status</label>
+      <select id="salFilingStatus">
+        <option value="single">Single</option>
+        <option value="marriedJointly">Married Filing Jointly</option>
+        <option value="headOfHousehold">Head of Household</option>
+        <option value="marriedSeparately">Married Filing Separately</option>
+      </select>
+    </div>
+    <div class="field" style="max-width:240px;"><label for="salState">State</label>
+      <select id="salState">
+        <option value="">— Federal + FICA only —</option>
+      </select>
+    </div>
+  </div>
+  <div class="result" style="background:var(--accent); border-color:var(--accent);">
+    <div class="result-label" style="color:#fff;" id="salPeriodLabel">Take-home pay — biweekly</div>
+    <div class="result-text" id="salPeriodOutput" style="color:#fff;">-</div>
+  </div>
+  <div class="stat-grid" id="salStats"></div>
+  <div class="actions"><button class="action" id="salCopyBtn" type="button">Copy result</button></div>
+  <p class="note">Subtracts federal income tax, state tax (if applicable), and FICA (Social Security + Medicare) from each paycheck. Does not yet include pre-tax deductions like 401(k) contributions or health insurance premiums, which would reduce take-home pay further.</p>
+</div>
+
+<div class="ad-slot"><!-- AD SLOT: below the tool. Once approved, paste your AdSense ad unit code here. --></div>
+
+<section class="content">
+<h2>What actually comes out of a paycheck</h2>
+<p>Your salary and your take-home pay are two very different numbers. A $65,000 salary doesn't arrive as $65,000 spread evenly across your paychecks — federal income tax, FICA payroll taxes (Social Security and Medicare), and state income tax if your state has one, all come out first. This calculator subtracts all three to show the number that actually lands in your account each pay period.</p>
+<h2>Biweekly vs. semi-monthly: not the same thing</h2>
+<p>These two get confused constantly because they sound alike. Biweekly means every two weeks, which works out to 26 paychecks a year — and twice a year, you'll notice a month with three paychecks instead of two. Semi-monthly means twice a month, typically on fixed dates like the 1st and 15th, which is exactly 24 paychecks a year, always two per month, never three. For the same annual salary, biweekly paychecks are slightly smaller than semi-monthly ones, since the same total is split across more pay periods.</p>
+</section>
+
+<section class="content">
+<h2>Frequently asked questions</h2>
+<div class="faq-item"><h3>Why is my paycheck less than salary divided by pay periods?</h3><p>Federal tax, state tax (if your state has one), and FICA payroll taxes (Social Security and Medicare) all come out before you see the money — this calculator subtracts all three to show your real take-home pay per paycheck.</p></div>
+<div class="faq-item"><h3>What's the difference between biweekly and semi-monthly pay?</h3><p>Biweekly means every two weeks — 26 paychecks a year. Semi-monthly means twice a month, typically the 1st and 15th — 24 paychecks a year. They sound similar but produce a genuinely different per-paycheck amount for the same salary.</p></div>
+<div class="faq-item"><h3>Does this include 401(k) or health insurance deductions?</h3><p>Not yet — this shows take-home pay after federal tax, state tax, and FICA only. Pre-tax deductions like 401(k) contributions or health insurance premiums would reduce your paycheck further and aren't factored in here.</p></div>
+</section>
+
+<div class="related">
+  <p class="label">Related tools</p>
+  <div class="related-list">
+    <a href="tax-calculator.html">Tax Calculator (US - IRS)</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+  </div>
+</div>
+
+</div>
+<footer class="site-footer">
+  <div>
+    <a href="index.html">Home</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="auto-loan-calculator.html">Auto Loan Calculator</a>
+      <a href="debt-payoff-calculator.html">Debt Payoff Calculator</a>
+      <a href="discount-calculator.html">Discount Calculator</a>
+      <a href="salary-calculator.html">Salary Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+      <a href="tax-calculator.html">Tax Calculator (US - IRS)</a>
+      <a href="canada-tax-calculator.html">Tax Calculator (Canada - CRA)</a>
+      <a href="blog.html">Blog</a>
+  </div>
+  <div style="margin-top:10px;">
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms-of-use.html">Terms &amp; Disclaimer</a>
+    <a href="about.html">About</a>
+  </div>
+  <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
+</footer>
+<script src="numberToWords.js"></script>
+<script src="finance.js"></script>
+<script>
+(function(){
+  var mod = window.FinanceTools;
+  if (!mod) { document.getElementById('fallbackBanner').style.display='block'; return; }
+  function el(id){ return document.getElementById(id); }
+  function fmtMoney(n){ return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function parseNum(str){ var s=String(str).trim().replace(/,/g,''); if(!/^-?\d+(\.\d+)?$/.test(s)) return NaN; return parseFloat(s); }
+  var lastResult = null;
+
+  // Populate state dropdown from the same verified data used on the tax calculator
+  var stateSelect = el('salState');
+  Object.keys(mod.STATE_TAX_2026).sort(function(a,b){
+    return mod.STATE_TAX_2026[a].name.localeCompare(mod.STATE_TAX_2026[b].name);
+  }).forEach(function(code){
+    var s = mod.STATE_TAX_2026[code];
+    var opt = document.createElement('option');
+    opt.value = code;
+    var tag = s.type === 'pending' ? ' (coming soon)' : (s.type === 'none' ? ' (no income tax)' : '');
+    opt.textContent = s.name + tag;
+    stateSelect.appendChild(opt);
+  });
+
+  function compute(){
+    var annual = parseNum(el('salAnnual').value);
+    var status = el('salFilingStatus').value;
+    var stateCode = el('salState').value;
+    var periodsPerYear = parseInt(el('salFrequency').value, 10);
+    var periodLabel = periodsPerYear === 52 ? 'weekly' : periodsPerYear === 26 ? 'biweekly' : periodsPerYear === 24 ? 'semi-monthly' : 'monthly';
+    var out = el('salPeriodOutput'); var stats = el('salStats');
+    try {
+      if (isNaN(annual)) throw new Error('Enter a valid annual salary.');
+      var fed = mod.calculateFederalIncomeTax({ grossIncome: annual, filingStatus: status });
+      var fica = mod.calculateFICA(annual, status);
+      var stateTax = 0; var stateNote = '';
+      if (stateCode) {
+        var stateResult = mod.calculateStateTax(stateCode, fed.taxableIncome, status);
+        if (stateResult.available) { stateTax = stateResult.stateTax; }
+        else { stateNote = stateResult.stateName + ' not yet available — showing federal + FICA only for now.'; }
+      }
+      var totalDeductions = fed.totalTax + fica.totalFICA + stateTax;
+      var annualNet = Math.max(0, annual - totalDeductions);
+      var perPeriod = annualNet / periodsPerYear;
+      lastResult = { fed: fed, fica: fica, stateTax: stateTax, annualNet: annualNet, perPeriod: perPeriod, periodLabel: periodLabel };
+
+      el('salPeriodLabel').textContent = 'Take-home pay — ' + periodLabel;
+      out.textContent = fmtMoney(perPeriod); out.classList.remove('error');
+      stats.innerHTML =
+        '<div class="stat"><div class="stat-label">Federal tax (annual)</div><div class="stat-value">' + fmtMoney(fed.totalTax) + '</div></div>' +
+        (stateTax > 0 ? '<div class="stat"><div class="stat-label">State tax (annual)</div><div class="stat-value">' + fmtMoney(stateTax) + '</div></div>' : '') +
+        '<div class="stat"><div class="stat-label">FICA (annual)</div><div class="stat-value">' + fmtMoney(fica.totalFICA) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Take-home pay (annual)</div><div class="stat-value">' + fmtMoney(annualNet) + '</div></div>';
+      if (stateNote) { stats.innerHTML += '<p class="note" style="grid-column:1/-1;">' + stateNote + '</p>'; }
+    } catch(e) {
+      out.textContent = e.message; out.classList.add('error'); stats.innerHTML=''; lastResult = null;
+    }
+  }
+  ['salAnnual','salFrequency','salFilingStatus','salState'].forEach(function(id){ el(id).addEventListener('input', compute); el(id).addEventListener('change', compute); });
+  el('salCopyBtn').addEventListener('click', function(){
+    if (!lastResult) return;
+    var lines = ['Salary Calculator — myloanmath.com', '', 'Annual salary: ' + el('salAnnual').value, ''];
+    lines.push('Take-home pay (' + lastResult.periodLabel + '): ' + fmtMoney(lastResult.perPeriod));
+    lines.push('Take-home pay (annual): ' + fmtMoney(lastResult.annualNet));
+    lines.push('Federal tax: ' + fmtMoney(lastResult.fed.totalTax));
+    if (lastResult.stateTax > 0) lines.push('State tax: ' + fmtMoney(lastResult.stateTax));
+    lines.push('FICA: ' + fmtMoney(lastResult.fica.totalFICA));
+    copyToClipboard(lines.join('\n'), el('salCopyBtn'));
+  });
+  compute();
+})();
+function copyToClipboard(text, btn){
+  function showCopied(){ btn.textContent='Copied!'; setTimeout(function(){ btn.textContent='Copy result'; }, 1800); }
+  function showFailed(){ btn.textContent='Copy failed — try manually'; setTimeout(function(){ btn.textContent='Copy result'; }, 2200); }
+  function fallbackCopy(){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(showCopied).catch(function(){ try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); } });
+  } else {
+    try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); }
+  }
+}
+</script>
+</body>
+</html>
