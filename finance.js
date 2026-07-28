@@ -192,6 +192,54 @@ function compoundInterest(input) {
 // ---------------------------------------------------------------------
 
 /**
+ * Savings Goal Calculator.
+ * Given a target amount, current savings, rate, and time horizon, solves
+ * for the required monthly contribution — the mathematical inverse of
+ * compoundInterest() above (which instead solves for future value given a
+ * known contribution). Uses monthly compounding to match the monthly
+ * contribution the UI collects, for consistency with compoundInterest's
+ * own contribution-per-period convention.
+ * Derived from the same annuity future-value identity:
+ *   FV = P(1+r)^n + PMT * ((1+r)^n - 1) / r
+ * Solved for PMT:
+ *   PMT = (FV - P(1+r)^n) * r / ((1+r)^n - 1)
+ */
+function requiredMonthlyContribution(input) {
+  const { targetAmount, currentSavings = 0, annualRatePercent, years } = input;
+  if (!(targetAmount > 0)) throw new Error('Target amount must be greater than zero.');
+  if (currentSavings < 0) throw new Error('Current savings cannot be negative.');
+  if (!(years > 0)) throw new Error('Time period must be greater than zero.');
+  if (annualRatePercent < 0) throw new Error('Interest rate cannot be negative.');
+
+  const r = annualRatePercent / 100 / 12;
+  const n = years * 12;
+  const principalGrowth = currentSavings * Math.pow(1 + r, n);
+  const remainingNeeded = targetAmount - principalGrowth;
+
+  let monthlyContribution;
+  if (remainingNeeded <= 0) {
+    // Current savings alone will already reach (or exceed) the goal by growth.
+    monthlyContribution = 0;
+  } else if (r === 0) {
+    monthlyContribution = remainingNeeded / n;
+  } else {
+    monthlyContribution = (remainingNeeded * r) / (Math.pow(1 + r, n) - 1);
+  }
+
+  const totalContributed = round2(currentSavings + monthlyContribution * n);
+  const totalInterestEarned = round2(targetAmount - totalContributed);
+
+  return {
+    monthlyContribution: round2(monthlyContribution),
+    totalContributed,
+    totalInterestEarned: Math.max(0, totalInterestEarned),
+    goalAlreadyMetByGrowth: remainingNeeded <= 0,
+  };
+}
+
+// ---------------------------------------------------------------------
+
+/**
  * Federal income tax calculator — 2026 tax year.
  * Source: IRS Revenue Procedure 2025-32 (verified against three independently
  * published worked examples before use — see build notes).
@@ -866,7 +914,7 @@ function assertFiniteNumbers(fields) {
 
 // ---------------------------------------------------------------------
 
-const FinanceTools = { calculateLoan, amortizationScheduleByYear, calculateMortgage, compoundInterest, calculateFederalIncomeTax, TAX_BRACKETS_2026, STANDARD_DEDUCTION_2026, FILING_STATUS_LABELS, calculateFederalIncomeTaxCRA, CRA_FEDERAL_BRACKETS_2026, CRA_BPA_2026, calculateStateTax, STATE_TAX_2026, getProvinceTaxStatus, PROVINCE_TAX_2026, calculateFICA, FICA_2026, calculateCPPEI, CPP_EI_2026, monthsToPayoff, typicalMinimumPayment, calculateDiscount, findDiscountPercent, PercentageTools, round2 };
+const FinanceTools = { calculateLoan, amortizationScheduleByYear, calculateMortgage, compoundInterest, requiredMonthlyContribution, calculateFederalIncomeTax, TAX_BRACKETS_2026, STANDARD_DEDUCTION_2026, FILING_STATUS_LABELS, calculateFederalIncomeTaxCRA, CRA_FEDERAL_BRACKETS_2026, CRA_BPA_2026, calculateStateTax, STATE_TAX_2026, getProvinceTaxStatus, PROVINCE_TAX_2026, calculateFICA, FICA_2026, calculateCPPEI, CPP_EI_2026, monthsToPayoff, typicalMinimumPayment, calculateDiscount, findDiscountPercent, PercentageTools, round2 };
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = FinanceTools;
