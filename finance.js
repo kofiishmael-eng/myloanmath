@@ -784,6 +784,46 @@ function typicalMinimumPayment(balance) {
 // ---------------------------------------------------------------------
 
 /**
+ * Discount / Sale Price Calculator.
+ * Supports stacking a second discount, applied correctly (multiplicatively
+ * on the already-discounted price) rather than the common but incorrect
+ * assumption that two discounts simply add together (20% + 10% is NOT 30%
+ * off — it's 1 - (0.80 * 0.90) = 28% off).
+ */
+function calculateDiscount(input) {
+  const { originalPrice, discountPercent, secondDiscountPercent = 0 } = input;
+  if (!(originalPrice >= 0)) throw new Error('Original price cannot be negative.');
+  if (discountPercent < 0 || discountPercent > 100) throw new Error('Discount percentage must be between 0 and 100.');
+  if (secondDiscountPercent < 0 || secondDiscountPercent > 100) throw new Error('Second discount percentage must be between 0 and 100.');
+
+  const afterFirst = originalPrice * (1 - discountPercent / 100);
+  const finalPrice = afterFirst * (1 - secondDiscountPercent / 100);
+  const amountSaved = originalPrice - finalPrice;
+  const effectiveDiscountPercent = originalPrice > 0 ? (amountSaved / originalPrice) * 100 : 0;
+  const naiveAddedPercent = discountPercent + secondDiscountPercent; // what people often (incorrectly) assume
+
+  return {
+    finalPrice: round2(finalPrice),
+    amountSaved: round2(amountSaved),
+    effectiveDiscountPercent: round2(effectiveDiscountPercent),
+    naiveAddedPercent: round2(Math.min(naiveAddedPercent, 100)),
+  };
+}
+
+/** Reverse lookup: given original and sale price, find the discount percentage and amount saved. */
+function findDiscountPercent(input) {
+  const { originalPrice, salePrice } = input;
+  if (!(originalPrice > 0)) throw new Error('Original price must be greater than zero.');
+  if (salePrice < 0) throw new Error('Sale price cannot be negative.');
+  if (salePrice > originalPrice) throw new Error("Sale price can't be higher than the original price.");
+  const amountSaved = originalPrice - salePrice;
+  const discountPercent = (amountSaved / originalPrice) * 100;
+  return { amountSaved: round2(amountSaved), discountPercent: round2(discountPercent) };
+}
+
+// ---------------------------------------------------------------------
+
+/**
  * Percentage Calculator — four standard modes.
  * All functions validate inputs and throw a clear Error rather than
  * returning NaN or Infinity.
@@ -826,7 +866,7 @@ function assertFiniteNumbers(fields) {
 
 // ---------------------------------------------------------------------
 
-const FinanceTools = { calculateLoan, amortizationScheduleByYear, calculateMortgage, compoundInterest, calculateFederalIncomeTax, TAX_BRACKETS_2026, STANDARD_DEDUCTION_2026, FILING_STATUS_LABELS, calculateFederalIncomeTaxCRA, CRA_FEDERAL_BRACKETS_2026, CRA_BPA_2026, calculateStateTax, STATE_TAX_2026, getProvinceTaxStatus, PROVINCE_TAX_2026, calculateFICA, FICA_2026, calculateCPPEI, CPP_EI_2026, monthsToPayoff, typicalMinimumPayment, PercentageTools, round2 };
+const FinanceTools = { calculateLoan, amortizationScheduleByYear, calculateMortgage, compoundInterest, calculateFederalIncomeTax, TAX_BRACKETS_2026, STANDARD_DEDUCTION_2026, FILING_STATUS_LABELS, calculateFederalIncomeTaxCRA, CRA_FEDERAL_BRACKETS_2026, CRA_BPA_2026, calculateStateTax, STATE_TAX_2026, getProvinceTaxStatus, PROVINCE_TAX_2026, calculateFICA, FICA_2026, calculateCPPEI, CPP_EI_2026, monthsToPayoff, typicalMinimumPayment, calculateDiscount, findDiscountPercent, PercentageTools, round2 };
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = FinanceTools;

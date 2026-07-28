@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XL6TXYDCLD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XL6TXYDCLD');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discount Calculator — Free Sale Price Calculator</title>
+<meta name="description" content="Calculate a sale price from a discount percentage, or find the discount from an original and sale price. Correctly handles stacked discounts.">
+<link rel="canonical" href="https://myloanmath.com/discount-calculator.html">
+<meta property="og:title" content="Discount Calculator — Free Sale Price Calculator">
+<meta property="og:description" content="Calculate a sale price from a discount percentage, or find the discount from an original and sale price. Correctly handles stacked discounts.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myloanmath.com/discount-calculator.html">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta property="og:image" content="https://myloanmath.com/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myloanmath.com/assets/og-image.png">
+<link rel="preconnect" href="https://pagead2.googlesyndication.com">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Discount Calculator", "applicationCategory": "FinanceApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do two discounts add together?", "acceptedAnswer": {"@type": "Answer", "text": "No — this is a common mistake. 20% off, then an additional 10% off, is not 30% off total. The second discount applies to the already-discounted price, so the real combined discount is 28%, not 30%."}}, {"@type": "Question", "name": "How do I find the discount percentage if I only know the original and sale price?", "acceptedAnswer": {"@type": "Answer", "text": "Switch to the reverse mode below the main calculator, enter both prices, and it calculates the exact discount percentage and amount saved for you."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9412143347948347" crossorigin="anonymous"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://myloanmath.com/"}, {"@type": "ListItem", "position": 2, "name": "Discount Calculator", "item": "https://myloanmath.com/discount-calculator.html"}]}</script>
+</head>
+<body>
+<a href="#main-heading" class="skip-link">Skip to content</a>
+<nav class="topnav">
+  <a class="brand" href="index.html"><svg class="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+    <rect width="64" height="64" rx="14" fill="#1F5C43"/>
+    <text x="32" y="45" font-family="Georgia, serif" font-size="36" font-weight="700" fill="#F2EFE4" text-anchor="middle">M</text>
+  </svg> myloanmath</a>
+  <div class="links">
+      <a href="index.html">Home</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="auto-loan-calculator.html">Auto Loan Calculator</a>
+      <a href="debt-payoff-calculator.html">Debt Payoff Calculator</a>
+      <a href="discount-calculator.html">Discount Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+      <a href="tax-calculator.html">Tax Calculator (US - IRS)</a>
+      <a href="canada-tax-calculator.html">Tax Calculator (Canada - CRA)</a>
+      <a href="blog.html">Blog</a>
+  </div>
+</nav>
+<div class="wrap">
+<div class="fallback-banner" id="fallbackBanner">Something went wrong loading the calculator engine. Open your browser's console (F12) to see the error.</div>
+<header class="page-head">
+  <div class="eyebrow">// myloanmath</div>
+  <h1 id="main-heading">Discount Calculator</h1>
+  <p class="sub">Find the sale price from a discount, or the discount from a sale price — with correct math for stacked discounts.</p>
+</header>
+
+<div class="card">
+  <div class="row">
+    <div class="field"><label for="discPrice">Original price</label><input type="text" id="discPrice" value="100" inputmode="decimal"></div>
+    <div class="field"><label for="discPercent">Discount (%)</label><input type="text" id="discPercent" value="20" inputmode="decimal"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="discSecondPercent">Additional discount, stacked (%, optional)</label><input type="text" id="discSecondPercent" value="0" inputmode="decimal"></div>
+  </div>
+  <div class="result">
+    <div class="result-label">Sale price</div>
+    <div class="result-text" id="discOutput">-</div>
+    <div class="stat-grid" id="discStats"></div>
+  </div>
+  <p class="note" id="discStackNote"></p>
+  <div class="actions"><button class="action" id="discCopyBtn" type="button">Copy result</button></div>
+</div>
+
+<div class="card">
+  <h2 style="font-family:var(--font-display);font-size:18px;margin:0 0 14px;">Or work backward: find the discount</h2>
+  <div class="row">
+    <div class="field"><label for="revOriginal">Original price</label><input type="text" id="revOriginal" value="80" inputmode="decimal"></div>
+    <div class="field"><label for="revSale">Sale price</label><input type="text" id="revSale" value="60" inputmode="decimal"></div>
+  </div>
+  <div class="result">
+    <div class="result-label">Discount</div>
+    <div class="result-text" id="revOutput">-</div>
+  </div>
+</div>
+
+<div class="ad-slot"><!-- AD SLOT: below the tool. Once approved, paste your AdSense ad unit code here. --></div>
+
+<section class="content">
+<h2>Why stacked discounts don't just add up</h2>
+<p>"20% off, plus an extra 10% off" feels like it should mean 30% off total — but it doesn't, and the gap is bigger than people expect on larger purchases. The second discount applies to the price after the first discount already reduced it, not to the original price. On a $100 item: 20% off brings it to $80, then 10% off that $80 brings it to $72 — a combined discount of 28%, not 30%. The two percentages compound against a shrinking base rather than simply adding together.</p>
+<p>This matters most when a store advertises "extra 20% off already-reduced items" — the true final price is always a bit higher than naively subtracting both percentages from the original price would suggest.</p>
+</section>
+
+<section class="content">
+<h2>Frequently asked questions</h2>
+<div class="faq-item"><h3>Do two discounts add together?</h3><p>No — this is a common mistake. 20% off, then an additional 10% off, is not 30% off total. The second discount applies to the already-discounted price, so the real combined discount is 28%, not 30%.</p></div>
+<div class="faq-item"><h3>How do I find the discount percentage if I only know the original and sale price?</h3><p>Use the reverse calculator below the main tool — enter both prices, and it calculates the exact discount percentage and amount saved for you.</p></div>
+</section>
+
+<div class="related">
+  <p class="label">Related tools</p>
+  <div class="related-list">
+    <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="debt-payoff-calculator.html">Debt Payoff Calculator</a>
+  </div>
+</div>
+
+</div>
+<footer class="site-footer">
+  <div>
+    <a href="index.html">Home</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="auto-loan-calculator.html">Auto Loan Calculator</a>
+      <a href="debt-payoff-calculator.html">Debt Payoff Calculator</a>
+      <a href="discount-calculator.html">Discount Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+      <a href="tax-calculator.html">Tax Calculator (US - IRS)</a>
+      <a href="canada-tax-calculator.html">Tax Calculator (Canada - CRA)</a>
+      <a href="blog.html">Blog</a>
+  </div>
+  <div style="margin-top:10px;">
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms-of-use.html">Terms &amp; Disclaimer</a>
+    <a href="about.html">About</a>
+  </div>
+  <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
+</footer>
+<script src="numberToWords.js"></script>
+<script src="finance.js"></script>
+<script>
+(function(){
+  var mod = window.FinanceTools;
+  if (!mod) { document.getElementById('fallbackBanner').style.display='block'; return; }
+  function el(id){ return document.getElementById(id); }
+  function fmtMoney(n){ return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function parseNum(str){ var s=String(str).trim().replace(/,/g,''); if(!/^-?\d+(\.\d+)?$/.test(s)) return NaN; return parseFloat(s); }
+  var lastResult = null;
+
+  function compute(){
+    var price = parseNum(el('discPrice').value);
+    var pct = parseNum(el('discPercent').value);
+    var pct2 = parseNum(el('discSecondPercent').value);
+    var out = el('discOutput'); var stats = el('discStats'); var note = el('discStackNote');
+    try {
+      if ([price, pct, pct2].some(isNaN)) throw new Error('Enter valid numbers for all fields.');
+      var r = mod.calculateDiscount({ originalPrice: price, discountPercent: pct, secondDiscountPercent: pct2 });
+      lastResult = r;
+      out.textContent = fmtMoney(r.finalPrice); out.classList.remove('error');
+      stats.innerHTML =
+        '<div class="stat"><div class="stat-label">Amount saved</div><div class="stat-value">' + fmtMoney(r.amountSaved) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Effective discount</div><div class="stat-value">' + r.effectiveDiscountPercent + '%</div></div>';
+      if (pct2 > 0) {
+        note.textContent = 'Two stacked discounts of ' + pct + '% and ' + pct2 + '% combine to ' + r.effectiveDiscountPercent + '% off — not ' + r.naiveAddedPercent + '% as simple addition would suggest, since the second discount applies to the already-reduced price.';
+      } else {
+        note.textContent = '';
+      }
+    } catch(e) {
+      out.textContent = e.message; out.classList.add('error'); stats.innerHTML=''; note.textContent=''; lastResult = null;
+    }
+  }
+
+  function computeReverse(){
+    var orig = parseNum(el('revOriginal').value);
+    var sale = parseNum(el('revSale').value);
+    var out = el('revOutput');
+    try {
+      if ([orig, sale].some(isNaN)) throw new Error('Enter valid numbers for both prices.');
+      var r = mod.findDiscountPercent({ originalPrice: orig, salePrice: sale });
+      out.textContent = r.discountPercent + '% off (saved ' + fmtMoney(r.amountSaved) + ')';
+      out.classList.remove('error');
+    } catch(e) {
+      out.textContent = e.message; out.classList.add('error');
+    }
+  }
+
+  ['discPrice','discPercent','discSecondPercent'].forEach(function(id){ el(id).addEventListener('input', compute); });
+  ['revOriginal','revSale'].forEach(function(id){ el(id).addEventListener('input', computeReverse); });
+  el('discCopyBtn').addEventListener('click', function(){
+    if (!lastResult) return;
+    var lines = ['Discount Calculator — myloanmath.com', '', 'Original price: ' + el('discPrice').value, 'Discount: ' + el('discPercent').value + '%', ''];
+    lines.push('Sale price: ' + el('discOutput').textContent);
+    el('discStats').querySelectorAll('.stat').forEach(function(s){ lines.push(s.querySelector('.stat-label').textContent + ': ' + s.querySelector('.stat-value').textContent); });
+    copyToClipboard(lines.join('\n'), el('discCopyBtn'));
+  });
+  compute();
+  computeReverse();
+})();
+function copyToClipboard(text, btn){
+  function showCopied(){ btn.textContent='Copied!'; setTimeout(function(){ btn.textContent='Copy result'; }, 1800); }
+  function showFailed(){ btn.textContent='Copy failed — try manually'; setTimeout(function(){ btn.textContent='Copy result'; }, 2200); }
+  function fallbackCopy(){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(showCopied).catch(function(){ try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); } });
+  } else {
+    try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); }
+  }
+}
+</script>
+</body>
+</html>
