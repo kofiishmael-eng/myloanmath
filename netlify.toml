@@ -35,6 +35,20 @@
   [headers.values]
     Cache-Control = "public, max-age=86400, must-revalidate"
 
+# Force HTTPS explicitly (required by AdSense's own site-readiness checks,
+# in addition to Netlify's dashboard-level "Force HTTPS" toggle)
+[[redirects]]
+  from = "http://myloanmath.com/*"
+  to = "https://myloanmath.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.myloanmath.com/*"
+  to = "https://myloanmath.com/:splat"
+  status = 301
+  force = true
+
 # Removed tool — redirect anyone with a bookmark or old search result
 [[redirects]]
   from = "/cheque-amount-in-words.html"
