@@ -85,6 +85,7 @@
     <div class="result-text" id="ciOutput">-</div>
     <div class="stat-grid" id="ciStats"></div>
   </div>
+  <div class="actions"><button class="action" id="ciCopyBtn" type="button">Copy result</button></div>
 </div>
 
 
@@ -176,9 +177,29 @@
   ['ciPrincipal','ciRate','ciYears','ciCompounds','ciContribution'].forEach(function(id){
     el(id).addEventListener('input', compute); el(id).addEventListener('change', compute);
   });
+  el('ciCopyBtn').addEventListener('click', function(){
+    var stats = el('ciStats').querySelectorAll('.stat');
+    var lines = ['Compound Interest Calculator — myloanmath.com', '', 'Future value: ' + el('ciOutput').textContent];
+    stats.forEach(function(s){ lines.push(s.querySelector('.stat-label').textContent + ': ' + s.querySelector('.stat-value').textContent); });
+    copyToClipboard(lines.join('\n'), el('ciCopyBtn'));
+  });
   compute();
 })();
-
+function copyToClipboard(text, btn){
+  function showCopied(){ btn.textContent='Copied!'; setTimeout(function(){ btn.textContent='Copy result'; }, 1800); }
+  function showFailed(){ btn.textContent='Copy failed — try manually'; setTimeout(function(){ btn.textContent='Copy result'; }, 2200); }
+  function fallbackCopy(){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(showCopied).catch(function(){ try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); } });
+  } else {
+    try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); }
+  }
+}
 </script>
 </body>
 </html>

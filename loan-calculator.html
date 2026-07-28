@@ -77,7 +77,7 @@
     <div class="result-text" id="loanOutput">-</div>
     <div class="stat-grid" id="loanStats"></div>
   </div>
-  <div class="actions"><button class="action" id="loanScheduleBtn" type="button">Show yearly breakdown</button></div>
+  <div class="actions"><button class="action" id="loanScheduleBtn" type="button">Show yearly breakdown</button><button class="action" id="loanCopyBtn" type="button">Copy result</button></div>
   <div class="schedule-wrap" id="scheduleWrap" style="display:none;"><table class="schedule-table" id="scheduleTable"></table></div>
   <p class="note">Uses the standard amortization formula. The final year's numbers may differ by a few cents from a pure formula calculation because real lenders round each monthly payment, and this calculator does too.</p>
 </div>
@@ -205,6 +205,38 @@
     el('loanScheduleBtn').textContent = scheduleVisible ? 'Hide yearly breakdown' : 'Show yearly breakdown';
     compute();
   });
+  el('loanCopyBtn').addEventListener('click', function(){
+    var stats = el('loanStats').querySelectorAll('.stat');
+    var lines = ['Loan Calculator — myloanmath.com', ''];
+    lines.push('Loan amount: ' + el('loanPrincipal').value);
+    lines.push('Interest rate: ' + el('loanRate').value + '%');
+    lines.push('Term: ' + el('loanTermValue').value + ' ' + el('loanTermUnit').value);
+    lines.push('');
+    lines.push('Monthly payment: ' + el('loanOutput').textContent);
+    stats.forEach(function(s){
+      lines.push(s.querySelector('.stat-label').textContent + ': ' + s.querySelector('.stat-value').textContent);
+    });
+    var text = lines.join('\n');
+    var btn = el('loanCopyBtn');
+    function showCopied(){ var original='Copy result'; btn.textContent='Copied!'; setTimeout(function(){ btn.textContent=original; }, 1800); }
+    function showFailed(){ btn.textContent='Copy failed — try manually'; setTimeout(function(){ btn.textContent='Copy result'; }, 2200); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(showCopied).catch(function(){
+        // Fallback for browsers where the async Clipboard API exists but is blocked (e.g. permissions)
+        try { fallbackCopy(text); showCopied(); } catch(e) { showFailed(); }
+      });
+    } else {
+      // Fallback for older browsers with no Clipboard API at all
+      try { fallbackCopy(text); showCopied(); } catch(e) { showFailed(); }
+    }
+  });
+  function fallbackCopy(text){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  }
   compute();
 })();
 

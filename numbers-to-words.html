@@ -152,8 +152,21 @@
   ['amount'].forEach(function(id){ el(id).addEventListener('input', compute); });
   ['indianSystem','includeAnd'].forEach(function(id){ el(id).addEventListener('change', compute); });
   el('copyBtn').addEventListener('click', function(){
-    navigator.clipboard.writeText(el('output').textContent);
-    el('copyBtn').textContent='Copied'; setTimeout(function(){ el('copyBtn').textContent='Copy'; }, 1200);
+    var text = el('output').textContent;
+    var btn = el('copyBtn');
+    function showCopied(){ btn.textContent='Copied'; setTimeout(function(){ btn.textContent='Copy'; }, 1200); }
+    function showFailed(){ btn.textContent='Copy failed'; setTimeout(function(){ btn.textContent='Copy'; }, 1600); }
+    function fallbackCopy(){
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      document.execCommand('copy'); document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(showCopied).catch(function(){ try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); } });
+    } else {
+      try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); }
+    }
   });
   el('clearBtn').addEventListener('click', function(){ el('amount').value=''; compute(); });
   compute();

@@ -82,6 +82,7 @@
     <div class="result-text" id="mortgageOutput">-</div>
     <div class="stat-grid" id="mortgageStats"></div>
   </div>
+  <div class="actions"><button class="action" id="mortgageCopyBtn" type="button">Copy result</button></div>
   <p class="note">Property tax and insurance defaults are rough national-average placeholders — replace them with your actual local rates for an accurate estimate.</p>
 </div>
 
@@ -181,8 +182,29 @@
   ['homePrice','downPayment','mortgageRate','mortgageTerm','propertyTax','homeInsurance','hoaFee'].forEach(function(id){
     el(id).addEventListener('input', compute);
   });
+  el('mortgageCopyBtn').addEventListener('click', function(){
+    var stats = el('mortgageStats').querySelectorAll('.stat');
+    var lines = ['Mortgage Calculator — myloanmath.com', '', 'Total monthly payment: ' + el('mortgageOutput').textContent];
+    stats.forEach(function(s){ lines.push(s.querySelector('.stat-label').textContent + ': ' + s.querySelector('.stat-value').textContent); });
+    copyToClipboard(lines.join('\n'), el('mortgageCopyBtn'));
+  });
   compute();
 })();
+function copyToClipboard(text, btn){
+  function showCopied(){ btn.textContent='Copied!'; setTimeout(function(){ btn.textContent='Copy result'; }, 1800); }
+  function showFailed(){ btn.textContent='Copy failed — try manually'; setTimeout(function(){ btn.textContent='Copy result'; }, 2200); }
+  function fallbackCopy(){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(showCopied).catch(function(){ try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); } });
+  } else {
+    try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); }
+  }
+}
 
 </script>
 </body>

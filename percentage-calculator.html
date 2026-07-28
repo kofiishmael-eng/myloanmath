@@ -81,6 +81,7 @@
     <div class="result-label">Result</div>
     <div class="result-text" id="pctOutput">-</div>
   </div>
+  <div class="actions"><button class="action" id="pctCopyBtn" type="button">Copy result</button></div>
 </div>
 
 
@@ -169,9 +170,26 @@
   }
   el('pctMode').addEventListener('change', compute);
   ['pctX','pctY'].forEach(function(id){ el(id).addEventListener('input', compute); });
+  el('pctCopyBtn').addEventListener('click', function(){
+    copyToClipboard('Percentage Calculator — myloanmath.com\n\n' + el('pctOutput').textContent, el('pctCopyBtn'));
+  });
   compute();
 })();
-
+function copyToClipboard(text, btn){
+  function showCopied(){ btn.textContent='Copied!'; setTimeout(function(){ btn.textContent='Copy result'; }, 1800); }
+  function showFailed(){ btn.textContent='Copy failed — try manually'; setTimeout(function(){ btn.textContent='Copy result'; }, 2200); }
+  function fallbackCopy(){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(showCopied).catch(function(){ try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); } });
+  } else {
+    try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); }
+  }
+}
 </script>
 </body>
 </html>

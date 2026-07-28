@@ -102,8 +102,17 @@
       </select>
     </div>
   </div>
+  <div class="opts">
+    <label class="opt"><input type="checkbox" id="includeCPPEI"> Also subtract CPP &amp; EI for a real paycheque estimate</label>
+  </div>
+  <div class="result" id="cppEiResultBox" style="display:none;">
+    <div class="result-label">Estimated payroll deductions (CPP + EI)</div>
+    <div class="result-text" id="cppEiOutput">-</div>
+    <div class="stat-grid" id="cppEiStats"></div>
+    <p class="note" id="cppEiNote"></p>
+  </div>
   <div class="result" style="background:var(--brass-soft); border-color:var(--brass); border-left:3px solid var(--brass);">
-    <div class="result-label" style="color:var(--brass);">Net income — full year</div>
+    <div class="result-label" style="color:var(--brass);" id="netAnnualLabel">Net income — full year</div>
     <div class="result-text" id="netAnnualOutput">-</div>
     <div style="margin-top:14px; padding-top:14px; border-top:1px solid var(--brass);">
       <div class="result-label" style="color:var(--brass);" id="netPayLabel">Net income — biweekly</div>
@@ -112,7 +121,7 @@
     <p class="note" id="netPayNote"></p>
   </div>
 
-  <div class="actions"><button class="action" id="craBreakdownBtn" type="button">Show bracket-by-bracket breakdown</button></div>
+  <div class="actions"><button class="action" id="craBreakdownBtn" type="button">Show bracket-by-bracket breakdown</button><button class="action" id="craCopyBtn" type="button">Copy result</button></div>
   <div class="schedule-wrap" id="craBreakdownWrap" style="display:none;"><table class="schedule-table" id="craBreakdownTable"></table></div>
   <p class="note" id="craPhaseOutNote"></p>
   <p class="note">Federal tax only — does not include provincial/territorial tax (which stacks on top and varies by province), CPP, or EI. Figures use 2026 CRA federal brackets and Basic Personal Amount. For your actual filing, consult a CPA or tax professional — this is an estimate, not tax advice.</p>
@@ -237,21 +246,49 @@
         combinedBox.style.display = 'none';
       }
 
+      // CPP/EI (payroll deductions)
+      var cppEiBox = el('cppEiResultBox');
+      var cppEiAmount = 0;
+      var includeCPPEI = el('includeCPPEI').checked;
+      if (includeCPPEI) {
+        var cppEi = mod.calculateCPPEI(income, provinceCode === 'QC');
+        cppEiBox.style.display = 'block';
+        if (cppEi.available) {
+          el('cppEiOutput').textContent = fmtMoney(cppEi.totalCPPEI);
+          el('cppEiStats').innerHTML =
+            '<div class="stat"><div class="stat-label">CPP</div><div class="stat-value">' + fmtMoney(cppEi.cpp1) + '</div></div>' +
+            (cppEi.cpp2 > 0 ? '<div class="stat"><div class="stat-label">CPP2</div><div class="stat-value">' + fmtMoney(cppEi.cpp2) + '</div></div>' : '') +
+            '<div class="stat"><div class="stat-label">EI</div><div class="stat-value">' + fmtMoney(cppEi.ei) + '</div></div>';
+          el('cppEiNote').textContent = '';
+          cppEiAmount = cppEi.totalCPPEI;
+        } else {
+          el('cppEiOutput').textContent = 'Not available for Quebec';
+          el('cppEiStats').innerHTML = '';
+          el('cppEiNote').textContent = cppEi.note;
+        }
+      } else {
+        cppEiBox.style.display = 'none';
+      }
+
       // Net income pay-period breakdown
-      var netAnnual = Math.max(0, income - totalTaxDeducted);
+      var netAnnual = Math.max(0, income - totalTaxDeducted - cppEiAmount);
       var periodsPerYear = parseInt(el('craPayFrequency').value, 10);
       var periodLabel = periodsPerYear === 52 ? 'weekly' : (periodsPerYear === 26 ? 'biweekly' : 'monthly');
       var netPerPeriod = netAnnual / periodsPerYear;
+      el('netAnnualLabel').textContent = (includeCPPEI && cppEiAmount > 0) ? 'Net paycheque income — full year' : 'Net income — full year';
       el('netAnnualOutput').textContent = fmtMoney(netAnnual);
       el('netAnnualOutput').classList.remove('error');
-      el('netPayLabel').textContent = 'Net income — ' + periodLabel;
+      el('netPayLabel').textContent = ((includeCPPEI && cppEiAmount > 0) ? 'Net paycheque income — ' : 'Net income — ') + periodLabel;
       el('netPayOutput').textContent = fmtMoney(netPerPeriod) + ' / ' + periodLabel.replace('ly', '');
       el('netPayOutput').classList.remove('error');
-      el('netPayNote').textContent = 'Income after ' + taxScopeLabel + ' income tax only. Does not yet include payroll deductions like CPP or EI, so your actual paycheque deposit will be somewhat lower than these figures.';
+      el('netPayNote').textContent = (includeCPPEI && cppEiAmount > 0)
+        ? 'Income after ' + taxScopeLabel + ' income tax and CPP/EI — a genuine estimate of your real paycheque deposit, before any employer benefit deductions.'
+        : 'Income after ' + taxScopeLabel + ' income tax only. Check the box above to also subtract CPP/EI for a more realistic paycheque estimate.';
     } catch(e) {
       out.textContent = e.message; out.classList.add('error'); stats.innerHTML=''; note.textContent='';
       el('craBreakdownWrap').style.display='none'; breakdownVisible=false;
       el('provinceResultBox').style.display='none'; el('combinedResultBox').style.display='none';
+      el('cppEiResultBox').style.display='none';
       el('netAnnualOutput').textContent = '—';
       el('netPayOutput').textContent = '—'; el('netPayNote').textContent = '';
     }
@@ -261,15 +298,49 @@
     breakdown.forEach(function(b){ rows += '<tr><td>'+b.ratePercent+'%</td><td>'+fmtMoney(b.amountTaxed)+'</td><td>'+fmtMoney(b.taxOwed)+'</td></tr>'; });
     el('craBreakdownTable').innerHTML = rows; el('craBreakdownWrap').style.display='block';
   }
-  ['craIncome','craAdditionalDeductions','craProvince','craPayFrequency'].forEach(function(id){ el(id).addEventListener('input', compute); el(id).addEventListener('change', compute); });
+  ['craIncome','craAdditionalDeductions','craProvince','craPayFrequency','includeCPPEI'].forEach(function(id){ el(id).addEventListener('input', compute); el(id).addEventListener('change', compute); });
   el('craBreakdownBtn').addEventListener('click', function(){
     breakdownVisible = !breakdownVisible;
     el('craBreakdownBtn').textContent = breakdownVisible ? 'Hide bracket-by-bracket breakdown' : 'Show bracket-by-bracket breakdown';
     compute();
   });
+  el('craCopyBtn').addEventListener('click', function(){
+    var lines = ['CRA Tax Calculator — myloanmath.com', '', 'Gross income: ' + el('craIncome').value, ''];
+    lines.push('Federal tax owed: ' + el('craOutput').textContent);
+    el('craStats').querySelectorAll('.stat').forEach(function(s){ lines.push(s.querySelector('.stat-label').textContent + ': ' + s.querySelector('.stat-value').textContent); });
+    if (el('provinceResultBox').style.display !== 'none') {
+      lines.push('');
+      lines.push(el('provinceResultLabel').textContent + ': ' + el('provinceOutput').textContent);
+    }
+    if (el('combinedResultBox').style.display !== 'none') {
+      lines.push('Total tax (federal + provincial): ' + el('combinedOutput').textContent);
+    }
+    if (el('includeCPPEI').checked && el('cppEiResultBox').style.display !== 'none') {
+      lines.push('');
+      lines.push('CPP + EI: ' + el('cppEiOutput').textContent);
+    }
+    lines.push('');
+    lines.push(el('netAnnualLabel').textContent + ': ' + el('netAnnualOutput').textContent);
+    lines.push(el('netPayLabel').textContent + ': ' + el('netPayOutput').textContent);
+    copyToClipboard(lines.join('\n'), el('craCopyBtn'));
+  });
   compute();
 })();
-
+function copyToClipboard(text, btn){
+  function showCopied(){ btn.textContent='Copied!'; setTimeout(function(){ btn.textContent='Copy result'; }, 1800); }
+  function showFailed(){ btn.textContent='Copy failed — try manually'; setTimeout(function(){ btn.textContent='Copy result'; }, 2200); }
+  function fallbackCopy(){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(showCopied).catch(function(){ try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); } });
+  } else {
+    try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); }
+  }
+}
 </script>
 </body>
 </html>

@@ -110,8 +110,16 @@
       </select>
     </div>
   </div>
+  <div class="opts">
+    <label class="opt"><input type="checkbox" id="includeFICA"> Also subtract Social Security &amp; Medicare (FICA) for a real paycheck estimate</label>
+  </div>
+  <div class="result" id="ficaResultBox" style="display:none;">
+    <div class="result-label">Estimated payroll taxes (FICA)</div>
+    <div class="result-text" id="ficaOutput">-</div>
+    <div class="stat-grid" id="ficaStats"></div>
+  </div>
   <div class="result" style="background:var(--brass-soft); border-color:var(--brass); border-left:3px solid var(--brass);">
-    <div class="result-label" style="color:var(--brass);">Net income — full year</div>
+    <div class="result-label" style="color:var(--brass);" id="netAnnualLabel">Net income — full year</div>
     <div class="result-text" id="netAnnualOutput">-</div>
     <div style="margin-top:14px; padding-top:14px; border-top:1px solid var(--brass);">
       <div class="result-label" style="color:var(--brass);" id="netPayLabel">Net income — biweekly</div>
@@ -120,7 +128,7 @@
     <p class="note" id="netPayNote"></p>
   </div>
 
-  <div class="actions"><button class="action" id="taxBreakdownBtn" type="button">Show bracket-by-bracket breakdown</button></div>
+  <div class="actions"><button class="action" id="taxBreakdownBtn" type="button">Show bracket-by-bracket breakdown</button><button class="action" id="taxCopyBtn" type="button">Copy result</button></div>
   <div class="schedule-wrap" id="taxBreakdownWrap" style="display:none;"><table class="schedule-table" id="taxBreakdownTable"></table></div>
   <p class="note">Federal income tax only — does not include state tax, FICA/Social Security, Medicare, or tax credits. Assumes the standard deduction (not itemized). Figures use IRS tax year 2026 brackets (Revenue Procedure 2025-32). For your actual filing, consult a CPA or tax professional — this is an estimate, not tax advice.</p>
 </div>
@@ -251,21 +259,42 @@
         combinedBox.style.display = 'none';
       }
 
+      // FICA (payroll taxes)
+      var ficaBox = el('ficaResultBox');
+      var ficaAmount = 0;
+      var includeFICA = el('includeFICA').checked;
+      if (includeFICA) {
+        var fica = mod.calculateFICA(income, status);
+        ficaBox.style.display = 'block';
+        el('ficaOutput').textContent = fmtMoney(fica.totalFICA);
+        el('ficaStats').innerHTML =
+          '<div class="stat"><div class="stat-label">Social Security</div><div class="stat-value">' + fmtMoney(fica.socialSecurityTax) + '</div></div>' +
+          '<div class="stat"><div class="stat-label">Medicare</div><div class="stat-value">' + fmtMoney(fica.medicareTax) + '</div></div>' +
+          (fica.additionalMedicareTax > 0 ? '<div class="stat"><div class="stat-label">Additional Medicare</div><div class="stat-value">' + fmtMoney(fica.additionalMedicareTax) + '</div></div>' : '');
+        ficaAmount = fica.totalFICA;
+      } else {
+        ficaBox.style.display = 'none';
+      }
+
       // Net income pay-period breakdown
-      var netAnnual = Math.max(0, income - totalTaxDeducted);
+      var netAnnual = Math.max(0, income - totalTaxDeducted - ficaAmount);
       var periodsPerYear = parseInt(el('taxPayFrequency').value, 10);
       var periodLabel = periodsPerYear === 52 ? 'weekly' : (periodsPerYear === 26 ? 'biweekly' : 'monthly');
       var netPerPeriod = netAnnual / periodsPerYear;
+      el('netAnnualLabel').textContent = includeFICA ? 'Net paycheck income — full year' : 'Net income — full year';
       el('netAnnualOutput').textContent = fmtMoney(netAnnual);
       el('netAnnualOutput').classList.remove('error');
-      el('netPayLabel').textContent = 'Net income — ' + periodLabel;
+      el('netPayLabel').textContent = (includeFICA ? 'Net paycheck income — ' : 'Net income — ') + periodLabel;
       el('netPayOutput').textContent = fmtMoney(netPerPeriod) + ' / ' + periodLabel.replace('ly', '');
       el('netPayOutput').classList.remove('error');
-      el('netPayNote').textContent = 'Income after ' + taxScopeLabel + ' income tax only. Does not yet include payroll deductions like Social Security or Medicare, so your actual paycheck deposit will be somewhat lower than these figures.';
+      el('netPayNote').textContent = includeFICA
+        ? 'Income after ' + taxScopeLabel + ' income tax and FICA (Social Security + Medicare) — this is a genuine estimate of your real paycheck deposit, before any employer benefit deductions like health insurance or 401(k) contributions.'
+        : 'Income after ' + taxScopeLabel + ' income tax only. Check the box above to also subtract FICA for a more realistic paycheck estimate.';
     } catch(e) {
       out.textContent = e.message; out.classList.add('error'); stats.innerHTML='';
       el('taxBreakdownWrap').style.display='none'; breakdownVisible=false;
       el('stateResultBox').style.display='none'; el('combinedResultBox').style.display='none';
+      el('ficaResultBox').style.display='none';
       el('netAnnualOutput').textContent = '—';
       el('netPayOutput').textContent = '—'; el('netPayNote').textContent = '';
     }
@@ -275,15 +304,49 @@
     breakdown.forEach(function(b){ rows += '<tr><td>'+b.ratePercent+'%</td><td>'+fmtMoney(b.amountTaxed)+'</td><td>'+fmtMoney(b.taxOwed)+'</td></tr>'; });
     el('taxBreakdownTable').innerHTML = rows; el('taxBreakdownWrap').style.display='block';
   }
-  ['taxIncome','taxFilingStatus','taxAdditionalDeductions','taxState','taxPayFrequency'].forEach(function(id){ el(id).addEventListener('input', compute); el(id).addEventListener('change', compute); });
+  ['taxIncome','taxFilingStatus','taxAdditionalDeductions','taxState','taxPayFrequency','includeFICA'].forEach(function(id){ el(id).addEventListener('input', compute); el(id).addEventListener('change', compute); });
   el('taxBreakdownBtn').addEventListener('click', function(){
     breakdownVisible = !breakdownVisible;
     el('taxBreakdownBtn').textContent = breakdownVisible ? 'Hide bracket-by-bracket breakdown' : 'Show bracket-by-bracket breakdown';
     compute();
   });
+  el('taxCopyBtn').addEventListener('click', function(){
+    var lines = ['IRS Tax Calculator — myloanmath.com', '', 'Gross income: ' + el('taxIncome').value, 'Filing status: ' + el('taxFilingStatus').options[el('taxFilingStatus').selectedIndex].text, ''];
+    lines.push('Federal tax owed: ' + el('taxOutput').textContent);
+    el('taxStats').querySelectorAll('.stat').forEach(function(s){ lines.push(s.querySelector('.stat-label').textContent + ': ' + s.querySelector('.stat-value').textContent); });
+    if (el('stateResultBox').style.display !== 'none') {
+      lines.push('');
+      lines.push(document.getElementById('stateResultLabel').textContent + ': ' + el('stateOutput').textContent);
+    }
+    if (el('combinedResultBox').style.display !== 'none') {
+      lines.push('Total tax (federal + state): ' + el('combinedOutput').textContent);
+    }
+    if (el('includeFICA').checked && el('ficaResultBox') && el('ficaResultBox').style.display !== 'none') {
+      lines.push('');
+      lines.push('FICA (Social Security + Medicare): ' + el('ficaOutput').textContent);
+    }
+    lines.push('');
+    lines.push('Net income — full year: ' + el('netAnnualOutput').textContent);
+    lines.push(el('netPayLabel').textContent + ': ' + el('netPayOutput').textContent);
+    copyToClipboard(lines.join('\n'), el('taxCopyBtn'));
+  });
   compute();
 })();
-
+function copyToClipboard(text, btn){
+  function showCopied(){ btn.textContent='Copied!'; setTimeout(function(){ btn.textContent='Copy result'; }, 1800); }
+  function showFailed(){ btn.textContent='Copy failed — try manually'; setTimeout(function(){ btn.textContent='Copy result'; }, 2200); }
+  function fallbackCopy(){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(showCopied).catch(function(){ try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); } });
+  } else {
+    try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); }
+  }
+}
 </script>
 </body>
 </html>
