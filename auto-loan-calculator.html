@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XL6TXYDCLD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XL6TXYDCLD');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auto Loan Calculator — Free Car Payment Calculator</title>
+<meta name="description" content="Calculate your monthly car payment including trade-in value and sales tax. Free auto loan calculator with total interest and amortization breakdown.">
+<link rel="canonical" href="https://myloanmath.com/auto-loan-calculator.html">
+<meta property="og:title" content="Auto Loan Calculator — Free Car Payment Calculator">
+<meta property="og:description" content="Calculate your monthly car payment including trade-in value and sales tax. Free auto loan calculator with total interest and amortization breakdown.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myloanmath.com/auto-loan-calculator.html">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta property="og:image" content="https://myloanmath.com/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myloanmath.com/assets/og-image.png">
+<link rel="preconnect" href="https://pagead2.googlesyndication.com">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Auto Loan Calculator", "applicationCategory": "FinanceApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does this include sales tax on the vehicle?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, if you enter a sales tax rate — it's added to the amount financed, since most buyers roll vehicle sales tax into the loan rather than paying it separately upfront."}}, {"@type": "Question", "name": "How does trade-in value affect my payment?", "acceptedAnswer": {"@type": "Answer", "text": "Your trade-in value is subtracted from the vehicle price before the loan amount is calculated, directly reducing how much you finance and therefore your monthly payment and total interest."}}, {"@type": "Question", "name": "What loan term should I use?", "acceptedAnswer": {"@type": "Answer", "text": "Auto loans commonly run 36 to 84 months. Shorter terms mean higher monthly payments but less total interest paid; longer terms lower the payment but increase total interest and the risk of owing more than the car is worth."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9412143347948347" crossorigin="anonymous"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://myloanmath.com/"}, {"@type": "ListItem", "position": 2, "name": "Auto Loan Calculator", "item": "https://myloanmath.com/auto-loan-calculator.html"}]}</script>
+</head>
+<body>
+<a href="#main-heading" class="skip-link">Skip to content</a>
+<nav class="topnav">
+  <a class="brand" href="index.html"><svg class="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+    <rect width="64" height="64" rx="14" fill="#1F5C43"/>
+    <text x="32" y="45" font-family="Georgia, serif" font-size="36" font-weight="700" fill="#F2EFE4" text-anchor="middle">M</text>
+  </svg> myloanmath</a>
+  <div class="links">
+      <a href="index.html">Home</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="auto-loan-calculator.html">Auto Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+      <a href="tax-calculator.html">Tax Calculator (US - IRS)</a>
+      <a href="canada-tax-calculator.html">Tax Calculator (Canada - CRA)</a>
+      <a href="blog.html">Blog</a>
+  </div>
+</nav>
+<div class="wrap">
+<div class="fallback-banner" id="fallbackBanner">Something went wrong loading the calculator engine. Open your browser's console (F12) to see the error.</div>
+<header class="page-head">
+  <div class="eyebrow">// myloanmath</div>
+  <h1 id="main-heading">Auto Loan Calculator</h1>
+  <p class="sub">Find your monthly car payment, including trade-in value and sales tax.</p>
+</header>
+
+<div class="card">
+  <div class="row">
+    <div class="field"><label for="autoPrice">Vehicle price</label><input type="text" id="autoPrice" value="35000" inputmode="decimal"></div>
+    <div class="field"><label for="autoDownPayment">Down payment</label><input type="text" id="autoDownPayment" value="5000" inputmode="decimal"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="autoTradeIn">Trade-in value</label><input type="text" id="autoTradeIn" value="0" inputmode="decimal"></div>
+    <div class="field"><label for="autoSalesTax">Sales tax rate (%)</label><input type="text" id="autoSalesTax" value="0" inputmode="decimal"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="autoRate">Annual interest rate (%)</label><input type="text" id="autoRate" value="6.5" inputmode="decimal"></div>
+    <div class="field"><label for="autoTermMonths">Loan term (months)</label><input type="text" id="autoTermMonths" value="60" inputmode="decimal"></div>
+  </div>
+  <div class="result">
+    <div class="result-label">Monthly payment</div>
+    <div class="result-text" id="autoOutput">-</div>
+    <div class="stat-grid" id="autoStats"></div>
+  </div>
+  <div class="actions"><button class="action" id="autoScheduleBtn" type="button">Show yearly breakdown</button><button class="action" id="autoCopyBtn" type="button">Copy result</button></div>
+  <div class="schedule-wrap" id="autoScheduleWrap" style="display:none;"><table class="schedule-table" id="autoScheduleTable"></table></div>
+  <p class="note">Uses the same standard amortization formula as our <a href="loan-calculator.html">general loan calculator</a>. Sales tax, if entered, is added to the amount financed — most buyers roll vehicle tax into the loan rather than paying it separately. Trade-in value reduces the amount financed directly.</p>
+</div>
+
+
+<div class="ad-slot"><!-- AD SLOT: below the tool. Once approved, paste your AdSense ad unit code here. --></div>
+
+<section class="content">
+<h2>How this auto loan calculator works</h2>
+<p>The amount you actually finance isn't the sticker price — it's the vehicle price, minus your down payment, minus your trade-in value, plus sales tax if you're rolling it into the loan rather than paying it upfront. That final number is what actually gets run through the standard amortization formula to produce your monthly payment, the same formula banks and dealerships use.</p>
+<p>Trade-in value matters more than people expect: a $5,000 trade-in doesn't just reduce your payment by a small amount, it directly reduces the loan principal dollar for dollar, which compounds into meaningfully less total interest paid over the life of the loan too.</p>
+<p>Loan term is the other major lever. A 72 or 84-month term lowers your monthly payment, which can make a more expensive car feel affordable — but it also means paying interest for years longer, and for the first stretch of a long loan, you can genuinely owe more than the car is worth as it depreciates faster than you're paying down the balance. A shorter term costs more per month but meaningfully less in total interest, and gets you to positive equity faster.</p>
+</section>
+
+<section class="content">
+<h2>Frequently asked questions</h2>
+<div class="faq-item"><h3>Does this include sales tax on the vehicle?</h3><p>Yes, if you enter a sales tax rate — it's added to the amount financed, since most buyers roll vehicle sales tax into the loan rather than paying it separately upfront.</p></div>
+<div class="faq-item"><h3>How does trade-in value affect my payment?</h3><p>Your trade-in value is subtracted from the vehicle price before the loan amount is calculated, directly reducing how much you finance and therefore your monthly payment and total interest.</p></div>
+<div class="faq-item"><h3>What loan term should I use?</h3><p>Auto loans commonly run 36 to 84 months. Shorter terms mean higher monthly payments but less total interest paid; longer terms lower the payment but increase total interest and the risk of owing more than the car is worth.</p></div>
+</section>
+
+<div class="related">
+  <p class="label">Related tools</p>
+  <div class="related-list">
+    <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+  </div>
+</div>
+
+</div>
+<footer class="site-footer">
+  <div>
+    <a href="index.html">Home</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="auto-loan-calculator.html">Auto Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+      <a href="tax-calculator.html">Tax Calculator (US - IRS)</a>
+      <a href="canada-tax-calculator.html">Tax Calculator (Canada - CRA)</a>
+      <a href="blog.html">Blog</a>
+  </div>
+  <div style="margin-top:10px;">
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms-of-use.html">Terms &amp; Disclaimer</a>
+    <a href="about.html">About</a>
+  </div>
+  <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
+</footer>
+<script src="numberToWords.js"></script>
+<script src="finance.js"></script>
+<script>
+(function(){
+  var mod = window.FinanceTools;
+  if (!mod) { document.getElementById('fallbackBanner').style.display='block'; return; }
+  function el(id){ return document.getElementById(id); }
+  function fmtMoney(n){ return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function parseNum(str){ var s=String(str).trim().replace(/,/g,''); if(!/^-?\d+(\.\d+)?$/.test(s)) return NaN; return parseFloat(s); }
+  var scheduleVisible = false;
+  var lastResult = null;
+
+  function compute(){
+    var price = parseNum(el('autoPrice').value);
+    var down = parseNum(el('autoDownPayment').value);
+    var tradeIn = parseNum(el('autoTradeIn').value);
+    var taxRate = parseNum(el('autoSalesTax').value);
+    var rate = parseNum(el('autoRate').value);
+    var term = parseNum(el('autoTermMonths').value);
+    var out = el('autoOutput'); var stats = el('autoStats');
+    try {
+      if ([price, down, tradeIn, taxRate, rate, term].some(isNaN)) throw new Error('Enter valid numbers for all fields.');
+      if (down < 0 || tradeIn < 0) throw new Error('Down payment and trade-in cannot be negative.');
+      var preTaxAmount = Math.max(0, price - down - tradeIn);
+      var taxAmount = preTaxAmount * (taxRate / 100);
+      var amountFinanced = preTaxAmount + taxAmount;
+      if (amountFinanced <= 0) throw new Error('Amount financed must be greater than zero — check your down payment and trade-in values.');
+      var r = mod.calculateLoan({ principal: amountFinanced, annualRatePercent: rate, termMonths: term });
+      lastResult = { amountFinanced: amountFinanced, taxAmount: taxAmount, r: r };
+      out.textContent = fmtMoney(r.monthlyPayment) + ' / month'; out.classList.remove('error');
+      stats.innerHTML =
+        '<div class="stat"><div class="stat-label">Amount financed</div><div class="stat-value">' + fmtMoney(amountFinanced) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Sales tax added</div><div class="stat-value">' + fmtMoney(taxAmount) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Total interest</div><div class="stat-value">' + fmtMoney(r.totalInterest) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Total cost</div><div class="stat-value">' + fmtMoney(r.totalPayment) + '</div></div>';
+      if (scheduleVisible) renderSchedule(amountFinanced, rate, term);
+    } catch(e) {
+      out.textContent = e.message; out.classList.add('error'); stats.innerHTML='';
+      el('autoScheduleWrap').style.display='none'; scheduleVisible=false; lastResult = null;
+    }
+  }
+  function renderSchedule(principal, rate, term){
+    var s = mod.amortizationScheduleByYear({ principal: principal, annualRatePercent: rate, termMonths: term });
+    var rows = '<tr><th>Year</th><th>Principal paid</th><th>Interest paid</th><th>Remaining balance</th></tr>';
+    s.forEach(function(y){ rows += '<tr><td>'+y.year+'</td><td>'+fmtMoney(y.principalPaid)+'</td><td>'+fmtMoney(y.interestPaid)+'</td><td>'+fmtMoney(y.remainingBalance)+'</td></tr>'; });
+    el('autoScheduleTable').innerHTML = rows; el('autoScheduleWrap').style.display='block';
+  }
+  ['autoPrice','autoDownPayment','autoTradeIn','autoSalesTax','autoRate','autoTermMonths'].forEach(function(id){
+    el(id).addEventListener('input', compute);
+  });
+  el('autoScheduleBtn').addEventListener('click', function(){
+    scheduleVisible = !scheduleVisible;
+    el('autoScheduleBtn').textContent = scheduleVisible ? 'Hide yearly breakdown' : 'Show yearly breakdown';
+    compute();
+  });
+  el('autoCopyBtn').addEventListener('click', function(){
+    if (!lastResult) return;
+    var lines = ['Auto Loan Calculator — myloanmath.com', '', 'Vehicle price: ' + el('autoPrice').value, 'Down payment: ' + el('autoDownPayment').value, 'Trade-in: ' + el('autoTradeIn').value, ''];
+    lines.push('Monthly payment: ' + el('autoOutput').textContent);
+    el('autoStats').querySelectorAll('.stat').forEach(function(s){ lines.push(s.querySelector('.stat-label').textContent + ': ' + s.querySelector('.stat-value').textContent); });
+    copyToClipboard(lines.join('\n'), el('autoCopyBtn'));
+  });
+  compute();
+})();
+function copyToClipboard(text, btn){
+  function showCopied(){ btn.textContent='Copied!'; setTimeout(function(){ btn.textContent='Copy result'; }, 1800); }
+  function showFailed(){ btn.textContent='Copy failed — try manually'; setTimeout(function(){ btn.textContent='Copy result'; }, 2200); }
+  function fallbackCopy(){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(showCopied).catch(function(){ try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); } });
+  } else {
+    try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); }
+  }
+}
+</script>
+</body>
+</html>
