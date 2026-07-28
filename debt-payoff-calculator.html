@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XL6TXYDCLD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XL6TXYDCLD');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Debt Payoff Calculator — Credit Card Payoff Calculator</title>
+<meta name="description" content="See exactly how long it'll take to pay off a credit card or loan at your monthly payment, and how much a minimum payment really costs you.">
+<link rel="canonical" href="https://myloanmath.com/debt-payoff-calculator.html">
+<meta property="og:title" content="Debt Payoff Calculator — Credit Card Payoff Calculator">
+<meta property="og:description" content="See exactly how long it'll take to pay off a credit card or loan at your monthly payment, and how much a minimum payment really costs you.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myloanmath.com/debt-payoff-calculator.html">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta property="og:image" content="https://myloanmath.com/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myloanmath.com/assets/og-image.png">
+<link rel="preconnect" href="https://pagead2.googlesyndication.com">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Debt Payoff Calculator", "applicationCategory": "FinanceApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why does it say my payment can never pay off the balance?", "acceptedAnswer": {"@type": "Answer", "text": "This happens when your monthly payment is less than the interest accruing each month — the balance would actually grow, not shrink, no matter how long you paid. You need a payment higher than the monthly interest amount shown in the error for the balance to ever go down."}}, {"@type": "Question", "name": "What is the minimum payment trap?", "acceptedAnswer": {"@type": "Answer", "text": "Credit card minimum payments are typically calculated as a small percentage of your balance (often 2%) or a flat floor like $25, whichever is greater. Paying only the minimum can stretch payoff to a decade or more and multiply the total interest paid many times over compared to a larger fixed payment."}}, {"@type": "Question", "name": "Is this the same math as a loan calculator?", "acceptedAnswer": {"@type": "Answer", "text": "It's the mathematical inverse. A loan calculator starts with a term and solves for the payment; this tool starts with a payment and solves for how long it takes, using the same underlying amortization formula."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9412143347948347" crossorigin="anonymous"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://myloanmath.com/"}, {"@type": "ListItem", "position": 2, "name": "Debt Payoff Calculator", "item": "https://myloanmath.com/debt-payoff-calculator.html"}]}</script>
+</head>
+<body>
+<a href="#main-heading" class="skip-link">Skip to content</a>
+<nav class="topnav">
+  <a class="brand" href="index.html"><svg class="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+    <rect width="64" height="64" rx="14" fill="#1F5C43"/>
+    <text x="32" y="45" font-family="Georgia, serif" font-size="36" font-weight="700" fill="#F2EFE4" text-anchor="middle">M</text>
+  </svg> myloanmath</a>
+  <div class="links">
+      <a href="index.html">Home</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="auto-loan-calculator.html">Auto Loan Calculator</a>
+      <a href="debt-payoff-calculator.html">Debt Payoff Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+      <a href="tax-calculator.html">Tax Calculator (US - IRS)</a>
+      <a href="canada-tax-calculator.html">Tax Calculator (Canada - CRA)</a>
+      <a href="blog.html">Blog</a>
+  </div>
+</nav>
+<div class="wrap">
+<div class="fallback-banner" id="fallbackBanner">Something went wrong loading the calculator engine. Open your browser's console (F12) to see the error.</div>
+<header class="page-head">
+  <div class="eyebrow">// myloanmath</div>
+  <h1 id="main-heading">Debt Payoff Calculator</h1>
+  <p class="sub">See how long it'll actually take to pay off a credit card or loan — and what a minimum payment really costs you.</p>
+</header>
+
+<div class="card">
+  <div class="row">
+    <div class="field"><label for="debtBalance">Current balance</label><input type="text" id="debtBalance" value="5000" inputmode="decimal"></div>
+    <div class="field"><label for="debtRate">Annual interest rate / APR (%)</label><input type="text" id="debtRate" value="22.99" inputmode="decimal"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="debtPayment">Your monthly payment</label><input type="text" id="debtPayment" value="200" inputmode="decimal"></div>
+  </div>
+  <div class="result">
+    <div class="result-label">Time to pay off</div>
+    <div class="result-text" id="debtOutput">-</div>
+    <div class="stat-grid" id="debtStats"></div>
+  </div>
+  <div class="actions"><button class="action" id="debtCopyBtn" type="button">Copy result</button></div>
+  <p class="note">Assumes no new charges are added to the balance and every payment is made on time. Uses the standard amortization formula, the same math credit card issuers use.</p>
+</div>
+
+<div class="card" style="background:var(--brass-soft); border-color:var(--brass); border-left:3px solid var(--brass);">
+  <div class="result-label" style="color:var(--brass);">The minimum payment trap</div>
+  <div id="minPaymentBox">
+    <p class="note" id="minPaymentText" style="margin-top:6px;"></p>
+  </div>
+</div>
+
+<div class="ad-slot"><!-- AD SLOT: below the tool. Once approved, paste your AdSense ad unit code here. --></div>
+
+<section class="content">
+<h2>How this debt payoff calculator works</h2>
+<p>This is the mathematical inverse of a standard loan calculator. A loan calculator starts with a term — say, 5 years — and solves for the monthly payment that pays it off exactly on schedule. This tool works backward: you tell it the payment you're actually making, and it solves for how many months that payment will take to clear the balance, using the same underlying amortization math.</p>
+<p>One real constraint worth understanding: if your payment is lower than the interest accruing each month, the balance mathematically can never go down — you'd be paying forever without making progress. This calculator catches that case directly and tells you the minimum payment needed just to stop the balance from growing, rather than showing a nonsensical result.</p>
+
+<h2>Why the minimum payment box above matters</h2>
+<p>Card issuers typically set minimum payments low on purpose — often around 2% of your balance or a small flat floor like $25, whichever is larger. That's usually just enough to cover most of the month's interest, meaning very little of a minimum payment actually reduces what you owe. The comparison box above shows this directly: the same balance, paid at the typical minimum, routinely takes years longer and costs multiples more in total interest than a meaningfully larger fixed payment.</p>
+</section>
+
+<section class="content">
+<h2>Frequently asked questions</h2>
+<div class="faq-item"><h3>Why does it say my payment can never pay off the balance?</h3><p>This happens when your monthly payment is less than the interest accruing each month — the balance would actually grow, not shrink, no matter how long you paid. You need a payment higher than the monthly interest amount shown in the error for the balance to ever go down.</p></div>
+<div class="faq-item"><h3>What is the minimum payment trap?</h3><p>Credit card minimum payments are typically calculated as a small percentage of your balance (often 2%) or a flat floor like $25, whichever is greater. Paying only the minimum can stretch payoff to a decade or more and multiply the total interest paid many times over compared to a larger fixed payment.</p></div>
+<div class="faq-item"><h3>Is this the same math as a loan calculator?</h3><p>It's the mathematical inverse. A loan calculator starts with a term and solves for the payment; this tool starts with a payment and solves for how long it takes, using the same underlying amortization formula.</p></div>
+</section>
+
+<div class="related">
+  <p class="label">Related tools</p>
+  <div class="related-list">
+    <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+  </div>
+</div>
+
+</div>
+<footer class="site-footer">
+  <div>
+    <a href="index.html">Home</a>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="auto-loan-calculator.html">Auto Loan Calculator</a>
+      <a href="debt-payoff-calculator.html">Debt Payoff Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+      <a href="tax-calculator.html">Tax Calculator (US - IRS)</a>
+      <a href="canada-tax-calculator.html">Tax Calculator (Canada - CRA)</a>
+      <a href="blog.html">Blog</a>
+  </div>
+  <div style="margin-top:10px;">
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms-of-use.html">Terms &amp; Disclaimer</a>
+    <a href="about.html">About</a>
+  </div>
+  <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
+</footer>
+<script src="numberToWords.js"></script>
+<script src="finance.js"></script>
+<script>
+(function(){
+  var mod = window.FinanceTools;
+  if (!mod) { document.getElementById('fallbackBanner').style.display='block'; return; }
+  function el(id){ return document.getElementById(id); }
+  function fmtMoney(n){ return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function parseNum(str){ var s=String(str).trim().replace(/,/g,''); if(!/^-?\d+(\.\d+)?$/.test(s)) return NaN; return parseFloat(s); }
+  var lastResult = null;
+
+  function compute(){
+    var balance = parseNum(el('debtBalance').value);
+    var rate = parseNum(el('debtRate').value);
+    var payment = parseNum(el('debtPayment').value);
+    var out = el('debtOutput'); var stats = el('debtStats');
+    var minBox = el('minPaymentText');
+    try {
+      if ([balance, rate, payment].some(isNaN)) throw new Error('Enter valid numbers for all fields.');
+      var r = mod.monthsToPayoff({ balance: balance, annualRatePercent: rate, monthlyPayment: payment });
+      lastResult = r;
+      var yearsPart = Math.floor(r.months / 12);
+      var monthsPart = r.months % 12;
+      var timeLabel = (yearsPart > 0 ? yearsPart + (yearsPart === 1 ? ' year' : ' years') + (monthsPart > 0 ? ', ' : '') : '') + (monthsPart > 0 ? monthsPart + (monthsPart === 1 ? ' month' : ' months') : (yearsPart === 0 ? '0 months' : ''));
+      out.textContent = timeLabel; out.classList.remove('error');
+      stats.innerHTML =
+        '<div class="stat"><div class="stat-label">Total months</div><div class="stat-value">' + r.months + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Total interest paid</div><div class="stat-value">' + fmtMoney(r.totalInterest) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Total paid overall</div><div class="stat-value">' + fmtMoney(r.totalPaid) + '</div></div>';
+
+      // Minimum payment comparison
+      var minPayment = mod.typicalMinimumPayment(balance);
+      try {
+        var minResult = mod.monthsToPayoff({ balance: balance, annualRatePercent: rate, monthlyPayment: minPayment });
+        var minYears = Math.floor(minResult.months / 12);
+        var minMonthsPart = minResult.months % 12;
+        var minTimeLabel = (minYears > 0 ? minYears + (minYears === 1 ? ' year' : ' years') + (minMonthsPart > 0 ? ', ' : '') : '') + (minMonthsPart > 0 ? minMonthsPart + (minMonthsPart === 1 ? ' month' : ' months') : (minYears === 0 ? '0 months' : ''));
+        minBox.innerHTML = 'A typical minimum payment on this balance would be around <strong>' + fmtMoney(minPayment) + '/month</strong>. At that rate, payoff would take <strong>' + minTimeLabel + '</strong> and cost <strong>' + fmtMoney(minResult.totalInterest) + '</strong> in total interest — compared to ' + timeLabel + ' and ' + fmtMoney(r.totalInterest) + ' at your entered payment of ' + fmtMoney(payment) + '/month.';
+      } catch(minErr) {
+        minBox.innerHTML = 'A typical minimum payment on this balance would be around <strong>' + fmtMoney(minPayment) + '/month</strong> — but at this interest rate, even that amount ' + minErr.message.charAt(0).toLowerCase() + minErr.message.slice(1);
+      }
+    } catch(e) {
+      out.textContent = e.message; out.classList.add('error'); stats.innerHTML=''; lastResult = null;
+      minBox.innerHTML = '';
+    }
+  }
+  ['debtBalance','debtRate','debtPayment'].forEach(function(id){ el(id).addEventListener('input', compute); });
+  el('debtCopyBtn').addEventListener('click', function(){
+    if (!lastResult) return;
+    var lines = ['Debt Payoff Calculator — myloanmath.com', '', 'Balance: ' + el('debtBalance').value, 'APR: ' + el('debtRate').value + '%', 'Monthly payment: ' + el('debtPayment').value, ''];
+    lines.push('Time to pay off: ' + el('debtOutput').textContent);
+    el('debtStats').querySelectorAll('.stat').forEach(function(s){ lines.push(s.querySelector('.stat-label').textContent + ': ' + s.querySelector('.stat-value').textContent); });
+    copyToClipboard(lines.join('\n'), el('debtCopyBtn'));
+  });
+  compute();
+})();
+function copyToClipboard(text, btn){
+  function showCopied(){ btn.textContent='Copied!'; setTimeout(function(){ btn.textContent='Copy result'; }, 1800); }
+  function showFailed(){ btn.textContent='Copy failed — try manually'; setTimeout(function(){ btn.textContent='Copy result'; }, 2200); }
+  function fallbackCopy(){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(showCopied).catch(function(){ try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); } });
+  } else {
+    try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); }
+  }
+}
+</script>
+</body>
+</html>

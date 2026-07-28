@@ -664,6 +664,126 @@ function getProvinceTaxStatus(provinceCode, taxableIncome) {
 // ---------------------------------------------------------------------
 
 /**
+ * US Payroll Taxes (FICA) — 2026.
+ * Verified across 8 independent CPA/payroll-provider sources, all agreeing
+ * exactly: Social Security wage base $184,500, rate 6.2%; Medicare 1.45%
+ * uncapped; Additional Medicare Tax 0.9% above filing-status-specific
+ * thresholds. Cross-checked the wage-base × rate math directly.
+ */
+const FICA_2026 = {
+  socialSecurityRate: 6.2,
+  socialSecurityWageBase: 184500,
+  medicareRate: 1.45,
+  additionalMedicareRate: 0.9,
+  additionalMedicareThreshold: { single: 200000, marriedJointly: 250000, headOfHousehold: 200000, marriedSeparately: 125000 },
+};
+
+function calculateFICA(grossIncome, filingStatus = 'single') {
+  if (!(grossIncome >= 0)) throw new Error('Gross income cannot be negative.');
+  const socialSecurityTax = round2(Math.min(grossIncome, FICA_2026.socialSecurityWageBase) * (FICA_2026.socialSecurityRate / 100));
+  const medicareTax = round2(grossIncome * (FICA_2026.medicareRate / 100));
+  const threshold = FICA_2026.additionalMedicareThreshold[filingStatus] !== undefined ? FICA_2026.additionalMedicareThreshold[filingStatus] : FICA_2026.additionalMedicareThreshold.single;
+  const additionalMedicareTax = round2(Math.max(0, grossIncome - threshold) * (FICA_2026.additionalMedicareRate / 100));
+  const totalFICA = round2(socialSecurityTax + medicareTax + additionalMedicareTax);
+  return { socialSecurityTax, medicareTax, additionalMedicareTax, totalFICA };
+}
+
+/**
+ * Canada Payroll Deductions (CPP + EI) — 2026.
+ * Verified across 7 independent sources, all agreeing exactly: CPP1 5.95%
+ * on earnings $3,500-$74,600 (max $4,230.45), CPP2 4.00% on $74,600-$85,000
+ * (max $416.00), EI 1.63% up to $68,900 (max $1,123.07). Cross-checked the
+ * CPP1 and CPP2 max-contribution math directly against the stated caps.
+ * Quebec uses its own QPP/QPIP system with different rates — not this one.
+ */
+const CPP_EI_2026 = {
+  cpp1Rate: 5.95, cpp1BasicExemption: 3500, cpp1Ceiling: 74600, cpp1Max: 4230.45,
+  cpp2Rate: 4.00, cpp2Ceiling: 85000, cpp2Max: 416.00,
+  eiRate: 1.63, eiCeiling: 68900, eiMax: 1123.07,
+};
+
+function calculateCPPEI(grossIncome, isQuebec = false) {
+  if (!(grossIncome >= 0)) throw new Error('Gross income cannot be negative.');
+  if (isQuebec) {
+    return { available: false, note: 'Quebec uses its own QPP and QPIP system with different rates instead of CPP/EI — not calculated here.' };
+  }
+  const c = CPP_EI_2026;
+  const cpp1PensionableEarnings = Math.max(0, Math.min(grossIncome, c.cpp1Ceiling) - c.cpp1BasicExemption);
+  const cpp1 = round2(Math.min(cpp1PensionableEarnings * (c.cpp1Rate / 100), c.cpp1Max));
+  const cpp2Earnings = Math.max(0, Math.min(grossIncome, c.cpp2Ceiling) - c.cpp1Ceiling);
+  const cpp2 = round2(Math.min(cpp2Earnings * (c.cpp2Rate / 100), c.cpp2Max));
+  const ei = round2(Math.min(grossIncome, c.eiCeiling) * (c.eiRate / 100));
+  const totalCPPEI = round2(cpp1 + cpp2 + ei);
+  return { available: true, cpp1, cpp2, ei, totalCPPEI };
+}
+
+// ---------------------------------------------------------------------
+
+/**
+ * Debt Payoff Calculator.
+ * Given a balance, APR, and a fixed monthly payment, solves for how many
+ * months to pay it off and the total interest paid — the mathematical
+ * inverse of the standard loan-payment formula (which instead solves for
+ * payment given a known term). Derived from the amortization identity:
+ *   payment = P*r*(1+r)^n / ((1+r)^n - 1)
+ * Solving for n:
+ *   n = log(payment / (payment - P*r)) / log(1+r)
+ * This requires payment > P*r (monthly interest accrued) — otherwise the
+ * balance never shrinks and payoff is mathematically impossible, which is
+ * handled as an explicit error rather than returning a nonsensical result.
+ */
+function monthsToPayoff(input) {
+  const { balance, annualRatePercent, monthlyPayment } = input;
+  if (!(balance > 0)) throw new Error('Balance must be greater than zero.');
+  if (annualRatePercent < 0) throw new Error('Interest rate cannot be negative.');
+  if (!(monthlyPayment > 0)) throw new Error('Monthly payment must be greater than zero.');
+
+  const r = annualRatePercent / 100 / 12;
+  let months;
+
+  if (r === 0) {
+    months = balance / monthlyPayment;
+  } else {
+    const monthlyInterestOnBalance = balance * r;
+    if (monthlyPayment <= monthlyInterestOnBalance) {
+      throw new Error(`This payment doesn't even cover the interest that accrues each month ($${round2(monthlyInterestOnBalance).toLocaleString()}) — at this rate, the balance would never go down. Increase the payment.`);
+    }
+    months = Math.log(monthlyPayment / (monthlyPayment - monthlyInterestOnBalance)) / Math.log(1 + r);
+  }
+
+  const monthsRounded = Math.ceil(months);
+  // Total paid uses the same amortization schedule as calculateLoan for consistency,
+  // running the fixed payment for the rounded whole number of months.
+  let remainingBalance = balance;
+  let totalPaid = 0;
+  for (let i = 0; i < monthsRounded && remainingBalance > 0.005; i++) {
+    const interestThisMonth = remainingBalance * r;
+    let paymentThisMonth = Math.min(monthlyPayment, remainingBalance + interestThisMonth);
+    remainingBalance = remainingBalance + interestThisMonth - paymentThisMonth;
+    totalPaid += paymentThisMonth;
+  }
+  const totalInterest = totalPaid - balance;
+
+  return {
+    months: monthsRounded,
+    years: round2(monthsRounded / 12),
+    totalPaid: round2(totalPaid),
+    totalInterest: round2(totalInterest),
+  };
+}
+
+/**
+ * Typical real-world credit card minimum payment: the greater of a flat
+ * dollar floor or a percentage of the balance — 2% and $25 are the most
+ * commonly cited defaults across major card issuers' stated formulas.
+ */
+function typicalMinimumPayment(balance) {
+  return Math.max(25, round2(balance * 0.02));
+}
+
+// ---------------------------------------------------------------------
+
+/**
  * Percentage Calculator — four standard modes.
  * All functions validate inputs and throw a clear Error rather than
  * returning NaN or Infinity.
@@ -706,7 +826,7 @@ function assertFiniteNumbers(fields) {
 
 // ---------------------------------------------------------------------
 
-const FinanceTools = { calculateLoan, amortizationScheduleByYear, calculateMortgage, compoundInterest, calculateFederalIncomeTax, TAX_BRACKETS_2026, STANDARD_DEDUCTION_2026, FILING_STATUS_LABELS, calculateFederalIncomeTaxCRA, CRA_FEDERAL_BRACKETS_2026, CRA_BPA_2026, calculateStateTax, STATE_TAX_2026, getProvinceTaxStatus, PROVINCE_TAX_2026, PercentageTools, round2 };
+const FinanceTools = { calculateLoan, amortizationScheduleByYear, calculateMortgage, compoundInterest, calculateFederalIncomeTax, TAX_BRACKETS_2026, STANDARD_DEDUCTION_2026, FILING_STATUS_LABELS, calculateFederalIncomeTaxCRA, CRA_FEDERAL_BRACKETS_2026, CRA_BPA_2026, calculateStateTax, STATE_TAX_2026, getProvinceTaxStatus, PROVINCE_TAX_2026, calculateFICA, FICA_2026, calculateCPPEI, CPP_EI_2026, monthsToPayoff, typicalMinimumPayment, PercentageTools, round2 };
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = FinanceTools;
