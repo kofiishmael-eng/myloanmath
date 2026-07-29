@@ -526,11 +526,21 @@ const STATE_TAX_2026 = {
   NV: { name: 'Nevada', type: 'none' },
   NH: { name: 'New Hampshire', type: 'none' },
   NJ: {
-    name: 'New Jersey', type: 'graduated', usesSingleFilerOnly: true,
-    // New Jersey's married-filing-jointly brackets are NOT just doubled single thresholds —
-    // genuinely different rate/threshold combinations per NJ Division of Taxation. Using
-    // single-filer brackets as the approximation here, same as other flagged states.
-    brackets: [{ rate: 1.4, upTo: 20000 }, { rate: 1.75, upTo: 35000 }, { rate: 3.5, upTo: 40000 }, { rate: 5.53, upTo: 75000 }, { rate: 6.37, upTo: 500000 }, { rate: 8.97, upTo: 1000000 }, { rate: 10.75, upTo: Infinity }],
+    name: 'New Jersey', type: 'graduated',
+    // Verified against NJ Division of Taxation's own published rate tables
+    // (cross-checked via Bankrate's citation). MFJ/HoH/Qualifying Widow(er)
+    // share one bracket set (8 brackets); Single/MFS share a different one
+    // (7 brackets) — these are genuinely different structures, not a doubled
+    // single-filer table. NJ uses per-person personal exemptions rather than
+    // a standard deduction, which isn't modeled here (noted in the note text).
+    bracketsByStatus: {
+      single: [{ rate: 1.4, upTo: 20000 }, { rate: 1.75, upTo: 35000 }, { rate: 3.5, upTo: 40000 }, { rate: 5.525, upTo: 75000 }, { rate: 6.37, upTo: 500000 }, { rate: 8.97, upTo: 1000000 }, { rate: 10.75, upTo: Infinity }],
+      marriedSeparately: [{ rate: 1.4, upTo: 20000 }, { rate: 1.75, upTo: 35000 }, { rate: 3.5, upTo: 40000 }, { rate: 5.525, upTo: 75000 }, { rate: 6.37, upTo: 500000 }, { rate: 8.97, upTo: 1000000 }, { rate: 10.75, upTo: Infinity }],
+      marriedJointly: [{ rate: 1.4, upTo: 20000 }, { rate: 1.75, upTo: 50000 }, { rate: 2.45, upTo: 70000 }, { rate: 3.5, upTo: 80000 }, { rate: 5.525, upTo: 150000 }, { rate: 6.37, upTo: 500000 }, { rate: 8.97, upTo: 1000000 }, { rate: 10.75, upTo: Infinity }],
+      headOfHousehold: [{ rate: 1.4, upTo: 20000 }, { rate: 1.75, upTo: 50000 }, { rate: 2.45, upTo: 70000 }, { rate: 3.5, upTo: 80000 }, { rate: 5.525, upTo: 150000 }, { rate: 6.37, upTo: 500000 }, { rate: 8.97, upTo: 1000000 }, { rate: 10.75, upTo: Infinity }],
+    },
+    standardDeduction: { single: 0, marriedJointly: 0, headOfHousehold: 0, marriedSeparately: 0 },
+    usesPersonalExemptionsNotDeduction: true,
   },
   NM: { name: 'New Mexico', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 1.5, upTo: 5500 }, { rate: 3.2, upTo: 16500 }, { rate: 4.3, upTo: 33500 }, { rate: 4.7, upTo: 66500 }, { rate: 4.9, upTo: 210000 }, { rate: 5.9, upTo: Infinity }] },
   NY: {
@@ -605,7 +615,12 @@ function calculateStateTax(stateCode, taxableIncome, filingStatus) {
         surchargeTax = round2(Math.max(0, stateTaxableIncome - state.surcharge.threshold) * (state.surcharge.rate / 100));
         tax += surchargeTax;
       }
-      let note = `${state.name} uses its own graduated brackets and standard deduction ($${stateDeduction.toLocaleString()} for this filing status), separate from the federal ones above.`;
+      let note;
+      if (state.usesPersonalExemptionsNotDeduction) {
+        note = `${state.name} uses its own graduated brackets, with separate bracket structures for single/married-separate filers versus married-jointly/head-of-household filers. ${state.name} uses per-person personal exemptions rather than a standard deduction, which isn't modeled here — the real amount owed is likely somewhat lower.`;
+      } else {
+        note = `${state.name} uses its own graduated brackets and standard deduction ($${stateDeduction.toLocaleString()} for this filing status), separate from the federal ones above.`;
+      }
       if (state.surcharge && surchargeTax > 0) {
         note += ` Includes an additional ${state.surcharge.rate}% surcharge on income over $${state.surcharge.threshold.toLocaleString()}.`;
       }
