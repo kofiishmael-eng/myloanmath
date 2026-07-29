@@ -515,7 +515,22 @@ const STATE_TAX_2026 = {
   KY: { name: 'Kentucky', type: 'flat', rate: 3.5 },
   LA: { name: 'Louisiana', type: 'flat', rate: 3.0 },
   ME: { name: 'Maine', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 5.8, upTo: 27399 }, { rate: 6.75, upTo: 64849 }, { rate: 7.15, upTo: Infinity }] },
-  MD: { name: 'Maryland', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 2, upTo: 1000 }, { rate: 3, upTo: 2000 }, { rate: 4, upTo: 3000 }, { rate: 4.75, upTo: 100000 }, { rate: 5, upTo: 125000 }, { rate: 5.25, upTo: 150000 }, { rate: 5.5, upTo: 250000 }, { rate: 6.25, upTo: 500000 }, { rate: 6.5, upTo: Infinity }] },
+  MD: {
+    name: 'Maryland', type: 'graduated',
+    // Corrected: the earlier single-filer table was missing a bracket (had 9,
+    // real structure has 10 — the top 6.5% bracket starts at $1,000,000 for
+    // single filers, not $500,000). Verified against the source's own
+    // cumulative worked example ($75,000 single -> $3,510) before use.
+    // HoH assumed to share MFJ's more generous thresholds (Maryland's common
+    // pattern, not independently confirmed for HoH specifically).
+    bracketsByStatus: {
+      single: [{ rate: 2, upTo: 1000 }, { rate: 3, upTo: 2000 }, { rate: 4, upTo: 3000 }, { rate: 4.75, upTo: 100000 }, { rate: 5, upTo: 125000 }, { rate: 5.25, upTo: 150000 }, { rate: 5.5, upTo: 250000 }, { rate: 5.75, upTo: 500000 }, { rate: 6.25, upTo: 1000000 }, { rate: 6.5, upTo: Infinity }],
+      marriedSeparately: [{ rate: 2, upTo: 1000 }, { rate: 3, upTo: 2000 }, { rate: 4, upTo: 3000 }, { rate: 4.75, upTo: 100000 }, { rate: 5, upTo: 125000 }, { rate: 5.25, upTo: 150000 }, { rate: 5.5, upTo: 250000 }, { rate: 5.75, upTo: 500000 }, { rate: 6.25, upTo: 1000000 }, { rate: 6.5, upTo: Infinity }],
+      marriedJointly: [{ rate: 2, upTo: 1000 }, { rate: 3, upTo: 2000 }, { rate: 4, upTo: 3000 }, { rate: 4.75, upTo: 150000 }, { rate: 5, upTo: 175000 }, { rate: 5.25, upTo: 225000 }, { rate: 5.5, upTo: 300000 }, { rate: 5.75, upTo: 600000 }, { rate: 6.25, upTo: 1200000 }, { rate: 6.5, upTo: Infinity }],
+      headOfHousehold: [{ rate: 2, upTo: 1000 }, { rate: 3, upTo: 2000 }, { rate: 4, upTo: 3000 }, { rate: 4.75, upTo: 150000 }, { rate: 5, upTo: 175000 }, { rate: 5.25, upTo: 225000 }, { rate: 5.5, upTo: 300000 }, { rate: 5.75, upTo: 600000 }, { rate: 6.25, upTo: 1200000 }, { rate: 6.5, upTo: Infinity }],
+    },
+    standardDeduction: { single: 2550, marriedJointly: 5150, headOfHousehold: 5150, marriedSeparately: 2550 },
+  },
   MA: { name: 'Massachusetts', type: 'graduated', brackets: [{ rate: 5, upTo: 1083150 }, { rate: 9, upTo: Infinity }] },
   MI: { name: 'Michigan', type: 'flat', rate: 4.25 },
   MN: { name: 'Minnesota', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 5.35, upTo: 33310 }, { rate: 6.8, upTo: 109430 }, { rate: 7.85, upTo: 203150 }, { rate: 9.85, upTo: Infinity }] },
@@ -572,7 +587,24 @@ const STATE_TAX_2026 = {
   VA: { name: 'Virginia', type: 'graduated', brackets: [{ rate: 2, upTo: 3000 }, { rate: 3, upTo: 5000 }, { rate: 5, upTo: 17000 }, { rate: 5.75, upTo: Infinity }] },
   WA: { name: 'Washington', type: 'none' },
   WV: { name: 'West Virginia', type: 'graduated', brackets: [{ rate: 2.22, upTo: 10000 }, { rate: 2.96, upTo: 25000 }, { rate: 3.33, upTo: 40000 }, { rate: 4.44, upTo: 60000 }, { rate: 4.82, upTo: Infinity }] },
-  WI: { name: 'Wisconsin', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 3.5, upTo: 15110 }, { rate: 4.4, upTo: 51950 }, { rate: 5.3, upTo: 332720 }, { rate: 7.65, upTo: Infinity }] },
+  WI: {
+    name: 'Wisconsin', type: 'graduated',
+    // Sourced directly from the Wisconsin Department of Revenue's own official
+    // rate page (revenue.wi.gov), which explicitly labels this table "2025 tax
+    // is" — Wisconsin's true 2026 tax-year figures have not yet been published
+    // by the state as of this writing. Using the most recently confirmed
+    // official figures rather than the guessed/conflicting 2026 estimates
+    // found across secondary sources. Verified against the DOR's own stated
+    // cumulative formula ($50,480 single -> $2,089) before use.
+    bracketsByStatus: {
+      single: [{ rate: 3.5, upTo: 14680 }, { rate: 4.4, upTo: 50480 }, { rate: 5.3, upTo: 323290 }, { rate: 7.65, upTo: Infinity }],
+      headOfHousehold: [{ rate: 3.5, upTo: 14680 }, { rate: 4.4, upTo: 50480 }, { rate: 5.3, upTo: 323290 }, { rate: 7.65, upTo: Infinity }],
+      marriedJointly: [{ rate: 3.5, upTo: 19580 }, { rate: 4.4, upTo: 67300 }, { rate: 5.3, upTo: 431060 }, { rate: 7.65, upTo: Infinity }],
+      marriedSeparately: [{ rate: 3.5, upTo: 9790 }, { rate: 4.4, upTo: 33650 }, { rate: 5.3, upTo: 215530 }, { rate: 7.65, upTo: Infinity }],
+    },
+    standardDeduction: { single: 0, marriedJointly: 0, headOfHousehold: 0, marriedSeparately: 0 },
+    dataVintageNote: "Uses Wisconsin's most recently published brackets (tax year 2025) — the WI Department of Revenue has not yet released final 2026 figures.",
+  },
   WY: { name: 'Wyoming', type: 'none' },
   DC: { name: 'Washington DC', type: 'graduated', brackets: [{ rate: 4, upTo: 10000 }, { rate: 6, upTo: 40000 }, { rate: 6.5, upTo: 60000 }, { rate: 8.5, upTo: 250000 }, { rate: 9.25, upTo: 500000 }, { rate: 9.75, upTo: 1000000 }, { rate: 10.75, upTo: Infinity }] },
 };
