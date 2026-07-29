@@ -904,6 +904,99 @@ function findDiscountPercent(input) {
 // ---------------------------------------------------------------------
 
 /**
+ * 401(k) Retirement Calculator — 2026 IRS contribution limits.
+ * Source: IRS.gov directly ("401(k) limit increases to $24,500 for 2026" and
+ * "Retirement topics — 401(k) and profit-sharing plan contribution limits"),
+ * cross-checked against Fidelity's published summary.
+ * Employee elective deferral limit: $24,500. Catch-up (age 50+): +$8,000.
+ * Super catch-up (ages 60-63 specifically, per SECURE 2.0): +$11,250 instead.
+ * Combined employee+employer limit: $72,000/year.
+ */
+const CONTRIB_401K_2026 = {
+  employeeLimit: 24500,
+  catchUpLimit: 8000,       // age 50+
+  superCatchUpLimit: 11250, // ages 60-63 specifically, replaces the standard catch-up
+  combinedLimit: 72000,     // employee + employer combined
+};
+
+function employee401kLimit(age) {
+  if (age >= 60 && age <= 63) return CONTRIB_401K_2026.employeeLimit + CONTRIB_401K_2026.superCatchUpLimit;
+  if (age >= 50) return CONTRIB_401K_2026.employeeLimit + CONTRIB_401K_2026.catchUpLimit;
+  return CONTRIB_401K_2026.employeeLimit;
+}
+
+/**
+ * Projects 401(k) balance to retirement using annual-step compounding —
+ * contributions are modeled as added once per year rather than per paycheck,
+ * a standard simplifying approximation disclosed directly to the user.
+ * Salary is held flat over the projection (no assumed raises), also disclosed.
+ */
+function calculate401kProjection(input) {
+  const { currentAge, retirementAge, currentBalance, annualSalary, employeeContributionPercent, employerMatchPercent, employerMatchLimitPercent, annualReturnPercent } = input;
+  if (!(currentAge >= 18 && currentAge < 100)) throw new Error('Enter a valid current age.');
+  if (!(retirementAge > currentAge && retirementAge <= 100)) throw new Error('Retirement age must be greater than current age.');
+  if (currentBalance < 0) throw new Error('Current balance cannot be negative.');
+  if (!(annualSalary >= 0)) throw new Error('Annual salary cannot be negative.');
+  if (employeeContributionPercent < 0 || employeeContributionPercent > 100) throw new Error('Contribution percent must be between 0 and 100.');
+  if (employerMatchPercent < 0 || employerMatchLimitPercent < 0) throw new Error('Employer match values cannot be negative.');
+  if (annualReturnPercent < 0) throw new Error('Return rate cannot be negative.');
+
+  let balance = currentBalance;
+  let totalEmployeeContributions = 0;
+  let totalEmployerContributions = 0;
+  const r = annualReturnPercent / 100;
+  const yearRows = [];
+
+  for (let age = currentAge; age < retirementAge; age++) {
+    const limit = employee401kLimit(age);
+    let employeeContribution = Math.min(annualSalary * (employeeContributionPercent / 100), limit);
+    const matchableAmount = Math.min(employeeContribution, annualSalary * (employerMatchLimitPercent / 100));
+    let employerContribution = matchableAmount * (employerMatchPercent / 100);
+    if (employeeContribution + employerContribution > CONTRIB_401K_2026.combinedLimit) {
+      employerContribution = Math.max(0, CONTRIB_401K_2026.combinedLimit - employeeContribution);
+    }
+    totalEmployeeContributions += employeeContribution;
+    totalEmployerContributions += employerContribution;
+    balance = balance * (1 + r) + employeeContribution + employerContribution;
+    yearRows.push({ age: age + 1, employeeContribution: round2(employeeContribution), employerContribution: round2(employerContribution), yearEndBalance: round2(balance) });
+  }
+
+  const totalContributions = totalEmployeeContributions + totalEmployerContributions;
+  const totalGrowth = balance - currentBalance - totalContributions;
+
+  return {
+    finalBalance: round2(balance),
+    totalEmployeeContributions: round2(totalEmployeeContributions),
+    totalEmployerContributions: round2(totalEmployerContributions),
+    totalContributions: round2(totalContributions),
+    totalGrowth: round2(totalGrowth),
+    yearsInvested: retirementAge - currentAge,
+    yearRows,
+  };
+}
+
+/**
+ * Tip Calculator — straightforward arithmetic, no external data dependency.
+ */
+function calculateTip(input) {
+  const { billAmount, tipPercent, numberOfPeople = 1 } = input;
+  if (!(billAmount >= 0)) throw new Error('Bill amount cannot be negative.');
+  if (tipPercent < 0) throw new Error('Tip percent cannot be negative.');
+  if (!(numberOfPeople >= 1)) throw new Error('Number of people must be at least 1.');
+
+  const tipAmount = billAmount * (tipPercent / 100);
+  const totalAmount = billAmount + tipAmount;
+  return {
+    tipAmount: round2(tipAmount),
+    totalAmount: round2(totalAmount),
+    tipPerPerson: round2(tipAmount / numberOfPeople),
+    totalPerPerson: round2(totalAmount / numberOfPeople),
+  };
+}
+
+// ---------------------------------------------------------------------
+
+/**
  * Percentage Calculator — four standard modes.
  * All functions validate inputs and throw a clear Error rather than
  * returning NaN or Infinity.
@@ -946,7 +1039,7 @@ function assertFiniteNumbers(fields) {
 
 // ---------------------------------------------------------------------
 
-const FinanceTools = { calculateLoan, amortizationScheduleByYear, calculateMortgage, compoundInterest, requiredMonthlyContribution, calculateFederalIncomeTax, TAX_BRACKETS_2026, STANDARD_DEDUCTION_2026, FILING_STATUS_LABELS, calculateFederalIncomeTaxCRA, CRA_FEDERAL_BRACKETS_2026, CRA_BPA_2026, calculateStateTax, STATE_TAX_2026, getProvinceTaxStatus, PROVINCE_TAX_2026, calculateFICA, FICA_2026, calculateCPPEI, CPP_EI_2026, monthsToPayoff, typicalMinimumPayment, calculateDiscount, findDiscountPercent, PercentageTools, round2 };
+const FinanceTools = { calculateLoan, amortizationScheduleByYear, calculateMortgage, compoundInterest, requiredMonthlyContribution, calculateFederalIncomeTax, TAX_BRACKETS_2026, STANDARD_DEDUCTION_2026, FILING_STATUS_LABELS, calculateFederalIncomeTaxCRA, CRA_FEDERAL_BRACKETS_2026, CRA_BPA_2026, calculateStateTax, STATE_TAX_2026, getProvinceTaxStatus, PROVINCE_TAX_2026, calculateFICA, FICA_2026, calculateCPPEI, CPP_EI_2026, monthsToPayoff, typicalMinimumPayment, calculateDiscount, findDiscountPercent, calculate401kProjection, employee401kLimit, CONTRIB_401K_2026, calculateTip, PercentageTools, round2 };
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = FinanceTools;

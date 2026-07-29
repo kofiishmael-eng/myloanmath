@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XL6TXYDCLD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XL6TXYDCLD');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>401(k) Calculator — Retirement Savings Projection</title>
+<meta name="description" content="Project your 401(k) balance at retirement, including employer match and 2026 IRS contribution limits. Free 401(k) retirement calculator.">
+<link rel="canonical" href="https://myloanmath.com/401k-calculator.html">
+<meta property="og:title" content="401(k) Calculator — Retirement Savings Projection">
+<meta property="og:description" content="Project your 401(k) balance at retirement, including employer match and 2026 IRS contribution limits. Free 401(k) retirement calculator.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myloanmath.com/401k-calculator.html">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta property="og:image" content="https://myloanmath.com/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myloanmath.com/assets/og-image.png">
+<link rel="preconnect" href="https://pagead2.googlesyndication.com">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "401(k) Calculator", "applicationCategory": "FinanceApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is the 2026 401(k) contribution limit?", "acceptedAnswer": {"@type": "Answer", "text": "$24,500 for employees under 50. Those 50 and older can add an $8,000 catch-up contribution ($32,500 total). Those aged 60-63 specifically get a larger $11,250 catch-up instead ($35,750 total), per the SECURE 2.0 Act."}}, {"@type": "Question", "name": "Why does my contribution get capped in the results?", "acceptedAnswer": {"@type": "Answer", "text": "The IRS caps how much you can contribute to a 401(k) each year regardless of your salary or chosen percentage. If your salary and contribution rate would exceed the limit for your age, this calculator automatically caps it at the correct IRS limit rather than showing an unrealistic number."}}, {"@type": "Question", "name": "Does this account for salary raises over time?", "acceptedAnswer": {"@type": "Answer", "text": "No — salary is held flat for the full projection, which is a simplifying assumption disclosed directly here. Real raises would increase both your contributions and your employer match over time, meaning your actual balance would likely be higher than this estimate."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9412143347948347" crossorigin="anonymous"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://myloanmath.com/"}, {"@type": "ListItem", "position": 2, "name": "401(k) Calculator", "item": "https://myloanmath.com/401k-calculator.html"}]}</script>
+</head>
+<body>
+<a href="#main-heading" class="skip-link">Skip to content</a>
+<nav class="topnav">
+  <a class="brand" href="index.html"><svg class="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+    <rect width="64" height="64" rx="14" fill="#1F5C43"/>
+    <text x="32" y="45" font-family="Georgia, serif" font-size="36" font-weight="700" fill="#F2EFE4" text-anchor="middle">M</text>
+  </svg> myloanmath</a>
+  <div class="links">
+      <a href="index.html">Home</a>
+      <span class="nav-sep">|</span>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <span class="nav-sep">|</span>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="auto-loan-calculator.html">Auto Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="debt-payoff-calculator.html">Debt Payoff Calculator</a>
+      <span class="nav-sep">|</span>
+      <a href="discount-calculator.html">Discount Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+      <a href="savings-goal-calculator.html">Savings Goal Calculator</a>
+      <a href="401k-calculator.html">401(k) Calculator</a>
+      <a href="tip-calculator.html">Tip Calculator</a>
+      <span class="nav-sep">|</span>
+      <a href="salary-calculator.html">Salary Calculator</a>
+      <a href="tax-calculator.html">Tax Calculator (US - IRS)</a>
+      <a href="canada-tax-calculator.html">Tax Calculator (Canada - CRA)</a>
+      <span class="nav-sep">|</span>
+      <a href="blog.html">Blog</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="which-calculator-do-i-need.html">Which Calculator?</a>
+      <a href="methodology.html">Methodology</a>
+  </div>
+</nav>
+<div class="wrap">
+<div class="fallback-banner" id="fallbackBanner">Something went wrong loading the calculator engine. Open your browser's console (F12) to see the error.</div>
+<header class="page-head">
+  <div class="eyebrow">// myloanmath</div>
+  <h1 id="main-heading">401(k) Calculator</h1>
+  <p class="sub">Project your retirement balance, including employer match and 2026 IRS contribution limits.</p>
+</header>
+
+<div class="card">
+  <div class="row">
+    <div class="field"><label for="k401CurrentAge">Current age</label><input type="text" id="k401CurrentAge" value="30" inputmode="decimal"></div>
+    <div class="field"><label for="k401RetireAge">Retirement age</label><input type="text" id="k401RetireAge" value="65" inputmode="decimal"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="k401Balance">Current 401(k) balance</label><input type="text" id="k401Balance" value="15000" inputmode="decimal"></div>
+    <div class="field"><label for="k401Salary">Annual salary</label><input type="text" id="k401Salary" value="75000" inputmode="decimal"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="k401Contribution">Your contribution (% of salary)</label><input type="text" id="k401Contribution" value="6" inputmode="decimal"></div>
+    <div class="field"><label for="k401Return">Expected annual return (%)</label><input type="text" id="k401Return" value="7" inputmode="decimal"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="k401MatchPercent">Employer match (% of your contribution)</label><input type="text" id="k401MatchPercent" value="100" inputmode="decimal"></div>
+    <div class="field"><label for="k401MatchLimit">Match applies up to (% of salary)</label><input type="text" id="k401MatchLimit" value="6" inputmode="decimal"></div>
+  </div>
+  <div class="result">
+    <div class="result-label">Projected balance at retirement</div>
+    <div class="result-text" id="k401Output">-</div>
+    <div class="stat-grid" id="k401Stats"></div>
+  </div>
+  <div class="actions"><button class="action" id="k401CopyBtn" type="button">Copy result</button></div>
+  <p class="note">Salary is held flat for the full projection (no assumed raises) and contributions compound annually rather than per-paycheck — both are simplifying assumptions. Your contribution is automatically capped at the correct IRS limit for your age each year.</p>
+</div>
+
+<div class="ad-slot"><!-- AD SLOT: below the tool. Once approved, paste your AdSense ad unit code here. --></div>
+
+<section class="content">
+<h2>2026 IRS 401(k) contribution limits</h2>
+<p>The IRS caps how much you can personally contribute to a 401(k) each year, regardless of your salary. For 2026, that limit is $24,500 for anyone under 50. If you're 50 or older, you can add an $8,000 catch-up contribution, for $32,500 total. There's a further wrinkle for savers turning 60, 61, 62, or 63 specifically during the year: SECURE 2.0 gives this age band a larger $11,250 catch-up instead of the standard $8,000, for $35,750 total — a narrow four-year window worth knowing about if you're approaching it. This calculator applies the correct limit automatically based on the age you enter for each year of the projection.</p>
+
+<h2>Why employer match is effectively free money</h2>
+<p>An employer match — commonly structured as "100% of your contribution up to 6% of salary" — means your employer adds money to your account for every dollar you contribute, up to that limit. Contributing less than the match threshold leaves part of that match unclaimed, which is functionally identical to declining a portion of your own compensation. This calculator separates employee and employer contributions in the results specifically so you can see how much of your final balance came from money your employer added on top of your own.</p>
+
+<h2>What this projection doesn't account for</h2>
+<p>Two real simplifications are built into this calculator, both disclosed directly: salary is assumed to stay flat over the entire projection, when in reality most people receive raises that would increase both their contributions and their employer match over time — meaning your real balance would likely end up higher than this estimate. Contributions are also modeled as landing once per year rather than spread across each paycheck, a standard simplification that has a small effect on the precise growth curve but not the overall trajectory.</p>
+</section>
+
+<section class="content">
+<h2>Frequently asked questions</h2>
+<div class="faq-item"><h3>What is the 2026 401(k) contribution limit?</h3><p>$24,500 for employees under 50. Those 50 and older can add an $8,000 catch-up contribution ($32,500 total). Those aged 60-63 specifically get a larger $11,250 catch-up instead ($35,750 total), per the SECURE 2.0 Act.</p></div>
+<div class="faq-item"><h3>Why does my contribution get capped in the results?</h3><p>The IRS caps how much you can contribute to a 401(k) each year regardless of your salary or chosen percentage. If your salary and contribution rate would exceed the limit for your age, this calculator automatically caps it at the correct IRS limit rather than showing an unrealistic number.</p></div>
+<div class="faq-item"><h3>Does this account for salary raises over time?</h3><p>No — salary is held flat for the full projection, which is a simplifying assumption disclosed directly here. Real raises would increase both your contributions and your employer match over time, meaning your actual balance would likely be higher than this estimate.</p></div>
+</section>
+
+<div class="related">
+  <p class="label">Related tools</p>
+  <div class="related-list">
+    <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+      <a href="savings-goal-calculator.html">Savings Goal Calculator</a>
+      <a href="salary-calculator.html">Salary Calculator</a>
+  </div>
+</div>
+
+</div>
+<footer class="site-footer">
+  <div>
+    <a href="index.html">Home</a>
+    <a href="blog.html">Blog</a>
+    <a href="about.html">About</a>
+  </div>
+  <div style="margin-top:10px;">
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms-of-use.html">Terms &amp; Disclaimer</a>
+  </div>
+  <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
+</footer>
+<script src="numberToWords.js"></script>
+<script src="finance.js"></script>
+<script>
+(function(){
+  var mod = window.FinanceTools;
+  if (!mod) { document.getElementById('fallbackBanner').style.display='block'; return; }
+  function el(id){ return document.getElementById(id); }
+  function fmtMoney(n){ return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function parseNum(str){ var s=String(str).trim().replace(/,/g,''); if(!/^-?\d+(\.\d+)?$/.test(s)) return NaN; return parseFloat(s); }
+  var lastResult = null;
+
+  function compute(){
+    var currentAge = parseNum(el('k401CurrentAge').value);
+    var retireAge = parseNum(el('k401RetireAge').value);
+    var balance = parseNum(el('k401Balance').value);
+    var salary = parseNum(el('k401Salary').value);
+    var contribPct = parseNum(el('k401Contribution').value);
+    var returnPct = parseNum(el('k401Return').value);
+    var matchPct = parseNum(el('k401MatchPercent').value);
+    var matchLimitPct = parseNum(el('k401MatchLimit').value);
+    var out = el('k401Output'); var stats = el('k401Stats');
+    try {
+      if ([currentAge, retireAge, balance, salary, contribPct, returnPct, matchPct, matchLimitPct].some(isNaN)) throw new Error('Enter valid numbers for all fields.');
+      var r = mod.calculate401kProjection({
+        currentAge: currentAge, retirementAge: retireAge, currentBalance: balance, annualSalary: salary,
+        employeeContributionPercent: contribPct, employerMatchPercent: matchPct, employerMatchLimitPercent: matchLimitPct, annualReturnPercent: returnPct
+      });
+      lastResult = r;
+      out.textContent = fmtMoney(r.finalBalance); out.classList.remove('error');
+      stats.innerHTML =
+        '<div class="stat"><div class="stat-label">Your contributions</div><div class="stat-value">' + fmtMoney(r.totalEmployeeContributions) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Employer contributions</div><div class="stat-value">' + fmtMoney(r.totalEmployerContributions) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Investment growth</div><div class="stat-value">' + fmtMoney(r.totalGrowth) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Years invested</div><div class="stat-value">' + r.yearsInvested + '</div></div>';
+    } catch(e) {
+      out.textContent = e.message; out.classList.add('error'); stats.innerHTML=''; lastResult = null;
+    }
+  }
+  ['k401CurrentAge','k401RetireAge','k401Balance','k401Salary','k401Contribution','k401Return','k401MatchPercent','k401MatchLimit'].forEach(function(id){ el(id).addEventListener('input', compute); });
+  el('k401CopyBtn').addEventListener('click', function(){
+    if (!lastResult) return;
+    var lines = ['401(k) Calculator — myloanmath.com', '', 'Current age: ' + el('k401CurrentAge').value, 'Retirement age: ' + el('k401RetireAge').value, ''];
+    lines.push('Projected balance: ' + fmtMoney(lastResult.finalBalance));
+    lines.push('Your contributions: ' + fmtMoney(lastResult.totalEmployeeContributions));
+    lines.push('Employer contributions: ' + fmtMoney(lastResult.totalEmployerContributions));
+    lines.push('Investment growth: ' + fmtMoney(lastResult.totalGrowth));
+    copyToClipboard(lines.join('\n'), el('k401CopyBtn'));
+  });
+  compute();
+})();
+function copyToClipboard(text, btn){
+  function showCopied(){ btn.textContent='Copied!'; setTimeout(function(){ btn.textContent='Copy result'; }, 1800); }
+  function showFailed(){ btn.textContent='Copy failed — try manually'; setTimeout(function(){ btn.textContent='Copy result'; }, 2200); }
+  function fallbackCopy(){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(showCopied).catch(function(){ try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); } });
+  } else {
+    try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); }
+  }
+}
+</script>
+</body>
+</html>

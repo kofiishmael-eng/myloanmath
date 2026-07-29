@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XL6TXYDCLD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XL6TXYDCLD');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tip Calculator — Free Bill Splitter &amp; Tip Calculator</title>
+<meta name="description" content="Calculate the tip and split the bill between any number of people. Free, instant tip calculator.">
+<link rel="canonical" href="https://myloanmath.com/tip-calculator.html">
+<meta property="og:title" content="Tip Calculator — Free Bill Splitter & Tip Calculator">
+<meta property="og:description" content="Calculate the tip and split the bill between any number of people. Free, instant tip calculator.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myloanmath.com/tip-calculator.html">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta property="og:image" content="https://myloanmath.com/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myloanmath.com/assets/og-image.png">
+<link rel="preconnect" href="https://pagead2.googlesyndication.com">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Tip Calculator", "applicationCategory": "FinanceApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Should I tip on the pre-tax or post-tax bill amount?", "acceptedAnswer": {"@type": "Answer", "text": "Convention varies, but tipping on the pre-tax subtotal is the more common practice and what most etiquette guides recommend. Enter whichever amount you intend to tip on."}}, {"@type": "Question", "name": "What's a standard tip percentage?", "acceptedAnswer": {"@type": "Answer", "text": "15-20% is standard for sit-down restaurant service in the US, with 18-20% increasingly common. Delivery, bars, and other services often follow different norms."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9412143347948347" crossorigin="anonymous"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://myloanmath.com/"}, {"@type": "ListItem", "position": 2, "name": "Tip Calculator", "item": "https://myloanmath.com/tip-calculator.html"}]}</script>
+</head>
+<body>
+<a href="#main-heading" class="skip-link">Skip to content</a>
+<nav class="topnav">
+  <a class="brand" href="index.html"><svg class="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+    <rect width="64" height="64" rx="14" fill="#1F5C43"/>
+    <text x="32" y="45" font-family="Georgia, serif" font-size="36" font-weight="700" fill="#F2EFE4" text-anchor="middle">M</text>
+  </svg> myloanmath</a>
+  <div class="links">
+      <a href="index.html">Home</a>
+      <span class="nav-sep">|</span>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <span class="nav-sep">|</span>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="auto-loan-calculator.html">Auto Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="debt-payoff-calculator.html">Debt Payoff Calculator</a>
+      <span class="nav-sep">|</span>
+      <a href="discount-calculator.html">Discount Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+      <a href="savings-goal-calculator.html">Savings Goal Calculator</a>
+      <a href="401k-calculator.html">401(k) Calculator</a>
+      <a href="tip-calculator.html">Tip Calculator</a>
+      <span class="nav-sep">|</span>
+      <a href="salary-calculator.html">Salary Calculator</a>
+      <a href="tax-calculator.html">Tax Calculator (US - IRS)</a>
+      <a href="canada-tax-calculator.html">Tax Calculator (Canada - CRA)</a>
+      <span class="nav-sep">|</span>
+      <a href="blog.html">Blog</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="which-calculator-do-i-need.html">Which Calculator?</a>
+      <a href="methodology.html">Methodology</a>
+  </div>
+</nav>
+<div class="wrap">
+<div class="fallback-banner" id="fallbackBanner">Something went wrong loading the calculator engine. Open your browser's console (F12) to see the error.</div>
+<header class="page-head">
+  <div class="eyebrow">// myloanmath</div>
+  <h1 id="main-heading">Tip Calculator</h1>
+  <p class="sub">Calculate the tip and split the bill between any number of people.</p>
+</header>
+
+<div class="card">
+  <div class="row">
+    <div class="field"><label for="tipBill">Bill amount</label><input type="text" id="tipBill" value="85.50" inputmode="decimal"></div>
+    <div class="field"><label for="tipPercent">Tip percentage</label><input type="text" id="tipPercent" value="20" inputmode="decimal"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="tipPeople">Split between how many people</label><input type="text" id="tipPeople" value="1" inputmode="decimal"></div>
+  </div>
+  <div class="result">
+    <div class="result-label">Tip amount</div>
+    <div class="result-text" id="tipOutput">-</div>
+    <div class="stat-grid" id="tipStats"></div>
+  </div>
+  <div class="actions"><button class="action" id="tipCopyBtn" type="button">Copy result</button></div>
+</div>
+
+<div class="ad-slot"><!-- AD SLOT: below the tool. Once approved, paste your AdSense ad unit code here. --></div>
+
+<section class="content">
+<h2>Common tip percentages</h2>
+<p>15% is generally considered the minimum for acceptable sit-down restaurant service in the US, 18-20% is standard for good service, and 20-25% is customary for exceptional service. These norms vary meaningfully by region and by type of service — delivery drivers, bartenders, and salon services often follow different conventions than a full-service restaurant.</p>
+<h2>Pre-tax or post-tax?</h2>
+<p>Most etiquette guides recommend tipping on the pre-tax subtotal, not the total after sales tax is added — tax isn't part of what the server or service provider earns, so tipping on it doesn't actually benefit them and just inflates the bill unnecessarily. That said, plenty of people simply tip on the final total out of convenience, and both are common in practice. Enter whichever amount you intend to base the tip on.</p>
+</section>
+
+<section class="content">
+<h2>Frequently asked questions</h2>
+<div class="faq-item"><h3>Should I tip on the pre-tax or post-tax bill amount?</h3><p>Convention varies, but tipping on the pre-tax subtotal is the more common practice and what most etiquette guides recommend. Enter whichever amount you intend to tip on.</p></div>
+<div class="faq-item"><h3>What's a standard tip percentage?</h3><p>15-20% is standard for sit-down restaurant service in the US, with 18-20% increasingly common. Delivery, bars, and other services often follow different norms.</p></div>
+</section>
+
+<div class="related">
+  <p class="label">Related tools</p>
+  <div class="related-list">
+    <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="discount-calculator.html">Discount Calculator</a>
+  </div>
+</div>
+
+</div>
+<footer class="site-footer">
+  <div>
+    <a href="index.html">Home</a>
+    <a href="blog.html">Blog</a>
+    <a href="about.html">About</a>
+  </div>
+  <div style="margin-top:10px;">
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms-of-use.html">Terms &amp; Disclaimer</a>
+  </div>
+  <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
+</footer>
+<script src="numberToWords.js"></script>
+<script src="finance.js"></script>
+<script>
+(function(){
+  var mod = window.FinanceTools;
+  if (!mod) { document.getElementById('fallbackBanner').style.display='block'; return; }
+  function el(id){ return document.getElementById(id); }
+  function fmtMoney(n){ return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function parseNum(str){ var s=String(str).trim().replace(/,/g,''); if(!/^-?\d+(\.\d+)?$/.test(s)) return NaN; return parseFloat(s); }
+  var lastResult = null;
+
+  function compute(){
+    var bill = parseNum(el('tipBill').value);
+    var pct = parseNum(el('tipPercent').value);
+    var people = parseNum(el('tipPeople').value);
+    var out = el('tipOutput'); var stats = el('tipStats');
+    try {
+      if ([bill, pct, people].some(isNaN)) throw new Error('Enter valid numbers for all fields.');
+      var r = mod.calculateTip({ billAmount: bill, tipPercent: pct, numberOfPeople: people });
+      lastResult = r;
+      out.textContent = fmtMoney(r.tipAmount); out.classList.remove('error');
+      stats.innerHTML =
+        '<div class="stat"><div class="stat-label">Total with tip</div><div class="stat-value">' + fmtMoney(r.totalAmount) + '</div></div>' +
+        (people > 1 ? '<div class="stat"><div class="stat-label">Tip per person</div><div class="stat-value">' + fmtMoney(r.tipPerPerson) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Total per person</div><div class="stat-value">' + fmtMoney(r.totalPerPerson) + '</div></div>' : '');
+    } catch(e) {
+      out.textContent = e.message; out.classList.add('error'); stats.innerHTML=''; lastResult = null;
+    }
+  }
+  ['tipBill','tipPercent','tipPeople'].forEach(function(id){ el(id).addEventListener('input', compute); });
+  el('tipCopyBtn').addEventListener('click', function(){
+    if (!lastResult) return;
+    var lines = ['Tip Calculator — myloanmath.com', '', 'Bill: ' + el('tipBill').value, 'Tip: ' + el('tipPercent').value + '%', ''];
+    lines.push('Tip amount: ' + fmtMoney(lastResult.tipAmount));
+    lines.push('Total with tip: ' + fmtMoney(lastResult.totalAmount));
+    if (parseNum(el('tipPeople').value) > 1) {
+      lines.push('Per person: ' + fmtMoney(lastResult.totalPerPerson));
+    }
+    copyToClipboard(lines.join('\n'), el('tipCopyBtn'));
+  });
+  compute();
+})();
+function copyToClipboard(text, btn){
+  function showCopied(){ btn.textContent='Copied!'; setTimeout(function(){ btn.textContent='Copy result'; }, 1800); }
+  function showFailed(){ btn.textContent='Copy failed — try manually'; setTimeout(function(){ btn.textContent='Copy result'; }, 2200); }
+  function fallbackCopy(){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(showCopied).catch(function(){ try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); } });
+  } else {
+    try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); }
+  }
+}
+</script>
+</body>
+</html>
