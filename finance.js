@@ -674,7 +674,17 @@ const PROVINCE_TAX_2026 = {
   NU: { name: 'Nunavut', type: 'graduated', brackets: [{ rate: 4, upTo: 55801 }, { rate: 7, upTo: 111602 }, { rate: 9, upTo: 181439 }, { rate: 11.5, upTo: Infinity }] },
   ON: { name: 'Ontario', type: 'graduated', hasSurtax: true, brackets: [{ rate: 5.05, upTo: 53891 }, { rate: 9.15, upTo: 107785 }, { rate: 11.16, upTo: 150000 }, { rate: 12.16, upTo: 220000 }, { rate: 13.16, upTo: Infinity }] },
   PE: { name: 'Prince Edward Island', type: 'graduated', hasSurtax: true, brackets: [{ rate: 9.5, upTo: 33928 }, { rate: 13.47, upTo: 65820 }, { rate: 16.6, upTo: 106890 }, { rate: 17.62, upTo: 142520 }, { rate: 19, upTo: 200000 }, { rate: 20, upTo: Infinity }] },
-  QC: { name: 'Quebec', type: 'pending' },
+  QC: {
+    name: 'Quebec', type: 'graduated', hasOwnBPACredit: true,
+    // Verified directly against Revenu Québec's own official rates page and the
+    // Quebec Ministry of Finance's own "Parameters of the Personal Income Tax
+    // System for 2026" document — not secondary aggregators, which showed real
+    // disagreement (three different BPA figures found in initial research).
+    // Bracket math cross-checked against the source's own worked example.
+    brackets: [{ rate: 14, upTo: 54345 }, { rate: 19, upTo: 108680 }, { rate: 24, upTo: 132245 }, { rate: 25.75, upTo: Infinity }],
+    bpaAmount: 18952,
+    bpaCreditRate: 0.14, // BPA applied as a non-refundable credit at the lowest bracket rate, same mechanism as the federal BPA
+  },
   SK: { name: 'Saskatchewan', type: 'graduated', brackets: [{ rate: 10.5, upTo: 54532 }, { rate: 12.5, upTo: 155805 }, { rate: 14.5, upTo: Infinity }] },
   YT: { name: 'Yukon', type: 'graduated', brackets: [{ rate: 6.4, upTo: 58523 }, { rate: 9, upTo: 117045 }, { rate: 10.9, upTo: 181440 }, { rate: 12.8, upTo: 500000 }, { rate: 15, upTo: Infinity }] },
 };
@@ -701,9 +711,16 @@ function getProvinceTaxStatus(provinceCode, taxableIncome) {
     if (taxableIncome <= b.upTo) break;
   }
 
-  let note = `${province.name}'s official 2026 bracket rates (Canada Revenue Agency). This does not yet apply ${province.name}'s basic-personal-amount-equivalent credit or low-income tax reduction, so the real amount owed is likely somewhat lower than shown, especially at lower incomes.`;
-  if (province.hasSurtax) {
-    note += ` It also does not include ${province.name}'s additional provincial surtax, which applies on top for higher earners.`;
+  let note;
+  if (province.hasOwnBPACredit) {
+    const bpaCredit = round2(province.bpaAmount * province.bpaCreditRate);
+    tax = Math.max(0, tax - bpaCredit);
+    note = `${province.name}'s official 2026 bracket rates and Basic Personal Amount ($${province.bpaAmount.toLocaleString()} credit), sourced directly from Revenu Qu\u00e9bec and the Quebec Ministry of Finance. This does not yet include Quebec's other provincial credits or the QPP/QPIP payroll deductions.`;
+  } else {
+    note = `${province.name}'s official 2026 bracket rates (Canada Revenue Agency). This does not yet apply ${province.name}'s basic-personal-amount-equivalent credit or low-income tax reduction, so the real amount owed is likely somewhat lower than shown, especially at lower incomes.`;
+    if (province.hasSurtax) {
+      note += ` It also does not include ${province.name}'s additional provincial surtax, which applies on top for higher earners.`;
+    }
   }
 
   return { provinceName: province.name, available: true, provinceTax: round2(tax), note };
