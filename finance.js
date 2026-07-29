@@ -533,7 +533,21 @@ const STATE_TAX_2026 = {
   },
   MA: { name: 'Massachusetts', type: 'graduated', brackets: [{ rate: 5, upTo: 1083150 }, { rate: 9, upTo: Infinity }] },
   MI: { name: 'Michigan', type: 'flat', rate: 4.25 },
-  MN: { name: 'Minnesota', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 5.35, upTo: 33310 }, { rate: 6.8, upTo: 109430 }, { rate: 7.85, upTo: 203150 }, { rate: 9.85, upTo: Infinity }] },
+  MN: {
+    name: 'Minnesota', type: 'graduated',
+    // Sourced directly from the Minnesota Department of Revenue's own official
+    // press release announcing the 2026 brackets (revenue.state.mn.us,
+    // published Dec 16, 2025), which explicitly gives all four filing
+    // statuses plus standard deductions for tax year 2026 specifically —
+    // the single-filer thresholds independently matched what was already here.
+    bracketsByStatus: {
+      single: [{ rate: 5.35, upTo: 33310 }, { rate: 6.8, upTo: 109430 }, { rate: 7.85, upTo: 203150 }, { rate: 9.85, upTo: Infinity }],
+      marriedJointly: [{ rate: 5.35, upTo: 48700 }, { rate: 6.8, upTo: 193480 }, { rate: 7.85, upTo: 337930 }, { rate: 9.85, upTo: Infinity }],
+      marriedSeparately: [{ rate: 5.35, upTo: 24350 }, { rate: 6.8, upTo: 96740 }, { rate: 7.85, upTo: 168965 }, { rate: 9.85, upTo: Infinity }],
+      headOfHousehold: [{ rate: 5.35, upTo: 41010 }, { rate: 6.8, upTo: 164800 }, { rate: 7.85, upTo: 270060 }, { rate: 9.85, upTo: Infinity }],
+    },
+    standardDeduction: { single: 15300, marriedJointly: 30600, headOfHousehold: 23000, marriedSeparately: 15300 },
+  },
   MS: { name: 'Mississippi', type: 'flat', rate: 4.0 },
   MO: { name: 'Missouri', type: 'graduated', brackets: [{ rate: 2, upTo: 1348 }, { rate: 2.5, upTo: 2696 }, { rate: 3, upTo: 4044 }, { rate: 3.5, upTo: 5392 }, { rate: 4, upTo: 6740 }, { rate: 4.5, upTo: 8088 }, { rate: 4.7, upTo: Infinity }] },
   MT: { name: 'Montana', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 4.7, upTo: 47500 }, { rate: 5.65, upTo: Infinity }] },
