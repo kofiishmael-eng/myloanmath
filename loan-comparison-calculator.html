@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XL6TXYDCLD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XL6TXYDCLD');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loan Comparison Calculator — Compare Two Loan Offers</title>
+<meta name="description" content="Compare two loan offers side by side — monthly payment, total interest, and total cost — to see exactly which one actually costs less.">
+<link rel="canonical" href="https://myloanmath.com/loan-comparison-calculator.html">
+<meta property="og:title" content="Loan Comparison Calculator — Compare Two Loan Offers">
+<meta property="og:description" content="Compare two loan offers side by side — monthly payment, total interest, and total cost — to see exactly which one actually costs less.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myloanmath.com/loan-comparison-calculator.html">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta property="og:image" content="https://myloanmath.com/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myloanmath.com/assets/og-image.png">
+<link rel="preconnect" href="https://pagead2.googlesyndication.com">
+<link rel="stylesheet" href="style.css">
+<style>
+  .compare-grid{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+  @media (max-width:640px){ .compare-grid{grid-template-columns:1fr;} }
+  .compare-col{background:var(--card); border:1px solid var(--line); border-radius:8px; padding:18px; box-shadow:var(--shadow-card);}
+  .compare-col h3{font-family:var(--font-display); font-size:16px; margin:0 0 14px;}
+  .compare-col.winner{border-color:var(--accent); border-width:2px;}
+  .winner-badge{display:inline-block; font-family:var(--font-mono); font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; background:var(--accent); color:#fff; padding:3px 10px; border-radius:10px; margin-bottom:10px;}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Loan Comparison Calculator", "applicationCategory": "FinanceApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Should I always pick the loan with the lower monthly payment?", "acceptedAnswer": {"@type": "Answer", "text": "Not necessarily. A lower monthly payment often comes from a longer term, which usually means paying more in total interest over the life of the loan. Compare total cost, not just the monthly payment, before deciding."}}, {"@type": "Question", "name": "Why would two loans with the same rate have different total costs?", "acceptedAnswer": {"@type": "Answer", "text": "Different loan terms. A shorter term at the same rate pays off faster with less total interest, even though the monthly payment is higher."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9412143347948347" crossorigin="anonymous"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://myloanmath.com/"}, {"@type": "ListItem", "position": 2, "name": "Loan Comparison Calculator", "item": "https://myloanmath.com/loan-comparison-calculator.html"}]}</script>
+</head>
+<body>
+<a href="#main-heading" class="skip-link">Skip to content</a>
+<nav class="topnav">
+  <a class="brand" href="index.html"><svg class="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+    <rect width="64" height="64" rx="14" fill="#1F5C43"/>
+    <text x="32" y="45" font-family="Georgia, serif" font-size="36" font-weight="700" fill="#F2EFE4" text-anchor="middle">M</text>
+  </svg> myloanmath</a>
+  <div class="links">
+      <a href="index.html">Home</a>
+      <span class="nav-sep">|</span>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <span class="nav-sep">|</span>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="auto-loan-calculator.html">Auto Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="debt-payoff-calculator.html">Debt Payoff Calculator</a>
+      <a href="loan-comparison-calculator.html">Loan Comparison</a>
+      <span class="nav-sep">|</span>
+      <a href="discount-calculator.html">Discount Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+      <a href="savings-goal-calculator.html">Savings Goal Calculator</a>
+      <a href="401k-calculator.html">401(k) Calculator</a>
+      <a href="tip-calculator.html">Tip Calculator</a>
+      <span class="nav-sep">|</span>
+      <a href="salary-calculator.html">Salary Calculator</a>
+      <a href="tax-calculator.html">Tax Calculator (US - IRS)</a>
+      <a href="canada-tax-calculator.html">Tax Calculator (Canada - CRA)</a>
+      <span class="nav-sep">|</span>
+      <a href="blog.html">Blog</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="which-calculator-do-i-need.html">Which Calculator?</a>
+      <a href="methodology.html">Methodology</a>
+  </div>
+</nav>
+<div class="wrap">
+<div class="fallback-banner" id="fallbackBanner">Something went wrong loading the calculator engine. Open your browser's console (F12) to see the error.</div>
+<header class="page-head">
+  <div class="eyebrow">// myloanmath</div>
+  <h1 id="main-heading">Loan Comparison Calculator</h1>
+  <p class="sub">Compare two loan offers side by side to see which one actually costs less.</p>
+</header>
+
+<div class="card">
+  <div class="compare-grid">
+    <div class="compare-col" id="loanAColumn">
+      <h3>Loan A</h3>
+      <div class="field" style="margin-bottom:12px;"><label for="loanAAmount">Amount</label><input type="text" id="loanAAmount" value="25000" inputmode="decimal"></div>
+      <div class="field" style="margin-bottom:12px;"><label for="loanARate">Interest rate (%)</label><input type="text" id="loanARate" value="6.5" inputmode="decimal"></div>
+      <div class="field" style="margin-bottom:12px;"><label for="loanATermValue">Term</label><input type="text" id="loanATermValue" value="5" inputmode="decimal"></div>
+      <div class="field"><label for="loanATermUnit">Term unit</label>
+        <select id="loanATermUnit"><option value="years" selected>Years</option><option value="months">Months</option></select>
+      </div>
+    </div>
+    <div class="compare-col" id="loanBColumn">
+      <h3>Loan B</h3>
+      <div class="field" style="margin-bottom:12px;"><label for="loanBAmount">Amount</label><input type="text" id="loanBAmount" value="25000" inputmode="decimal"></div>
+      <div class="field" style="margin-bottom:12px;"><label for="loanBRate">Interest rate (%)</label><input type="text" id="loanBRate" value="7.25" inputmode="decimal"></div>
+      <div class="field" style="margin-bottom:12px;"><label for="loanBTermValue">Term</label><input type="text" id="loanBTermValue" value="6" inputmode="decimal"></div>
+      <div class="field"><label for="loanBTermUnit">Term unit</label>
+        <select id="loanBTermUnit"><option value="years" selected>Years</option><option value="months">Months</option></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="compare-grid" style="margin-top:20px;">
+    <div class="compare-col" id="resultAColumn">
+      <div class="result-label">Loan A</div>
+      <div class="result-text" id="loanAOutput" style="font-size:18px;">-</div>
+      <div class="stat-grid" id="loanAStats" style="margin-top:12px;"></div>
+    </div>
+    <div class="compare-col" id="resultBColumn">
+      <div class="result-label">Loan B</div>
+      <div class="result-text" id="loanBOutput" style="font-size:18px;">-</div>
+      <div class="stat-grid" id="loanBStats" style="margin-top:12px;"></div>
+    </div>
+  </div>
+
+  <div class="result" style="margin-top:20px; background:var(--accent); border-color:var(--accent);">
+    <div class="result-label" style="color:#fff;">The difference</div>
+    <div class="result-text" id="compareSummary" style="color:#fff; font-size:16px;">-</div>
+  </div>
+</div>
+
+<div class="ad-slot"><!-- AD SLOT: below the tool. Once approved, paste your AdSense ad unit code here. --></div>
+
+<section class="content">
+<h2>Why the lower monthly payment isn't always the better deal</h2>
+<p>It's tempting to compare two loan offers by their monthly payment alone, but that number is shaped as much by the term as it is by the rate. A loan with a lower rate but a longer term can easily cost more in total interest than a loan with a higher rate but a shorter term — the monthly payment being smaller doesn't mean the loan is cheaper overall. This tool computes total cost for both scenarios directly, which is the number that actually answers "which loan costs less."</p>
+<h2>What to actually compare</h2>
+<p>Three numbers matter, not one: the monthly payment (does it fit your budget), the total interest (the real cost of borrowing), and the total cost (everything you'll pay, combined). A loan that wins on monthly payment can lose badly on total cost, and vice versa — which one matters more depends on whether cash flow or total cost is your bigger constraint right now.</p>
+</section>
+
+<section class="content">
+<h2>Frequently asked questions</h2>
+<div class="faq-item"><h3>Should I always pick the loan with the lower monthly payment?</h3><p>Not necessarily. A lower monthly payment often comes from a longer term, which usually means paying more in total interest over the life of the loan. Compare total cost, not just the monthly payment, before deciding.</p></div>
+<div class="faq-item"><h3>Why would two loans with the same rate have different total costs?</h3><p>Different loan terms. A shorter term at the same rate pays off faster with less total interest, even though the monthly payment is higher.</p></div>
+</section>
+
+<div class="related">
+  <p class="label">Related tools</p>
+  <div class="related-list">
+    <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="auto-loan-calculator.html">Auto Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+  </div>
+</div>
+
+</div>
+<footer class="site-footer">
+  <div>
+    <a href="index.html">Home</a>
+    <a href="blog.html">Blog</a>
+    <a href="about.html">About</a>
+  </div>
+  <div style="margin-top:10px;">
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms-of-use.html">Terms &amp; Disclaimer</a>
+  </div>
+  <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
+</footer>
+<script src="numberToWords.js"></script>
+<script src="finance.js"></script>
+<script>
+(function(){
+  var mod = window.FinanceTools;
+  if (!mod) { document.getElementById('fallbackBanner').style.display='block'; return; }
+  function el(id){ return document.getElementById(id); }
+  function fmtMoney(n){ return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function parseNum(str){ var s=String(str).trim().replace(/,/g,''); if(!/^-?\d+(\.\d+)?$/.test(s)) return NaN; return parseFloat(s); }
+
+  function computeOne(prefix){
+    var amount = parseNum(el(prefix + 'Amount').value);
+    var rate = parseNum(el(prefix + 'Rate').value);
+    var termVal = parseNum(el(prefix + 'TermValue').value);
+    var termUnit = el(prefix + 'TermUnit').value;
+    var termMonths = termUnit === 'years' ? termVal * 12 : termVal;
+    var out = el(prefix + 'Output'); var stats = el(prefix + 'Stats');
+    try {
+      if ([amount, rate, termVal].some(isNaN)) throw new Error('Enter valid numbers.');
+      var r = mod.calculateLoan({ principal: amount, annualRatePercent: rate, termMonths: termMonths });
+      out.textContent = fmtMoney(r.monthlyPayment) + ' / month'; out.classList.remove('error');
+      stats.innerHTML =
+        '<div class="stat"><div class="stat-label">Total interest</div><div class="stat-value">' + fmtMoney(r.totalInterest) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Total cost</div><div class="stat-value">' + fmtMoney(r.totalPayment) + '</div></div>';
+      return r;
+    } catch(e) {
+      out.textContent = e.message; out.classList.add('error'); stats.innerHTML='';
+      return null;
+    }
+  }
+
+  function compute(){
+    var a = computeOne('loanA');
+    var b = computeOne('loanB');
+    var summary = el('compareSummary');
+    var colA = el('resultAColumn'); var colB = el('resultBColumn');
+    colA.classList.remove('winner'); colB.classList.remove('winner');
+    var badgeA = colA.querySelector('.winner-badge'); if (badgeA) badgeA.remove();
+    var badgeB = colB.querySelector('.winner-badge'); if (badgeB) badgeB.remove();
+
+    if (!a || !b) { summary.textContent = 'Fix the errors above to see the comparison.'; return; }
+
+    var diff = Math.abs(a.totalPayment - b.totalPayment);
+    var monthlyDiff = Math.abs(a.monthlyPayment - b.monthlyPayment);
+    if (a.totalPayment < b.totalPayment) {
+      colA.classList.add('winner');
+      colA.insertAdjacentHTML('afterbegin', '<span class="winner-badge">Lower total cost</span>');
+      summary.textContent = 'Loan A costs ' + fmtMoney(diff) + ' less in total than Loan B, despite a monthly payment that is ' + (a.monthlyPayment > b.monthlyPayment ? fmtMoney(monthlyDiff) + ' higher' : fmtMoney(monthlyDiff) + ' lower') + ' per month.';
+    } else if (b.totalPayment < a.totalPayment) {
+      colB.classList.add('winner');
+      colB.insertAdjacentHTML('afterbegin', '<span class="winner-badge">Lower total cost</span>');
+      summary.textContent = 'Loan B costs ' + fmtMoney(diff) + ' less in total than Loan A, despite a monthly payment that is ' + (b.monthlyPayment > a.monthlyPayment ? fmtMoney(monthlyDiff) + ' higher' : fmtMoney(monthlyDiff) + ' lower') + ' per month.';
+    } else {
+      summary.textContent = 'Both loans cost exactly the same in total.';
+    }
+  }
+  ['loanAAmount','loanARate','loanATermValue','loanATermUnit','loanBAmount','loanBRate','loanBTermValue','loanBTermUnit'].forEach(function(id){
+    el(id).addEventListener('input', compute);
+    el(id).addEventListener('change', compute);
+  });
+  compute();
+})();
+</script>
+</body>
+</html>
