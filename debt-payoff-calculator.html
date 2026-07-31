@@ -101,6 +101,24 @@
   </div>
 </div>
 
+<div class="card" id="trackingCard">
+  <div class="result-label" style="color:var(--accent);">Track your progress</div>
+  <div id="trackingSetup">
+    <p class="note" style="margin-top:6px; margin-bottom:14px;">Save this plan to check your progress against it later — nothing leaves your browser, it's stored only on this device.</p>
+    <button class="action" id="savePlanBtn" type="button">Save this plan</button>
+  </div>
+  <div id="trackingActive" style="display:none;">
+    <div class="stat-grid" id="trackingStats" style="margin-bottom:14px;"></div>
+    <div class="row">
+      <div class="field"><label for="actualBalance">Your actual current balance</label><input type="text" id="actualBalance" inputmode="decimal" placeholder="Enter what you owe today"></div>
+    </div>
+    <p class="note" id="trackingResult" style="margin-top:8px;"></p>
+    <div class="actions" style="margin-top:10px;">
+      <button class="action" id="clearPlanBtn" type="button">Clear saved plan</button>
+    </div>
+  </div>
+</div>
+
 <div class="ad-slot"><!-- AD SLOT: below the tool. Once approved, paste your AdSense ad unit code here. --></div>
 
 <section class="content">
@@ -245,6 +263,78 @@
     el('debtStats').querySelectorAll('.stat').forEach(function(s){ lines.push(s.querySelector('.stat-label').textContent + ': ' + s.querySelector('.stat-value').textContent); });
     copyToClipboard(lines.join('\n'), el('debtCopyBtn'));
   });
+
+  var STORAGE_KEY = 'myloanmath_debt_plan';
+  function loadPlan(){
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch(e) { return null; }
+  }
+  function savePlan(plan){
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(plan)); return true; }
+    catch(e) { return false; }
+  }
+  function clearPlan(){
+    try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+  }
+  function monthsElapsed(startDateStr){
+    var start = new Date(startDateStr);
+    var now = new Date();
+    var months = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
+    return Math.max(0, months);
+  }
+  function renderTrackingView(){
+    var plan = loadPlan();
+    if (!plan) {
+      el('trackingSetup').style.display = 'block';
+      el('trackingActive').style.display = 'none';
+      return;
+    }
+    el('trackingSetup').style.display = 'none';
+    el('trackingActive').style.display = 'block';
+    var elapsed = monthsElapsed(plan.startDate);
+    var schedule;
+    try {
+      schedule = mod.monthsToPayoff({ balance: plan.balance, annualRatePercent: plan.rate, monthlyPayment: plan.monthlyPayment }).monthlySchedule;
+    } catch(e) { schedule = null; }
+    var expectedEntry = schedule ? (schedule[Math.min(elapsed, schedule.length - 1)]) : null;
+    var expectedBalance = expectedEntry ? expectedEntry.remainingBalance : null;
+    el('trackingStats').innerHTML =
+      '<div class="stat"><div class="stat-label">Plan started</div><div class="stat-value">' + new Date(plan.startDate).toLocaleDateString() + '</div></div>' +
+      '<div class="stat"><div class="stat-label">Months since start</div><div class="stat-value">' + elapsed + '</div></div>' +
+      '<div class="stat"><div class="stat-label">Expected balance today</div><div class="stat-value">' + (expectedBalance !== null ? fmtMoney(expectedBalance) : '—') + '</div></div>';
+
+    function updateComparison(){
+      var actual = parseNum(el('actualBalance').value);
+      var resultEl = el('trackingResult');
+      if (isNaN(actual) || expectedBalance === null) { resultEl.textContent = ''; return; }
+      var diff = expectedBalance - actual;
+      if (Math.abs(diff) < 0.5) {
+        resultEl.textContent = 'You are exactly on schedule.';
+      } else if (diff > 0) {
+        resultEl.innerHTML = 'You are <strong style="color:var(--accent);">' + fmtMoney(diff) + ' ahead of schedule</strong> — your actual balance is lower than the original plan projected for this point.';
+      } else {
+        resultEl.innerHTML = 'You are <strong style="color:var(--error);">' + fmtMoney(Math.abs(diff)) + ' behind schedule</strong> — your actual balance is higher than the original plan projected for this point.';
+      }
+    }
+    el('actualBalance').removeEventListener('input', updateComparison);
+    el('actualBalance').addEventListener('input', updateComparison);
+  }
+  el('savePlanBtn').addEventListener('click', function(){
+    if (!lastResult) { return; }
+    var balance = parseNum(el('debtBalance').value);
+    var rate = parseNum(el('debtRate').value);
+    var payment = parseNum(el('debtPayment').value);
+    if ([balance, rate, payment].some(isNaN)) return;
+    savePlan({ balance: balance, rate: rate, monthlyPayment: payment, startDate: new Date().toISOString() });
+    renderTrackingView();
+  });
+  el('clearPlanBtn').addEventListener('click', function(){
+    clearPlan();
+    renderTrackingView();
+  });
+  renderTrackingView();
   compute();
 })();
 function copyToClipboard(text, btn){

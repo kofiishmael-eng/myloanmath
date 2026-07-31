@@ -95,6 +95,24 @@
   <p class="note">Assumes interest compounds monthly, and every contribution is made on schedule for the full time period.</p>
 </div>
 
+<div class="card" id="trackingCard">
+  <div class="result-label" style="color:var(--accent);">Track your progress</div>
+  <div id="trackingSetup">
+    <p class="note" style="margin-top:6px; margin-bottom:14px;">Save this goal to check your progress against it later — nothing leaves your browser, it's stored only on this device.</p>
+    <button class="action" id="savePlanBtn" type="button">Save this goal</button>
+  </div>
+  <div id="trackingActive" style="display:none;">
+    <div class="stat-grid" id="trackingStats" style="margin-bottom:14px;"></div>
+    <div class="row">
+      <div class="field"><label for="actualSaved">Your actual amount saved so far</label><input type="text" id="actualSaved" inputmode="decimal" placeholder="Enter what you've saved today"></div>
+    </div>
+    <p class="note" id="trackingResult" style="margin-top:8px;"></p>
+    <div class="actions" style="margin-top:10px;">
+      <button class="action" id="clearPlanBtn" type="button">Clear saved goal</button>
+    </div>
+  </div>
+</div>
+
 <div class="ad-slot"><!-- AD SLOT: below the tool. Once approved, paste your AdSense ad unit code here. --></div>
 
 <section class="content">
@@ -181,6 +199,77 @@
     el('goalStats').querySelectorAll('.stat').forEach(function(s){ lines.push(s.querySelector('.stat-label').textContent + ': ' + s.querySelector('.stat-value').textContent); });
     copyToClipboard(lines.join('\n'), el('goalCopyBtn'));
   });
+
+  var STORAGE_KEY = 'myloanmath_savings_goal';
+  function loadPlan(){
+    try { var raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : null; }
+    catch(e) { return null; }
+  }
+  function savePlan(plan){
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(plan)); return true; }
+    catch(e) { return false; }
+  }
+  function clearPlan(){ try { localStorage.removeItem(STORAGE_KEY); } catch(e) {} }
+  function monthsElapsed(startDateStr){
+    var start = new Date(startDateStr);
+    var now = new Date();
+    var months = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
+    return Math.max(0, months);
+  }
+  // Replays the same monthly-compounding formula requiredMonthlyContribution is built on,
+  // to produce a month-by-month expected-balance schedule for progress tracking.
+  function expectedBalanceAtMonth(currentSavings, monthlyContribution, annualRatePercent, monthsElapsed){
+    var r = annualRatePercent / 100 / 12;
+    var balance = currentSavings;
+    for (var i = 0; i < monthsElapsed; i++) { balance = balance * (1 + r) + monthlyContribution; }
+    return balance;
+  }
+  function renderTrackingView(){
+    var plan = loadPlan();
+    if (!plan) {
+      el('trackingSetup').style.display = 'block';
+      el('trackingActive').style.display = 'none';
+      return;
+    }
+    el('trackingSetup').style.display = 'none';
+    el('trackingActive').style.display = 'block';
+    var elapsed = monthsElapsed(plan.startDate);
+    var expectedBalance = expectedBalanceAtMonth(plan.currentSavings, plan.monthlyContribution, plan.rate, elapsed);
+    el('trackingStats').innerHTML =
+      '<div class="stat"><div class="stat-label">Goal started</div><div class="stat-value">' + new Date(plan.startDate).toLocaleDateString() + '</div></div>' +
+      '<div class="stat"><div class="stat-label">Months since start</div><div class="stat-value">' + elapsed + '</div></div>' +
+      '<div class="stat"><div class="stat-label">Expected saved by now</div><div class="stat-value">' + fmtMoney(expectedBalance) + '</div></div>';
+
+    function updateComparison(){
+      var actual = parseNum(el('actualSaved').value);
+      var resultEl = el('trackingResult');
+      if (isNaN(actual)) { resultEl.textContent = ''; return; }
+      var diff = actual - expectedBalance;
+      if (Math.abs(diff) < 0.5) {
+        resultEl.textContent = 'You are exactly on schedule.';
+      } else if (diff > 0) {
+        resultEl.innerHTML = 'You are <strong style="color:var(--accent);">' + fmtMoney(diff) + ' ahead of schedule</strong> — you have saved more than the original plan projected for this point.';
+      } else {
+        resultEl.innerHTML = 'You are <strong style="color:var(--error);">' + fmtMoney(Math.abs(diff)) + ' behind schedule</strong> — you have saved less than the original plan projected for this point.';
+      }
+    }
+    el('actualSaved').removeEventListener('input', updateComparison);
+    el('actualSaved').addEventListener('input', updateComparison);
+  }
+  el('savePlanBtn').addEventListener('click', function(){
+    if (!lastResult) { return; }
+    var currentSavings = parseNum(el('goalCurrent').value);
+    var rate = parseNum(el('goalRate').value);
+    var monthlyContribution = lastResult.monthlyContribution;
+    if ([currentSavings, rate].some(isNaN)) return;
+    savePlan({ currentSavings: currentSavings, monthlyContribution: monthlyContribution, rate: rate, startDate: new Date().toISOString() });
+    renderTrackingView();
+  });
+  el('clearPlanBtn').addEventListener('click', function(){
+    clearPlan();
+    renderTrackingView();
+  });
+  renderTrackingView();
   compute();
 })();
 function copyToClipboard(text, btn){
