@@ -97,6 +97,7 @@
     <div class="result-text" id="k401Output">-</div>
     <div class="stat-grid" id="k401Stats"></div>
   </div>
+  <div id="k401Chart" style="display:none; margin:16px 0;"></div>
   <div class="actions"><button class="action" id="k401CopyBtn" type="button">Copy result</button></div>
   <p class="note">Salary is held flat for the full projection (no assumed raises) and contributions compound annually rather than per-paycheck — both are simplifying assumptions. Your contribution is automatically capped at the correct IRS limit for your age each year.</p>
 </div>
@@ -177,11 +178,41 @@
         '<div class="stat"><div class="stat-label">Employer contributions</div><div class="stat-value">' + fmtMoney(r.totalEmployerContributions) + '</div></div>' +
         '<div class="stat"><div class="stat-label">Investment growth</div><div class="stat-value">' + fmtMoney(r.totalGrowth) + '</div></div>' +
         '<div class="stat"><div class="stat-label">Years invested</div><div class="stat-value">' + r.yearsInvested + '</div></div>';
+      renderGrowthChart(r.yearRows, r.finalBalance);
     } catch(e) {
       out.textContent = e.message; out.classList.add('error'); stats.innerHTML=''; lastResult = null;
+      if (el('k401Chart')) el('k401Chart').style.display='none';
     }
   }
   ['k401CurrentAge','k401RetireAge','k401Balance','k401Salary','k401Contribution','k401Return','k401MatchPercent','k401MatchLimit'].forEach(function(id){ el(id).addEventListener('input', compute); });
+  function renderGrowthChart(yearRows, maxVal){
+    var container = el('k401Chart');
+    if (!container || !yearRows || !yearRows.length) return;
+    var w = 640, h = 220, padL = 70, padB = 30, padT = 16, padR = 16;
+    var plotW = w - padL - padR, plotH = h - padT - padB;
+    var n = yearRows.length;
+    var barW = Math.max(1, (plotW / n) * 0.7);
+    var gap = (plotW / n) - barW;
+    var svg = '<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:100%; height:auto; font-family:var(--font-mono);" role="img" aria-label="401(k) balance growth by age">';
+    for (var g = 0; g <= 4; g++) {
+      var val = maxVal * (g / 4);
+      var y = padT + plotH - (plotH * (g / 4));
+      svg += '<line x1="' + padL + '" y1="' + y + '" x2="' + (w - padR) + '" y2="' + y + '" stroke="var(--line)" stroke-width="1"/>';
+      svg += '<text x="' + (padL - 8) + '" y="' + (y + 4) + '" text-anchor="end" font-size="10" fill="var(--ink-soft)">' + fmtMoney(val).split('.')[0] + '</text>';
+    }
+    yearRows.forEach(function(yr, i) {
+      var barH = maxVal > 0 ? (yr.yearEndBalance / maxVal) * plotH : 0;
+      var x = padL + i * (barW + gap) + gap / 2;
+      var y = padT + plotH - barH;
+      svg += '<rect x="' + x + '" y="' + y + '" width="' + barW + '" height="' + barH + '" fill="var(--accent)" opacity="0.85"><title>Age ' + yr.age + ': ' + fmtMoney(yr.yearEndBalance) + '</title></rect>';
+      if (n <= 15 || i % Math.ceil(n / 15) === 0) {
+        svg += '<text x="' + (x + barW / 2) + '" y="' + (h - padB + 14) + '" text-anchor="middle" font-size="9" fill="var(--ink-soft)">' + yr.age + '</text>';
+      }
+    });
+    svg += '</svg>';
+    container.innerHTML = '<div class="result-label" style="margin-bottom:8px;">Balance growth by age</div>' + svg;
+    container.style.display = 'block';
+  }
   el('k401CopyBtn').addEventListener('click', function(){
     if (!lastResult) return;
     var lines = ['401(k) Calculator — myloanmath.com', '', 'Current age: ' + el('k401CurrentAge').value, 'Retirement age: ' + el('k401RetireAge').value, ''];

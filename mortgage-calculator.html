@@ -97,7 +97,9 @@
     <div class="result-text" id="mortgageOutput">-</div>
     <div class="stat-grid" id="mortgageStats"></div>
   </div>
-  <div class="actions"><button class="action" id="mortgageCopyBtn" type="button">Copy result</button></div>
+  <div class="actions"><button class="action" id="mortgageScheduleBtn" type="button">Show yearly breakdown</button><button class="action" id="mortgageCopyBtn" type="button">Copy result</button></div>
+  <div id="mortgageScheduleChart" style="display:none; margin:16px 0;"></div>
+  <div class="schedule-wrap" id="mortgageScheduleWrap" style="display:none;"><table class="schedule-table" id="mortgageScheduleTable"></table></div>
   <p class="note">Property tax and insurance defaults are rough national-average placeholders — replace them with your actual local rates for an accurate estimate.</p>
 </div>
 
@@ -170,6 +172,8 @@
   function el(id){ return document.getElementById(id); }
   function fmtMoney(n){ return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
   function parseNum(str){ var s=String(str).trim().replace(/,/g,''); if(!/^-?\d+(\.\d+)?$/.test(s)) return NaN; return parseFloat(s); }
+  var scheduleVisible = false;
+  var lastLoanInfo = null;
   function compute(){
     var out = el('mortgageOutput'); var stats = el('mortgageStats');
     try {
@@ -190,10 +194,58 @@
         '<div class="stat"><div class="stat-label">PMI</div><div class="stat-value">' + fmtMoney(r.pmiMonthly) + '</div></div>' +
         '<div class="stat"><div class="stat-label">HOA</div><div class="stat-value">' + fmtMoney(r.hoaMonthly) + '</div></div>' +
         '<div class="stat"><div class="stat-label">Down payment</div><div class="stat-value">' + r.downPaymentPercent + '%</div></div>';
-    } catch(e) { out.textContent = e.message; out.classList.add('error'); stats.innerHTML=''; }
+      lastLoanInfo = { principal: r.loanPrincipal, rate: rate, termMonths: term * 12 };
+      if (scheduleVisible) { renderMortgageSchedule(lastLoanInfo); }
+      else { el('mortgageScheduleWrap').style.display='none'; if (el('mortgageScheduleChart')) el('mortgageScheduleChart').style.display='none'; }
+    } catch(e) {
+      out.textContent = e.message; out.classList.add('error'); stats.innerHTML='';
+      el('mortgageScheduleWrap').style.display='none'; scheduleVisible=false; lastLoanInfo = null;
+      if (el('mortgageScheduleChart')) el('mortgageScheduleChart').style.display='none';
+    }
+  }
+  function renderMortgageSchedule(loanInfo){
+    var years = mod.amortizationScheduleByYear({ principal: loanInfo.principal, annualRatePercent: loanInfo.rate, termMonths: loanInfo.termMonths });
+    var rows = '<tr><th>Year</th><th>Principal paid</th><th>Interest paid</th><th>Remaining balance</th></tr>';
+    years.forEach(function(y){ rows += '<tr><td>'+y.year+'</td><td>'+fmtMoney(y.principalPaid)+'</td><td>'+fmtMoney(y.interestPaid)+'</td><td>'+fmtMoney(y.remainingBalance)+'</td></tr>'; });
+    el('mortgageScheduleTable').innerHTML = rows; el('mortgageScheduleWrap').style.display='block';
+    renderMortgageBalanceChart(years, loanInfo.principal);
+  }
+  function renderMortgageBalanceChart(years, principal){
+    var container = el('mortgageScheduleChart');
+    if (!container) return;
+    var w = 640, h = 220, padL = 60, padB = 30, padT = 16, padR = 16;
+    var plotW = w - padL - padR, plotH = h - padT - padB;
+    var maxVal = principal;
+    var n = years.length;
+    var barW = Math.max(2, (plotW / n) * 0.7);
+    var gap = (plotW / n) - barW;
+    var svg = '<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:100%; height:auto; font-family:var(--font-mono);" role="img" aria-label="Remaining mortgage balance by year">';
+    for (var g = 0; g <= 4; g++) {
+      var val = maxVal * (g / 4);
+      var y = padT + plotH - (plotH * (g / 4));
+      svg += '<line x1="' + padL + '" y1="' + y + '" x2="' + (w - padR) + '" y2="' + y + '" stroke="var(--line)" stroke-width="1"/>';
+      svg += '<text x="' + (padL - 8) + '" y="' + (y + 4) + '" text-anchor="end" font-size="10" fill="var(--ink-soft)">' + fmtMoney(val).split('.')[0] + '</text>';
+    }
+    years.forEach(function(yr, i) {
+      var barH = (yr.remainingBalance / maxVal) * plotH;
+      var x = padL + i * (barW + gap) + gap / 2;
+      var y = padT + plotH - barH;
+      svg += '<rect x="' + x + '" y="' + y + '" width="' + barW + '" height="' + barH + '" fill="var(--accent)" opacity="0.85"><title>Year ' + yr.year + ': ' + fmtMoney(yr.remainingBalance) + ' remaining</title></rect>';
+      if (n <= 15 || i % Math.ceil(n / 15) === 0) {
+        svg += '<text x="' + (x + barW / 2) + '" y="' + (h - padB + 14) + '" text-anchor="middle" font-size="9" fill="var(--ink-soft)">' + yr.year + '</text>';
+      }
+    });
+    svg += '</svg>';
+    container.innerHTML = '<div class="result-label" style="margin-bottom:8px;">Remaining loan balance by year (principal &amp; interest only)</div>' + svg;
+    container.style.display = 'block';
   }
   ['homePrice','downPayment','mortgageRate','mortgageTerm','propertyTax','homeInsurance','hoaFee'].forEach(function(id){
     el(id).addEventListener('input', compute);
+  });
+  el('mortgageScheduleBtn').addEventListener('click', function(){
+    scheduleVisible = !scheduleVisible;
+    el('mortgageScheduleBtn').textContent = scheduleVisible ? 'Hide yearly breakdown' : 'Show yearly breakdown';
+    compute();
   });
   el('mortgageCopyBtn').addEventListener('click', function(){
     var stats = el('mortgageStats').querySelectorAll('.stat');
