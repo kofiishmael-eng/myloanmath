@@ -80,6 +80,11 @@
   <span>&#10003; Tax calculators verified against official IRS &amp; CRA figures</span>
 </div>
 
+<div id="continueSection" style="display:none; margin-bottom:24px;">
+  <p class="label" style="font-family:var(--font-mono); font-size:11px; color:var(--brass); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px; font-weight:700;">Continue where you left off</p>
+  <div class="related-list" id="continueList"></div>
+</div>
+
 <div class="row" style="margin-bottom:8px;">
   <div class="field">
     <label for="siteSearch">Search tools</label>
@@ -199,9 +204,26 @@
   </div>
   <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
 </footer>
+<script src="recentTools.js"></script>
 <script>
 (function(){
   function el(id){ return document.getElementById(id); }
+
+  // Continue where you left off
+  if (window.RecentTools) {
+    var recent = window.RecentTools.getRecentTools();
+    if (recent.length > 0) {
+      var list = el('continueList');
+      recent.forEach(function(item){
+        var a = document.createElement('a');
+        a.href = item.url;
+        a.textContent = item.title;
+        list.appendChild(a);
+      });
+      el('continueSection').style.display = 'block';
+    }
+  }
+
   function applyFilter(query){
     var q = query.trim().toLowerCase();
     var cards = document.querySelectorAll('#toolGrid .tool-card');
