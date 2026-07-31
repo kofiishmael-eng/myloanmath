@@ -88,6 +88,7 @@
     <div class="result-text" id="debtOutput">-</div>
     <div class="stat-grid" id="debtStats"></div>
   </div>
+  <div id="debtScheduleChart" style="display:none; margin:16px 0;"></div>
   <div class="actions"><button class="action" id="debtCopyBtn" type="button">Copy result</button></div>
   <p class="note">Assumes no new charges are added to the balance and every payment is made on time. Uses the standard amortization formula, the same math credit card issuers use.</p>
 </div>
@@ -185,13 +186,54 @@
         var minMonthsPart = minResult.months % 12;
         var minTimeLabel = (minYears > 0 ? minYears + (minYears === 1 ? ' year' : ' years') + (minMonthsPart > 0 ? ', ' : '') : '') + (minMonthsPart > 0 ? minMonthsPart + (minMonthsPart === 1 ? ' month' : ' months') : (minYears === 0 ? '0 months' : ''));
         minBox.innerHTML = 'A typical minimum payment on this balance would be around <strong>' + fmtMoney(minPayment) + '/month</strong>. At that rate, payoff would take <strong>' + minTimeLabel + '</strong> and cost <strong>' + fmtMoney(minResult.totalInterest) + '</strong> in total interest — compared to ' + timeLabel + ' and ' + fmtMoney(r.totalInterest) + ' at your entered payment of ' + fmtMoney(payment) + '/month.';
+        renderPayoffChart(r.monthlySchedule, minResult.monthlySchedule, balance);
       } catch(minErr) {
         minBox.innerHTML = 'A typical minimum payment on this balance would be around <strong>' + fmtMoney(minPayment) + '/month</strong> — but at this interest rate, even that amount ' + minErr.message.charAt(0).toLowerCase() + minErr.message.slice(1);
+        renderPayoffChart(r.monthlySchedule, null, balance);
       }
     } catch(e) {
       out.textContent = e.message; out.classList.add('error'); stats.innerHTML=''; lastResult = null;
       minBox.innerHTML = '';
+      if (el('debtScheduleChart')) el('debtScheduleChart').style.display='none';
     }
+  }
+  function renderPayoffChart(userSchedule, minSchedule, startingBalance){
+    var container = el('debtScheduleChart');
+    if (!container) return;
+    var w = 640, h = 240, padL = 60, padB = 30, padT = 16, padR = 16;
+    var plotW = w - padL - padR, plotH = h - padT - padB;
+    var maxMonths = Math.max(userSchedule[userSchedule.length-1].month, minSchedule ? minSchedule[minSchedule.length-1].month : 0);
+    var maxVal = startingBalance;
+    function pathFor(schedule, color){
+      var pts = schedule.map(function(pt){
+        var x = padL + (pt.month / maxMonths) * plotW;
+        var y = padT + plotH - (pt.remainingBalance / maxVal) * plotH;
+        return x + ',' + y;
+      });
+      return '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + color + '" stroke-width="2.5"/>';
+    }
+    var svg = '<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:100%; height:auto; font-family:var(--font-mono);" role="img" aria-label="Balance over time comparison">';
+    for (var g = 0; g <= 4; g++) {
+      var val = maxVal * (g / 4);
+      var y = padT + plotH - (plotH * (g / 4));
+      svg += '<line x1="' + padL + '" y1="' + y + '" x2="' + (w - padR) + '" y2="' + y + '" stroke="var(--line)" stroke-width="1"/>';
+      svg += '<text x="' + (padL - 8) + '" y="' + (y + 4) + '" text-anchor="end" font-size="10" fill="var(--ink-soft)">' + fmtMoney(val).split('.')[0] + '</text>';
+    }
+    if (minSchedule) svg += pathFor(minSchedule, 'var(--brass)');
+    svg += pathFor(userSchedule, 'var(--accent)');
+    // X axis labels at a few points
+    [0, 0.25, 0.5, 0.75, 1].forEach(function(frac){
+      var month = Math.round(maxMonths * frac);
+      var x = padL + frac * plotW;
+      svg += '<text x="' + x + '" y="' + (h - padB + 14) + '" text-anchor="middle" font-size="9" fill="var(--ink-soft)">mo ' + month + '</text>';
+    });
+    svg += '</svg>';
+    var legend = '<div style="display:flex; gap:16px; font-size:12px; color:var(--ink-soft); margin-top:6px;">' +
+      '<span><span style="display:inline-block;width:10px;height:10px;background:var(--accent);border-radius:2px;margin-right:5px;"></span>Your payment</span>';
+    if (minSchedule) legend += '<span><span style="display:inline-block;width:10px;height:10px;background:var(--brass);border-radius:2px;margin-right:5px;"></span>Typical minimum payment</span>';
+    legend += '</div>';
+    container.innerHTML = '<div class="result-label" style="margin-bottom:8px;">Balance over time' + (minSchedule ? ' — your payment vs. the minimum' : '') + '</div>' + svg + legend;
+    container.style.display = 'block';
   }
   ['debtBalance','debtRate','debtPayment'].forEach(function(id){ el(id).addEventListener('input', compute); });
   el('debtCopyBtn').addEventListener('click', function(){

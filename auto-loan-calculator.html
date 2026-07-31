@@ -94,6 +94,7 @@
     <div class="stat-grid" id="autoStats"></div>
   </div>
   <div class="actions"><button class="action" id="autoScheduleBtn" type="button">Show yearly breakdown</button><button class="action" id="autoCopyBtn" type="button">Copy result</button></div>
+  <div id="autoScheduleChart" style="display:none; margin-bottom:16px;"></div>
   <div class="schedule-wrap" id="autoScheduleWrap" style="display:none;"><table class="schedule-table" id="autoScheduleTable"></table></div>
   <p class="note">Uses the same standard amortization formula as our <a href="loan-calculator.html">general loan calculator</a>. Sales tax, if entered, is added to the amount financed — most buyers roll vehicle tax into the loan rather than paying it separately. Trade-in value reduces the amount financed directly.</p>
 </div>
@@ -180,10 +181,12 @@
         '<div class="stat"><div class="stat-label">Sales tax added</div><div class="stat-value">' + fmtMoney(taxAmount) + '</div></div>' +
         '<div class="stat"><div class="stat-label">Total interest</div><div class="stat-value">' + fmtMoney(r.totalInterest) + '</div></div>' +
         '<div class="stat"><div class="stat-label">Total cost</div><div class="stat-value">' + fmtMoney(r.totalPayment) + '</div></div>';
-      if (scheduleVisible) renderSchedule(amountFinanced, rate, term);
+      if (scheduleVisible) { renderSchedule(amountFinanced, rate, term); }
+      else { el('autoScheduleWrap').style.display='none'; if (el('autoScheduleChart')) el('autoScheduleChart').style.display='none'; }
     } catch(e) {
       out.textContent = e.message; out.classList.add('error'); stats.innerHTML='';
       el('autoScheduleWrap').style.display='none'; scheduleVisible=false; lastResult = null;
+      if (el('autoScheduleChart')) el('autoScheduleChart').style.display='none';
     }
   }
   function renderSchedule(principal, rate, term){
@@ -191,6 +194,36 @@
     var rows = '<tr><th>Year</th><th>Principal paid</th><th>Interest paid</th><th>Remaining balance</th></tr>';
     s.forEach(function(y){ rows += '<tr><td>'+y.year+'</td><td>'+fmtMoney(y.principalPaid)+'</td><td>'+fmtMoney(y.interestPaid)+'</td><td>'+fmtMoney(y.remainingBalance)+'</td></tr>'; });
     el('autoScheduleTable').innerHTML = rows; el('autoScheduleWrap').style.display='block';
+    renderBalanceChart(s, principal);
+  }
+  function renderBalanceChart(years, principal){
+    var container = el('autoScheduleChart');
+    if (!container) return;
+    var w = 640, h = 220, padL = 60, padB = 30, padT = 16, padR = 16;
+    var plotW = w - padL - padR, plotH = h - padT - padB;
+    var maxVal = principal;
+    var n = years.length;
+    var barW = Math.max(2, (plotW / n) * 0.7);
+    var gap = (plotW / n) - barW;
+    var svg = '<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:100%; height:auto; font-family:var(--font-mono);" role="img" aria-label="Remaining loan balance by year">';
+    for (var g = 0; g <= 4; g++) {
+      var val = maxVal * (g / 4);
+      var y = padT + plotH - (plotH * (g / 4));
+      svg += '<line x1="' + padL + '" y1="' + y + '" x2="' + (w - padR) + '" y2="' + y + '" stroke="var(--line)" stroke-width="1"/>';
+      svg += '<text x="' + (padL - 8) + '" y="' + (y + 4) + '" text-anchor="end" font-size="10" fill="var(--ink-soft)">' + fmtMoney(val).split('.')[0] + '</text>';
+    }
+    years.forEach(function(yr, i) {
+      var barH = (yr.remainingBalance / maxVal) * plotH;
+      var x = padL + i * (barW + gap) + gap / 2;
+      var y = padT + plotH - barH;
+      svg += '<rect x="' + x + '" y="' + y + '" width="' + barW + '" height="' + barH + '" fill="var(--accent)" opacity="0.85"><title>Year ' + yr.year + ': ' + fmtMoney(yr.remainingBalance) + ' remaining</title></rect>';
+      if (n <= 15 || i % Math.ceil(n / 15) === 0) {
+        svg += '<text x="' + (x + barW / 2) + '" y="' + (h - padB + 14) + '" text-anchor="middle" font-size="9" fill="var(--ink-soft)">' + yr.year + '</text>';
+      }
+    });
+    svg += '</svg>';
+    container.innerHTML = '<div class="result-label" style="margin-bottom:8px;">Remaining balance by year</div>' + svg;
+    container.style.display = 'block';
   }
   ['autoPrice','autoDownPayment','autoTradeIn','autoSalesTax','autoRate','autoTermMonths'].forEach(function(id){
     el(id).addEventListener('input', compute);

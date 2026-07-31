@@ -882,11 +882,13 @@ function monthsToPayoff(input) {
   // running the fixed payment for the rounded whole number of months.
   let remainingBalance = balance;
   let totalPaid = 0;
+  const monthlySchedule = [{ month: 0, remainingBalance: round2(balance) }];
   for (let i = 0; i < monthsRounded && remainingBalance > 0.005; i++) {
     const interestThisMonth = remainingBalance * r;
     let paymentThisMonth = Math.min(monthlyPayment, remainingBalance + interestThisMonth);
     remainingBalance = remainingBalance + interestThisMonth - paymentThisMonth;
     totalPaid += paymentThisMonth;
+    monthlySchedule.push({ month: i + 1, remainingBalance: round2(Math.max(0, remainingBalance)) });
   }
   const totalInterest = totalPaid - balance;
 
@@ -894,6 +896,7 @@ function monthsToPayoff(input) {
     months: monthsRounded,
     years: round2(monthsRounded / 12),
     totalPaid: round2(totalPaid),
+    monthlySchedule,
     totalInterest: round2(totalInterest),
   };
 }

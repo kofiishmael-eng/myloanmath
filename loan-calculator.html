@@ -93,6 +93,7 @@
     <div class="stat-grid" id="loanStats"></div>
   </div>
   <div class="actions"><button class="action" id="loanScheduleBtn" type="button">Show yearly breakdown</button><button class="action" id="loanCopyBtn" type="button">Copy result</button></div>
+  <div id="scheduleChart" style="display:none; margin-bottom:16px;"></div>
   <div class="schedule-wrap" id="scheduleWrap" style="display:none;"><table class="schedule-table" id="scheduleTable"></table></div>
   <p class="note">Uses the standard amortization formula. The final year's numbers may differ by a few cents from a pure formula calculation because real lenders round each monthly payment, and this calculator does too.</p>
 </div>
@@ -199,10 +200,12 @@
         '<div class="stat"><div class="stat-label">Total paid</div><div class="stat-value">' + fmtMoney(result.totalPayment) + '</div></div>' +
         '<div class="stat"><div class="stat-label">Total interest</div><div class="stat-value">' + fmtMoney(result.totalInterest) + '</div></div>' +
         '<div class="stat"><div class="stat-label">Number of payments</div><div class="stat-value">' + result.numberOfPayments + '</div></div>';
-      if (scheduleVisible) renderSchedule(principal, rate, termMonths);
+      if (scheduleVisible) { renderSchedule(principal, rate, termMonths); }
+      else { el('scheduleWrap').style.display='none'; if (el('scheduleChart')) el('scheduleChart').style.display='none'; }
     } catch(e) {
       out.textContent = e.message; out.classList.add('error'); stats.innerHTML='';
       el('scheduleWrap').style.display='none'; scheduleVisible=false;
+      if (el('scheduleChart')) el('scheduleChart').style.display='none';
     }
   }
   function renderSchedule(principal, rate, termMonths){
@@ -210,6 +213,38 @@
     var rows = '<tr><th>Year</th><th>Principal paid</th><th>Interest paid</th><th>Remaining balance</th></tr>';
     years.forEach(function(y){ rows += '<tr><td>'+y.year+'</td><td>'+fmtMoney(y.principalPaid)+'</td><td>'+fmtMoney(y.interestPaid)+'</td><td>'+fmtMoney(y.remainingBalance)+'</td></tr>'; });
     el('scheduleTable').innerHTML = rows; el('scheduleWrap').style.display='block';
+    renderBalanceChart(years, principal);
+  }
+  function renderBalanceChart(years, principal){
+    var container = el('scheduleChart');
+    if (!container) return;
+    var w = 640, h = 220, padL = 60, padB = 30, padT = 16, padR = 16;
+    var plotW = w - padL - padR, plotH = h - padT - padB;
+    var maxVal = principal;
+    var n = years.length;
+    var barW = Math.max(2, (plotW / n) * 0.7);
+    var gap = (plotW / n) - barW;
+    var svg = '<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:100%; height:auto; font-family:var(--font-mono);" role="img" aria-label="Remaining loan balance by year">';
+    // Y-axis gridlines and labels (4 lines)
+    for (var g = 0; g <= 4; g++) {
+      var val = maxVal * (g / 4);
+      var y = padT + plotH - (plotH * (g / 4));
+      svg += '<line x1="' + padL + '" y1="' + y + '" x2="' + (w - padR) + '" y2="' + y + '" stroke="var(--line)" stroke-width="1"/>';
+      svg += '<text x="' + (padL - 8) + '" y="' + (y + 4) + '" text-anchor="end" font-size="10" fill="var(--ink-soft)">' + fmtMoney(val).split('.')[0] + '</text>';
+    }
+    // Bars: remaining balance per year
+    years.forEach(function(yr, i) {
+      var barH = (yr.remainingBalance / maxVal) * plotH;
+      var x = padL + i * (barW + gap) + gap / 2;
+      var y = padT + plotH - barH;
+      svg += '<rect x="' + x + '" y="' + y + '" width="' + barW + '" height="' + barH + '" fill="var(--accent)" opacity="0.85"><title>Year ' + yr.year + ': ' + fmtMoney(yr.remainingBalance) + ' remaining</title></rect>';
+      if (n <= 15 || i % Math.ceil(n / 15) === 0) {
+        svg += '<text x="' + (x + barW / 2) + '" y="' + (h - padB + 14) + '" text-anchor="middle" font-size="9" fill="var(--ink-soft)">' + yr.year + '</text>';
+      }
+    });
+    svg += '</svg>';
+    container.innerHTML = '<div class="result-label" style="margin-bottom:8px;">Remaining balance by year</div>' + svg;
+    container.style.display = 'block';
   }
   ['loanPrincipal','loanRate','loanTermValue','loanTermUnit'].forEach(function(id){ el(id).addEventListener('input', compute); el(id).addEventListener('change', compute); });
   el('loanScheduleBtn').addEventListener('click', function(){
