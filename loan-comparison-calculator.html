@@ -208,16 +208,31 @@
 
     var diff = Math.abs(a.totalPayment - b.totalPayment);
     var monthlyDiff = Math.abs(a.monthlyPayment - b.monthlyPayment);
-    if (a.totalPayment < b.totalPayment) {
+
+    // Build the sentence from the winner's point of view. "Despite" only makes
+    // sense when the cheaper loan has the HIGHER monthly payment — using it when
+    // the winner is cheaper on both counts reads as a contradiction.
+    function summarize(winnerName, loserName, winner, loser){
+      var lead = winnerName + ' costs ' + fmtMoney(diff) + ' less in total than ' + loserName;
+      if (monthlyDiff < 0.005) return lead + ', at the same monthly payment.';
+      if (winner.monthlyPayment > loser.monthlyPayment) {
+        return lead + ', despite a monthly payment that is ' + fmtMoney(monthlyDiff) + ' higher per month.';
+      }
+      return lead + ' — and its monthly payment is ' + fmtMoney(monthlyDiff) + ' lower per month as well.';
+    }
+
+    if (diff < 0.005) {
+      summary.textContent = monthlyDiff < 0.005
+        ? 'Both loans cost exactly the same in total.'
+        : 'Both loans cost the same in total, but the monthly payments differ by ' + fmtMoney(monthlyDiff) + '.';
+    } else if (a.totalPayment < b.totalPayment) {
       colA.classList.add('winner');
       colA.insertAdjacentHTML('afterbegin', '<span class="winner-badge">Lower total cost</span>');
-      summary.textContent = 'Loan A costs ' + fmtMoney(diff) + ' less in total than Loan B, despite a monthly payment that is ' + (a.monthlyPayment > b.monthlyPayment ? fmtMoney(monthlyDiff) + ' higher' : fmtMoney(monthlyDiff) + ' lower') + ' per month.';
-    } else if (b.totalPayment < a.totalPayment) {
+      summary.textContent = summarize('Loan A', 'Loan B', a, b);
+    } else {
       colB.classList.add('winner');
       colB.insertAdjacentHTML('afterbegin', '<span class="winner-badge">Lower total cost</span>');
-      summary.textContent = 'Loan B costs ' + fmtMoney(diff) + ' less in total than Loan A, despite a monthly payment that is ' + (b.monthlyPayment > a.monthlyPayment ? fmtMoney(monthlyDiff) + ' higher' : fmtMoney(monthlyDiff) + ' lower') + ' per month.';
-    } else {
-      summary.textContent = 'Both loans cost exactly the same in total.';
+      summary.textContent = summarize('Loan B', 'Loan A', b, a);
     }
   }
   ['loanAAmount','loanARate','loanATermValue','loanATermUnit','loanBAmount','loanBRate','loanBTermValue','loanBTermUnit'].forEach(function(id){
