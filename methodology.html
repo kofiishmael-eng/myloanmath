@@ -20,6 +20,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://myloanmath.com/methodology.html">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta property="og:image" content="https://myloanmath.com/assets/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -39,6 +40,7 @@
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9412143347948347" crossorigin="anonymous"></script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://myloanmath.com/"}, {"@type": "ListItem", "position": 2, "name": "Methodology & Sources", "item": "https://myloanmath.com/methodology.html"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "MyLoanMath", "url": "https://myloanmath.com/", "logo": "https://myloanmath.com/assets/icon-512.png", "email": "contact@myloanmath.com", "foundingDate": "2026", "description": "Free, browser-based financial calculators with every figure verified against primary sources and every correction published.", "publishingPrinciples": "https://myloanmath.com/methodology.html", "correctionsPolicy": "https://myloanmath.com/changelog.html", "contactPoint": {"@type": "ContactPoint", "contactType": "editorial", "email": "contact@myloanmath.com", "availableLanguage": "English"}}</script>
 </head>
 <body>
 <a href="#main-heading" class="skip-link">Skip to content</a>
@@ -99,7 +101,7 @@
 <div class="source-block">
   <span class="status-pill status-partial">Partially verified</span>
   <h3>State income tax</h3>
-  <p>All 9 no-income-tax states and all genuinely flat-rate states are fully verified. Graduated-bracket states were sourced from the Tax Foundation's annual report, cross-checked against each state's own published cumulative-tax formula where available (for example, California and New York were verified to the cent against their own tax authorities' worked examples). Roughly 15 states use single-filer brackets as an approximation regardless of the filing status selected, since married-filing brackets differ from single brackets in those states and weren't fully modeled — this is disclosed directly in the calculator's result for any affected state.</p>
+  <p>All 9 no-income-tax states and all genuinely flat-rate states are fully verified. Graduated-bracket states were sourced from the Tax Foundation's annual report, cross-checked against each state's own published cumulative-tax formula where available (for example, California and New York were verified to the cent against their own tax authorities' worked examples). Married-filing-jointly brackets are now modeled for every state that publishes different thresholds for joint filers (Alabama, Connecticut, Hawaii, Kansas, Maine, Montana, Nebraska, New Mexico, Oklahoma, Oregon and Vermont, alongside California, Maryland, Minnesota, New Jersey, New York and Wisconsin, which already had them). Nine further graduated states &mdash; Arkansas, Delaware, Massachusetts, Missouri, Rhode Island, South Carolina, Virginia, West Virginia and the District of Columbia &mdash; apply one schedule to every filing status, and the calculator now says so explicitly rather than hedging. Head-of-household thresholds are still approximated with single-filer thresholds in the eleven states listed first, which is disclosed in the calculator's own result whenever that filing status is selected.</p>
 </div>
 
 <div class="source-block">
@@ -143,6 +145,16 @@
   <h3>Amortization, compound interest, and savings goal math</h3>
   <p>These calculations use the same standard formulas taught in financial mathematics and used industry-wide by lenders and financial institutions — the fixed-payment amortization formula, the compound interest formula with periodic contributions, and their mathematical inverses (solving for time-to-payoff or required contribution instead of payment). These aren't sourced from a single external site; they're verified through internal consistency checks — for example, confirming that solving for a payoff time and then feeding that time back into the original payment formula returns the original payment, to the cent.</p>
 </div>
+
+<h2 class="category-heading">Editorial standards</h2>
+<p>Four rules govern every number on this site.</p>
+<p><strong>Primary sources only.</strong> Figures come from the body that sets them &mdash; IRS publications and Revenue Procedures, CRA guidance, and each state or province's own revenue authority or statute. Where only secondary sources exist, they are cross-checked against one another and the limitation is disclosed in the calculator's own result rather than buried here.</p>
+<p><strong>Disagreement is reported, not resolved by guessing.</strong> When credible sources conflict, the conflict is stated and neither side is presented as settled. Pending legislation is not modelled as if it were law; where a bill would change a figure, it is checked for enactment before anything moves.</p>
+<p><strong>Math is verified by hand, not by inspection.</strong> Calculations are checked by recomputing a worked example independently and comparing it to the code &mdash; not by reading the code and judging it correct. Changes are tested through the rendered page, and the remaining calculators are re-run afterwards to catch anything the change broke elsewhere.</p>
+<p><strong>Errors are published.</strong> Every correction is recorded on the <a href="changelog.html">Corrections &amp; Changes</a> page, dated, with the size of the error stated in dollars wherever it can be quantified. Approximations are labelled as approximations inside the tool that produces them, so a caveat can never be missed by someone who never scrolled this far.</p>
+
+<h2 class="category-heading">Funding and independence</h2>
+<p>MyLoanMath is free and supported by advertising. No calculation, recommendation, or tool on this site is influenced by that: there are no affiliate links to lenders, banks, insurers or tax preparers anywhere, and no result is shaped by anything commercial. Every tool runs entirely in your browser and nothing you type is transmitted anywhere &mdash; see the <a href="privacy-policy.html">privacy policy</a> for detail. Corrections are welcome and genuinely wanted at <a href="mailto:contact@myloanmath.com">contact@myloanmath.com</a>.</p>
 
 <h2 class="category-heading">Update schedule</h2>
 <p style="color:var(--ink-soft); font-size:14.5px; line-height:1.7;">Tax figures change annually. The IRS typically publishes the following year's figures in October or November; the CRA follows a similar autumn schedule. We review and update the tax calculators against newly published figures each year once they're officially released, and every tax page shows a "last verified" date so you can see at a glance how current the numbers are.</p>

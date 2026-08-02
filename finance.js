@@ -478,10 +478,21 @@ function calculateFederalIncomeTaxCRA(input) {
  * standard deductions/exemptions, which could lower the result slightly.
  */
 const STATE_TAX_2026 = {
-  AL: { name: 'Alabama', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 2, upTo: 500 }, { rate: 4, upTo: 3000 }, { rate: 5, upTo: Infinity }] },
+  AL: {
+    name: 'Alabama', type: 'graduated', headOfHouseholdApproximated: true,
+    bracketsByStatus: {
+      single: [{ rate: 2, upTo: 500 }, { rate: 4, upTo: 3000 }, { rate: 5, upTo: Infinity }],
+      marriedJointly: [{ rate: 2, upTo: 1000 }, { rate: 4, upTo: 6000 }, { rate: 5, upTo: Infinity }],
+      // Married-separately filers use the undoubled (single) schedule.
+      marriedSeparately: [{ rate: 2, upTo: 500 }, { rate: 4, upTo: 3000 }, { rate: 5, upTo: Infinity }],
+      // Head-of-household thresholds are not published in the source used
+      // here; single-filer thresholds stand in and this is disclosed below.
+      headOfHousehold: [{ rate: 2, upTo: 500 }, { rate: 4, upTo: 3000 }, { rate: 5, upTo: Infinity }],
+    },
+  },
   AK: { name: 'Alaska', type: 'none' },
   AZ: { name: 'Arizona', type: 'flat', rate: 2.5 },
-  AR: { name: 'Arkansas', type: 'graduated', brackets: [{ rate: 2, upTo: 4600 }, { rate: 3.9, upTo: Infinity }] },
+  AR: { name: 'Arkansas', type: 'graduated', bracketsApplyToAllStatuses: true, brackets: [{ rate: 2, upTo: 4600 }, { rate: 3.9, upTo: Infinity }] },
   CA: {
     name: 'California', type: 'graduated',
     // Verified against the California Franchise Tax Board's own published rate
@@ -502,19 +513,63 @@ const STATE_TAX_2026 = {
     dataVintageNote: "Uses California's most recently published brackets (tax year 2025) — the FTB has not yet released final 2026 inflation-adjusted thresholds (expected fall 2026). The rate structure itself is confirmed unchanged.",
   },
   CO: { name: 'Colorado', type: 'flat', rate: 4.4 },
-  CT: { name: 'Connecticut', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 2, upTo: 10000 }, { rate: 4.5, upTo: 50000 }, { rate: 5.5, upTo: 100000 }, { rate: 6, upTo: 200000 }, { rate: 6.5, upTo: 250000 }, { rate: 6.99, upTo: Infinity }] },
-  DE: { name: 'Delaware', type: 'graduated', brackets: [{ rate: 2.2, upTo: 2000 }, { rate: 3.9, upTo: 5000 }, { rate: 4.8, upTo: 10000 }, { rate: 5.2, upTo: 20000 }, { rate: 5.55, upTo: 25000 }, { rate: 6.6, upTo: Infinity }] },
+  CT: {
+    name: 'Connecticut', type: 'graduated', headOfHouseholdApproximated: true,
+    bracketsByStatus: {
+      single: [{ rate: 2, upTo: 10000 }, { rate: 4.5, upTo: 50000 }, { rate: 5.5, upTo: 100000 }, { rate: 6, upTo: 200000 }, { rate: 6.5, upTo: 250000 }, { rate: 6.9, upTo: 500000 }, { rate: 6.99, upTo: Infinity }],
+      marriedJointly: [{ rate: 2, upTo: 20000 }, { rate: 4.5, upTo: 100000 }, { rate: 5.5, upTo: 200000 }, { rate: 6, upTo: 400000 }, { rate: 6.5, upTo: 500000 }, { rate: 6.9, upTo: 1000000 }, { rate: 6.99, upTo: Infinity }],
+      // Married-separately filers use the undoubled (single) schedule.
+      marriedSeparately: [{ rate: 2, upTo: 10000 }, { rate: 4.5, upTo: 50000 }, { rate: 5.5, upTo: 100000 }, { rate: 6, upTo: 200000 }, { rate: 6.5, upTo: 250000 }, { rate: 6.9, upTo: 500000 }, { rate: 6.99, upTo: Infinity }],
+      // Head-of-household thresholds are not published in the source used
+      // here; single-filer thresholds stand in and this is disclosed below.
+      headOfHousehold: [{ rate: 2, upTo: 10000 }, { rate: 4.5, upTo: 50000 }, { rate: 5.5, upTo: 100000 }, { rate: 6, upTo: 200000 }, { rate: 6.5, upTo: 250000 }, { rate: 6.9, upTo: 500000 }, { rate: 6.99, upTo: Infinity }],
+    },
+  },
+  DE: { name: 'Delaware', type: 'graduated', bracketsApplyToAllStatuses: true, brackets: [{ rate: 0, upTo: 2000 }, { rate: 2.2, upTo: 5000 }, { rate: 3.9, upTo: 10000 }, { rate: 4.8, upTo: 20000 }, { rate: 5.2, upTo: 25000 }, { rate: 5.55, upTo: 60000 }, { rate: 6.6, upTo: Infinity }] },
   FL: { name: 'Florida', type: 'none' },
   GA: { name: 'Georgia', type: 'flat', rate: 4.99 },
-  HI: { name: 'Hawaii', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 1.4, upTo: 9600 }, { rate: 3.2, upTo: 14400 }, { rate: 5.5, upTo: 19200 }, { rate: 6.4, upTo: 24000 }, { rate: 6.8, upTo: 36000 }, { rate: 7.2, upTo: 48000 }, { rate: 7.6, upTo: 125000 }, { rate: 7.9, upTo: 175000 }, { rate: 8.25, upTo: 225000 }, { rate: 9, upTo: 275000 }, { rate: 10, upTo: 325000 }, { rate: 11, upTo: Infinity }] },
+  HI: {
+    name: 'Hawaii', type: 'graduated', headOfHouseholdApproximated: true,
+    bracketsByStatus: {
+      single: [{ rate: 1.4, upTo: 9600 }, { rate: 3.2, upTo: 14400 }, { rate: 5.5, upTo: 19200 }, { rate: 6.4, upTo: 24000 }, { rate: 6.8, upTo: 36000 }, { rate: 7.2, upTo: 48000 }, { rate: 7.6, upTo: 125000 }, { rate: 7.9, upTo: 175000 }, { rate: 8.25, upTo: 225000 }, { rate: 9, upTo: 275000 }, { rate: 10, upTo: 325000 }, { rate: 11, upTo: Infinity }],
+      marriedJointly: [{ rate: 1.4, upTo: 19200 }, { rate: 3.2, upTo: 28800 }, { rate: 5.5, upTo: 38400 }, { rate: 6.4, upTo: 48000 }, { rate: 6.8, upTo: 72000 }, { rate: 7.2, upTo: 96000 }, { rate: 7.6, upTo: 250000 }, { rate: 7.9, upTo: 350000 }, { rate: 8.25, upTo: 450000 }, { rate: 9, upTo: 550000 }, { rate: 10, upTo: 650000 }, { rate: 11, upTo: Infinity }],
+      // Married-separately filers use the undoubled (single) schedule.
+      marriedSeparately: [{ rate: 1.4, upTo: 9600 }, { rate: 3.2, upTo: 14400 }, { rate: 5.5, upTo: 19200 }, { rate: 6.4, upTo: 24000 }, { rate: 6.8, upTo: 36000 }, { rate: 7.2, upTo: 48000 }, { rate: 7.6, upTo: 125000 }, { rate: 7.9, upTo: 175000 }, { rate: 8.25, upTo: 225000 }, { rate: 9, upTo: 275000 }, { rate: 10, upTo: 325000 }, { rate: 11, upTo: Infinity }],
+      // Head-of-household thresholds are not published in the source used
+      // here; single-filer thresholds stand in and this is disclosed below.
+      headOfHousehold: [{ rate: 1.4, upTo: 9600 }, { rate: 3.2, upTo: 14400 }, { rate: 5.5, upTo: 19200 }, { rate: 6.4, upTo: 24000 }, { rate: 6.8, upTo: 36000 }, { rate: 7.2, upTo: 48000 }, { rate: 7.6, upTo: 125000 }, { rate: 7.9, upTo: 175000 }, { rate: 8.25, upTo: 225000 }, { rate: 9, upTo: 275000 }, { rate: 10, upTo: 325000 }, { rate: 11, upTo: Infinity }],
+    },
+  },
   ID: { name: 'Idaho', type: 'flat', rate: 5.3 },
   IL: { name: 'Illinois', type: 'flat', rate: 4.95 },
   IN: { name: 'Indiana', type: 'flat', rate: 2.95 },
   IA: { name: 'Iowa', type: 'flat', rate: 3.9 },
-  KS: { name: 'Kansas', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 5.2, upTo: 23000 }, { rate: 5.58, upTo: Infinity }] },
+  KS: {
+    name: 'Kansas', type: 'graduated', headOfHouseholdApproximated: true,
+    bracketsByStatus: {
+      single: [{ rate: 5.2, upTo: 23000 }, { rate: 5.58, upTo: Infinity }],
+      marriedJointly: [{ rate: 5.2, upTo: 46000 }, { rate: 5.58, upTo: Infinity }],
+      // Married-separately filers use the undoubled (single) schedule.
+      marriedSeparately: [{ rate: 5.2, upTo: 23000 }, { rate: 5.58, upTo: Infinity }],
+      // Head-of-household thresholds are not published in the source used
+      // here; single-filer thresholds stand in and this is disclosed below.
+      headOfHousehold: [{ rate: 5.2, upTo: 23000 }, { rate: 5.58, upTo: Infinity }],
+    },
+  },
   KY: { name: 'Kentucky', type: 'flat', rate: 3.5 },
   LA: { name: 'Louisiana', type: 'flat', rate: 3.0 },
-  ME: { name: 'Maine', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 5.8, upTo: 27399 }, { rate: 6.75, upTo: 64849 }, { rate: 7.15, upTo: Infinity }] },
+  ME: {
+    name: 'Maine', type: 'graduated', headOfHouseholdApproximated: true,
+    bracketsByStatus: {
+      single: [{ rate: 5.8, upTo: 27399 }, { rate: 6.75, upTo: 64849 }, { rate: 7.15, upTo: Infinity }],
+      marriedJointly: [{ rate: 5.8, upTo: 54849 }, { rate: 6.75, upTo: 129749 }, { rate: 7.15, upTo: Infinity }],
+      // Married-separately filers use the undoubled (single) schedule.
+      marriedSeparately: [{ rate: 5.8, upTo: 27399 }, { rate: 6.75, upTo: 64849 }, { rate: 7.15, upTo: Infinity }],
+      // Head-of-household thresholds are not published in the source used
+      // here; single-filer thresholds stand in and this is disclosed below.
+      headOfHousehold: [{ rate: 5.8, upTo: 27399 }, { rate: 6.75, upTo: 64849 }, { rate: 7.15, upTo: Infinity }],
+    },
+  },
   MD: {
     name: 'Maryland', type: 'graduated',
     // Corrected: the earlier single-filer table was missing a bracket (had 9,
@@ -531,7 +586,7 @@ const STATE_TAX_2026 = {
     },
     standardDeduction: { single: 2550, marriedJointly: 5150, headOfHousehold: 5150, marriedSeparately: 2550 },
   },
-  MA: { name: 'Massachusetts', type: 'graduated', brackets: [{ rate: 5, upTo: 1083150 }, { rate: 9, upTo: Infinity }] },
+  MA: { name: 'Massachusetts', type: 'graduated', bracketsApplyToAllStatuses: true, brackets: [{ rate: 5, upTo: 1083150 }, { rate: 9, upTo: Infinity }] },
   MI: { name: 'Michigan', type: 'flat', rate: 4.25 },
   MN: {
     name: 'Minnesota', type: 'graduated',
@@ -549,9 +604,31 @@ const STATE_TAX_2026 = {
     standardDeduction: { single: 15300, marriedJointly: 30600, headOfHousehold: 23000, marriedSeparately: 15300 },
   },
   MS: { name: 'Mississippi', type: 'flat', rate: 4.0 },
-  MO: { name: 'Missouri', type: 'graduated', brackets: [{ rate: 2, upTo: 1348 }, { rate: 2.5, upTo: 2696 }, { rate: 3, upTo: 4044 }, { rate: 3.5, upTo: 5392 }, { rate: 4, upTo: 6740 }, { rate: 4.5, upTo: 8088 }, { rate: 4.7, upTo: Infinity }] },
-  MT: { name: 'Montana', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 4.7, upTo: 47500 }, { rate: 5.65, upTo: Infinity }] },
-  NE: { name: 'Nebraska', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 2.46, upTo: 4130 }, { rate: 3.51, upTo: 24760 }, { rate: 4.55, upTo: Infinity }] },
+  MO: { name: 'Missouri', type: 'graduated', bracketsApplyToAllStatuses: true, brackets: [{ rate: 0, upTo: 1348 }, { rate: 2, upTo: 2696 }, { rate: 2.5, upTo: 4044 }, { rate: 3, upTo: 5392 }, { rate: 3.5, upTo: 6740 }, { rate: 4, upTo: 8088 }, { rate: 4.5, upTo: 9436 }, { rate: 4.7, upTo: Infinity }] },
+  MT: {
+    name: 'Montana', type: 'graduated', headOfHouseholdApproximated: true,
+    bracketsByStatus: {
+      single: [{ rate: 4.7, upTo: 47500 }, { rate: 5.65, upTo: Infinity }],
+      marriedJointly: [{ rate: 4.7, upTo: 95000 }, { rate: 5.65, upTo: Infinity }],
+      // Married-separately filers use the undoubled (single) schedule.
+      marriedSeparately: [{ rate: 4.7, upTo: 47500 }, { rate: 5.65, upTo: Infinity }],
+      // Head-of-household thresholds are not published in the source used
+      // here; single-filer thresholds stand in and this is disclosed below.
+      headOfHousehold: [{ rate: 4.7, upTo: 47500 }, { rate: 5.65, upTo: Infinity }],
+    },
+  },
+  NE: {
+    name: 'Nebraska', type: 'graduated', headOfHouseholdApproximated: true,
+    bracketsByStatus: {
+      single: [{ rate: 2.46, upTo: 4130 }, { rate: 3.51, upTo: 24760 }, { rate: 4.55, upTo: Infinity }],
+      marriedJointly: [{ rate: 2.46, upTo: 8250 }, { rate: 3.51, upTo: 49530 }, { rate: 4.55, upTo: Infinity }],
+      // Married-separately filers use the undoubled (single) schedule.
+      marriedSeparately: [{ rate: 2.46, upTo: 4130 }, { rate: 3.51, upTo: 24760 }, { rate: 4.55, upTo: Infinity }],
+      // Head-of-household thresholds are not published in the source used
+      // here; single-filer thresholds stand in and this is disclosed below.
+      headOfHousehold: [{ rate: 2.46, upTo: 4130 }, { rate: 3.51, upTo: 24760 }, { rate: 4.55, upTo: Infinity }],
+    },
+  },
   NV: { name: 'Nevada', type: 'none' },
   NH: { name: 'New Hampshire', type: 'none' },
   NJ: {
@@ -571,7 +648,18 @@ const STATE_TAX_2026 = {
     standardDeduction: { single: 0, marriedJointly: 0, headOfHousehold: 0, marriedSeparately: 0 },
     usesPersonalExemptionsNotDeduction: true,
   },
-  NM: { name: 'New Mexico', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 1.5, upTo: 5500 }, { rate: 3.2, upTo: 16500 }, { rate: 4.3, upTo: 33500 }, { rate: 4.7, upTo: 66500 }, { rate: 4.9, upTo: 210000 }, { rate: 5.9, upTo: Infinity }] },
+  NM: {
+    name: 'New Mexico', type: 'graduated', headOfHouseholdApproximated: true,
+    bracketsByStatus: {
+      single: [{ rate: 1.5, upTo: 5500 }, { rate: 3.2, upTo: 16500 }, { rate: 4.3, upTo: 33500 }, { rate: 4.7, upTo: 66500 }, { rate: 4.9, upTo: 210000 }, { rate: 5.9, upTo: Infinity }],
+      marriedJointly: [{ rate: 1.5, upTo: 8000 }, { rate: 3.2, upTo: 25000 }, { rate: 4.3, upTo: 50000 }, { rate: 4.7, upTo: 100000 }, { rate: 4.9, upTo: 315000 }, { rate: 5.9, upTo: Infinity }],
+      // Married-separately filers use the undoubled (single) schedule.
+      marriedSeparately: [{ rate: 1.5, upTo: 5500 }, { rate: 3.2, upTo: 16500 }, { rate: 4.3, upTo: 33500 }, { rate: 4.7, upTo: 66500 }, { rate: 4.9, upTo: 210000 }, { rate: 5.9, upTo: Infinity }],
+      // Head-of-household thresholds are not published in the source used
+      // here; single-filer thresholds stand in and this is disclosed below.
+      headOfHousehold: [{ rate: 1.5, upTo: 5500 }, { rate: 3.2, upTo: 16500 }, { rate: 4.3, upTo: 33500 }, { rate: 4.7, upTo: 66500 }, { rate: 4.9, upTo: 210000 }, { rate: 5.9, upTo: Infinity }],
+    },
+  },
   NY: {
     name: 'New York', type: 'graduated',
     // Verified: 2026 rate cut (0.1pp off the bottom 5 brackets vs 2025) confirmed by two
@@ -588,19 +676,52 @@ const STATE_TAX_2026 = {
   NC: { name: 'North Carolina', type: 'flat', rate: 3.99 },
   ND: { name: 'North Dakota', type: 'flat', rate: 1.95 },
   OH: { name: 'Ohio', type: 'flatWithExemption', rate: 2.75, exemption: 26050 },
-  OK: { name: 'Oklahoma', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 2.5, upTo: 3750 }, { rate: 3.5, upTo: 4900 }, { rate: 4.5, upTo: Infinity }] },
-  OR: { name: 'Oregon', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 4.75, upTo: 4550 }, { rate: 6.75, upTo: 11400 }, { rate: 8.75, upTo: 125000 }, { rate: 9.9, upTo: Infinity }] },
+  OK: {
+    name: 'Oklahoma', type: 'graduated', headOfHouseholdApproximated: true,
+    bracketsByStatus: {
+      single: [{ rate: 0, upTo: 3750 }, { rate: 2.5, upTo: 4900 }, { rate: 3.5, upTo: 7200 }, { rate: 4.5, upTo: Infinity }],
+      marriedJointly: [{ rate: 0, upTo: 7500 }, { rate: 2.5, upTo: 9800 }, { rate: 3.5, upTo: 14400 }, { rate: 4.5, upTo: Infinity }],
+      // Married-separately filers use the undoubled (single) schedule.
+      marriedSeparately: [{ rate: 0, upTo: 3750 }, { rate: 2.5, upTo: 4900 }, { rate: 3.5, upTo: 7200 }, { rate: 4.5, upTo: Infinity }],
+      // Head-of-household thresholds are not published in the source used
+      // here; single-filer thresholds stand in and this is disclosed below.
+      headOfHousehold: [{ rate: 0, upTo: 3750 }, { rate: 2.5, upTo: 4900 }, { rate: 3.5, upTo: 7200 }, { rate: 4.5, upTo: Infinity }],
+    },
+  },
+  OR: {
+    name: 'Oregon', type: 'graduated', headOfHouseholdApproximated: true,
+    bracketsByStatus: {
+      single: [{ rate: 4.75, upTo: 4550 }, { rate: 6.75, upTo: 11400 }, { rate: 8.75, upTo: 125000 }, { rate: 9.9, upTo: Infinity }],
+      marriedJointly: [{ rate: 4.75, upTo: 9100 }, { rate: 6.75, upTo: 22800 }, { rate: 8.75, upTo: 250000 }, { rate: 9.9, upTo: Infinity }],
+      // Married-separately filers use the undoubled (single) schedule.
+      marriedSeparately: [{ rate: 4.75, upTo: 4550 }, { rate: 6.75, upTo: 11400 }, { rate: 8.75, upTo: 125000 }, { rate: 9.9, upTo: Infinity }],
+      // Head-of-household thresholds are not published in the source used
+      // here; single-filer thresholds stand in and this is disclosed below.
+      headOfHousehold: [{ rate: 4.75, upTo: 4550 }, { rate: 6.75, upTo: 11400 }, { rate: 8.75, upTo: 125000 }, { rate: 9.9, upTo: Infinity }],
+    },
+  },
   PA: { name: 'Pennsylvania', type: 'flat', rate: 3.07 },
-  RI: { name: 'Rhode Island', type: 'graduated', brackets: [{ rate: 3.75, upTo: 82050 }, { rate: 4.75, upTo: 186450 }, { rate: 5.99, upTo: Infinity }] },
-  SC: { name: 'South Carolina', type: 'graduated', brackets: [{ rate: 0, upTo: 3640 }, { rate: 3, upTo: 18230 }, { rate: 6, upTo: Infinity }] },
+  RI: { name: 'Rhode Island', type: 'graduated', bracketsApplyToAllStatuses: true, brackets: [{ rate: 3.75, upTo: 82050 }, { rate: 4.75, upTo: 186450 }, { rate: 5.99, upTo: Infinity }] },
+  SC: { name: 'South Carolina', type: 'graduated', bracketsApplyToAllStatuses: true, brackets: [{ rate: 0, upTo: 3640 }, { rate: 3, upTo: 18230 }, { rate: 6, upTo: Infinity }] },
   SD: { name: 'South Dakota', type: 'none' },
   TN: { name: 'Tennessee', type: 'none' },
   TX: { name: 'Texas', type: 'none' },
   UT: { name: 'Utah', type: 'flat', rate: 4.5 },
-  VT: { name: 'Vermont', type: 'graduated', usesSingleFilerOnly: true, brackets: [{ rate: 3.35, upTo: 49400 }, { rate: 6.6, upTo: 119700 }, { rate: 7.6, upTo: 249700 }, { rate: 8.75, upTo: Infinity }] },
-  VA: { name: 'Virginia', type: 'graduated', brackets: [{ rate: 2, upTo: 3000 }, { rate: 3, upTo: 5000 }, { rate: 5, upTo: 17000 }, { rate: 5.75, upTo: Infinity }] },
+  VT: {
+    name: 'Vermont', type: 'graduated', headOfHouseholdApproximated: true,
+    bracketsByStatus: {
+      single: [{ rate: 3.35, upTo: 49400 }, { rate: 6.6, upTo: 119700 }, { rate: 7.6, upTo: 249700 }, { rate: 8.75, upTo: Infinity }],
+      marriedJointly: [{ rate: 3.35, upTo: 82500 }, { rate: 6.6, upTo: 199450 }, { rate: 7.6, upTo: 304000 }, { rate: 8.75, upTo: Infinity }],
+      // Married-separately filers use the undoubled (single) schedule.
+      marriedSeparately: [{ rate: 3.35, upTo: 49400 }, { rate: 6.6, upTo: 119700 }, { rate: 7.6, upTo: 249700 }, { rate: 8.75, upTo: Infinity }],
+      // Head-of-household thresholds are not published in the source used
+      // here; single-filer thresholds stand in and this is disclosed below.
+      headOfHousehold: [{ rate: 3.35, upTo: 49400 }, { rate: 6.6, upTo: 119700 }, { rate: 7.6, upTo: 249700 }, { rate: 8.75, upTo: Infinity }],
+    },
+  },
+  VA: { name: 'Virginia', type: 'graduated', bracketsApplyToAllStatuses: true, brackets: [{ rate: 2, upTo: 3000 }, { rate: 3, upTo: 5000 }, { rate: 5, upTo: 17000 }, { rate: 5.75, upTo: Infinity }] },
   WA: { name: 'Washington', type: 'none' },
-  WV: { name: 'West Virginia', type: 'graduated', brackets: [{ rate: 2.22, upTo: 10000 }, { rate: 2.96, upTo: 25000 }, { rate: 3.33, upTo: 40000 }, { rate: 4.44, upTo: 60000 }, { rate: 4.82, upTo: Infinity }] },
+  WV: { name: 'West Virginia', type: 'graduated', bracketsApplyToAllStatuses: true, brackets: [{ rate: 2.22, upTo: 10000 }, { rate: 2.96, upTo: 25000 }, { rate: 3.33, upTo: 40000 }, { rate: 4.44, upTo: 60000 }, { rate: 4.82, upTo: Infinity }] },
   WI: {
     name: 'Wisconsin', type: 'graduated',
     // Sourced directly from the Wisconsin Department of Revenue's own official
@@ -620,7 +741,7 @@ const STATE_TAX_2026 = {
     dataVintageNote: "Uses Wisconsin's most recently published brackets (tax year 2025) — the WI Department of Revenue has not yet released final 2026 figures.",
   },
   WY: { name: 'Wyoming', type: 'none' },
-  DC: { name: 'Washington DC', type: 'graduated', brackets: [{ rate: 4, upTo: 10000 }, { rate: 6, upTo: 40000 }, { rate: 6.5, upTo: 60000 }, { rate: 8.5, upTo: 250000 }, { rate: 9.25, upTo: 500000 }, { rate: 9.75, upTo: 1000000 }, { rate: 10.75, upTo: Infinity }] },
+  DC: { name: 'Washington DC', type: 'graduated', bracketsApplyToAllStatuses: true, brackets: [{ rate: 4, upTo: 10000 }, { rate: 6, upTo: 40000 }, { rate: 6.5, upTo: 60000 }, { rate: 8.5, upTo: 250000 }, { rate: 9.25, upTo: 500000 }, { rate: 9.75, upTo: 1000000 }, { rate: 10.75, upTo: Infinity }] },
 };
 
 function calculateStateTax(stateCode, taxableIncome, filingStatus) {
@@ -643,8 +764,11 @@ function calculateStateTax(stateCode, taxableIncome, filingStatus) {
   if (state.type === 'graduated') {
     // States with filing-status-specific brackets and their own standard deduction (e.g. New York)
     if (state.bracketsByStatus) {
-      const status = state.standardDeduction[filingStatus] !== undefined ? filingStatus : 'single';
-      const stateDeduction = state.standardDeduction[status] || 0;
+      // Pick the schedule by what brackets actually exist for this status, not
+      // by what the standard-deduction table happens to contain. Some states
+      // publish filing-status brackets but no separate state deduction.
+      const status = state.bracketsByStatus[filingStatus] ? filingStatus : 'single';
+      const stateDeduction = (state.standardDeduction && state.standardDeduction[status]) || 0;
       const stateTaxableIncome = Math.max(0, taxableIncome - stateDeduction);
       const brackets = state.bracketsByStatus[status] || state.bracketsByStatus.single;
       let tax = 0, lastCap = 0;
@@ -664,8 +788,13 @@ function calculateStateTax(stateCode, taxableIncome, filingStatus) {
       let note;
       if (state.usesPersonalExemptionsNotDeduction) {
         note = `${state.name} uses its own graduated brackets, with separate bracket structures for single/married-separate filers versus married-jointly/head-of-household filers. ${state.name} uses per-person personal exemptions rather than a standard deduction, which isn't modeled here — the real amount owed is likely somewhat lower.`;
-      } else {
+      } else if (stateDeduction > 0) {
         note = `${state.name} uses its own graduated brackets and standard deduction ($${stateDeduction.toLocaleString()} for this filing status), separate from the federal ones above.`;
+      } else {
+        note = `${state.name} uses its own graduated brackets, with separate thresholds for joint filers.`;
+      }
+      if (state.headOfHouseholdApproximated && filingStatus === 'headOfHousehold') {
+        note += ` Head-of-household thresholds aren't separately modeled for ${state.name} — single-filer thresholds are used, so the real amount may be somewhat lower.`;
       }
       if (state.surcharge && surchargeTax > 0) {
         note += ` Includes an additional ${state.surcharge.rate}% surcharge on income over $${state.surcharge.threshold.toLocaleString()}.`;
@@ -684,7 +813,9 @@ function calculateStateTax(stateCode, taxableIncome, filingStatus) {
       if (taxableIncome <= b.upTo) break;
     }
     let simpleNote = `${state.name} uses graduated brackets.`;
-    if (state.usesSingleFilerOnly) {
+    if (state.bracketsApplyToAllStatuses) {
+      simpleNote += ` ${state.name} applies the same bracket thresholds to every filing status, so this figure is correct whether you file single or jointly.`;
+    } else if (state.usesSingleFilerOnly) {
       simpleNote += ` Uses single-filer bracket thresholds as an approximation regardless of filing status selected above, since married/joint brackets differ in this state — the real amount may vary somewhat if you're not filing single.`;
     }
     return { stateName: state.name, stateTax: round2(tax), available: true, note: simpleNote };
