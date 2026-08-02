@@ -64,6 +64,7 @@
       <span class="nav-sep">|</span>
       <a href="blog.html">Blog</a>
       <a href="glossary.html">Glossary</a>
+      <a href="financial-calendar.html">Financial Calendar</a>
       <a href="which-calculator-do-i-need.html">Which Calculator?</a>
       <a href="methodology.html">Methodology</a>
   </div>
@@ -91,7 +92,7 @@
     <div class="stat-grid" id="goalStats"></div>
   </div>
   <p class="note" id="goalMetNote"></p>
-  <div class="actions"><button class="action" id="goalCopyBtn" type="button">Copy result</button></div>
+  <div class="actions"><button class="action" id="goalCopyBtn" type="button">Copy result</button><button class="action" id="goalShareBtn" type="button">Copy link to this scenario</button></div>
   <p class="note">Assumes interest compounds monthly, and every contribution is made on schedule for the full time period.</p>
 </div>
 
@@ -162,6 +163,7 @@
 <script src="numberToWords.js"></script>
 <script src="finance.js"></script>
 <script src="recentTools.js"></script>
+<script src="shareState.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("savings-goal-calculator.html", "Savings Goal Calculator");</script>
 <script>
 (function(){
@@ -289,6 +291,19 @@ function copyToClipboard(text, btn){
     try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); }
   }
 }
+</script>
+<script>
+// Shareable / bookmarkable scenario. Runs after the calculator above has
+// registered its listeners, so applying URL values recalculates the page.
+if (window.ShareState) ShareState.init({
+  buttonId: 'goalShareBtn',
+  fields: {
+    'target': 'goalTarget',
+    'current': 'goalCurrent',
+    'rate': 'goalRate',
+    'years': 'goalYears'
+  }
+});
 </script>
 </body>
 </html>

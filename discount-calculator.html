@@ -64,6 +64,7 @@
       <span class="nav-sep">|</span>
       <a href="blog.html">Blog</a>
       <a href="glossary.html">Glossary</a>
+      <a href="financial-calendar.html">Financial Calendar</a>
       <a href="which-calculator-do-i-need.html">Which Calculator?</a>
       <a href="methodology.html">Methodology</a>
   </div>
@@ -90,7 +91,7 @@
     <div class="stat-grid" id="discStats"></div>
   </div>
   <p class="note" id="discStackNote"></p>
-  <div class="actions"><button class="action" id="discCopyBtn" type="button">Copy result</button></div>
+  <div class="actions"><button class="action" id="discCopyBtn" type="button">Copy result</button><button class="action" id="discShareBtn" type="button">Copy link to this scenario</button></div>
 </div>
 
 <div class="card">
@@ -154,6 +155,7 @@
 <script src="numberToWords.js"></script>
 <script src="finance.js"></script>
 <script src="recentTools.js"></script>
+<script src="shareState.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("discount-calculator.html", "Discount Calculator");</script>
 <script>
 (function(){
@@ -228,6 +230,20 @@ function copyToClipboard(text, btn){
     try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); }
   }
 }
+</script>
+<script>
+// Shareable / bookmarkable scenario. Runs after the calculator above has
+// registered its listeners, so applying URL values recalculates the page.
+if (window.ShareState) ShareState.init({
+  buttonId: 'discShareBtn',
+  fields: {
+    'price': 'discPrice',
+    'percent': 'discPercent',
+    'second': 'discSecondPercent',
+    'original': 'revOriginal',
+    'sale': 'revSale'
+  }
+});
 </script>
 </body>
 </html>

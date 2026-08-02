@@ -64,6 +64,7 @@
       <span class="nav-sep">|</span>
       <a href="blog.html">Blog</a>
       <a href="glossary.html">Glossary</a>
+      <a href="financial-calendar.html">Financial Calendar</a>
       <a href="which-calculator-do-i-need.html">Which Calculator?</a>
       <a href="methodology.html">Methodology</a>
   </div>
@@ -94,7 +95,7 @@
     <div class="result-text" id="autoOutput">-</div>
     <div class="stat-grid" id="autoStats"></div>
   </div>
-  <div class="actions"><button class="action" id="autoScheduleBtn" type="button">Show yearly breakdown</button><button class="action" id="autoCopyBtn" type="button">Copy result</button></div>
+  <div class="actions"><button class="action" id="autoScheduleBtn" type="button">Show yearly breakdown</button><button class="action" id="autoCopyBtn" type="button">Copy result</button><button class="action" id="autoShareBtn" type="button">Copy link to this scenario</button></div>
   <div id="autoScheduleChart" style="display:none; margin-bottom:16px;"></div>
   <div class="schedule-wrap" id="autoScheduleWrap" style="display:none;"><table class="schedule-table" id="autoScheduleTable"></table></div>
   <p class="note">Uses the same standard amortization formula as our <a href="loan-calculator.html">general loan calculator</a>. Sales tax, if entered, is added to the amount financed — most buyers roll vehicle tax into the loan rather than paying it separately. Trade-in value reduces the amount financed directly.</p>
@@ -150,6 +151,7 @@
 <script src="numberToWords.js"></script>
 <script src="finance.js"></script>
 <script src="recentTools.js"></script>
+<script src="shareState.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("auto-loan-calculator.html", "Auto Loan Calculator");</script>
 <script>
 (function(){
@@ -260,6 +262,21 @@ function copyToClipboard(text, btn){
     try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); }
   }
 }
+</script>
+<script>
+// Shareable / bookmarkable scenario. Runs after the calculator above has
+// registered its listeners, so applying URL values recalculates the page.
+if (window.ShareState) ShareState.init({
+  buttonId: 'autoShareBtn',
+  fields: {
+    'price': 'autoPrice',
+    'down': 'autoDownPayment',
+    'trade': 'autoTradeIn',
+    'salestax': 'autoSalesTax',
+    'rate': 'autoRate',
+    'months': 'autoTermMonths'
+  }
+});
 </script>
 </body>
 </html>

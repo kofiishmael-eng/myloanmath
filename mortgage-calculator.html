@@ -64,6 +64,7 @@
       <span class="nav-sep">|</span>
       <a href="blog.html">Blog</a>
       <a href="glossary.html">Glossary</a>
+      <a href="financial-calendar.html">Financial Calendar</a>
       <a href="which-calculator-do-i-need.html">Which Calculator?</a>
       <a href="methodology.html">Methodology</a>
   </div>
@@ -98,7 +99,7 @@
     <div class="result-text" id="mortgageOutput">-</div>
     <div class="stat-grid" id="mortgageStats"></div>
   </div>
-  <div class="actions"><button class="action" id="mortgageScheduleBtn" type="button">Show yearly breakdown</button><button class="action" id="mortgageCopyBtn" type="button">Copy result</button></div>
+  <div class="actions"><button class="action" id="mortgageScheduleBtn" type="button">Show yearly breakdown</button><button class="action" id="mortgageCopyBtn" type="button">Copy result</button><button class="action" id="mortgageShareBtn" type="button">Copy link to this scenario</button></div>
   <div id="mortgageScheduleChart" style="display:none; margin:16px 0;"></div>
   <div class="schedule-wrap" id="mortgageScheduleWrap" style="display:none;"><table class="schedule-table" id="mortgageScheduleTable"></table></div>
   <p class="note">Property tax and insurance defaults are rough national-average placeholders — replace them with your actual local rates for an accurate estimate.</p>
@@ -165,6 +166,7 @@
 <script src="numberToWords.js"></script>
 <script src="finance.js"></script>
 <script src="recentTools.js"></script>
+<script src="shareState.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("mortgage-calculator.html", "Mortgage Calculator");</script>
 
 <script>
@@ -274,6 +276,22 @@ function copyToClipboard(text, btn){
   }
 }
 
+</script>
+<script>
+// Shareable / bookmarkable scenario. Runs after the calculator above has
+// registered its listeners, so applying URL values recalculates the page.
+if (window.ShareState) ShareState.init({
+  buttonId: 'mortgageShareBtn',
+  fields: {
+    'price': 'homePrice',
+    'down': 'downPayment',
+    'rate': 'mortgageRate',
+    'term': 'mortgageTerm',
+    'proptax': 'propertyTax',
+    'insurance': 'homeInsurance',
+    'hoa': 'hoaFee'
+  }
+});
 </script>
 </body>
 </html>

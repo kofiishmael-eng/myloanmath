@@ -72,6 +72,7 @@
       <span class="nav-sep">|</span>
       <a href="blog.html">Blog</a>
       <a href="glossary.html">Glossary</a>
+      <a href="financial-calendar.html">Financial Calendar</a>
       <a href="which-calculator-do-i-need.html">Which Calculator?</a>
       <a href="methodology.html">Methodology</a>
   </div>
@@ -125,6 +126,8 @@
   </div>
 </div>
 
+<div class="actions"><button class="action" id="compareShareBtn" type="button">Copy link to this scenario</button></div>
+
 <div class="ad-slot"><!-- AD SLOT: below the tool. Once approved, paste your AdSense ad unit code here. --></div>
 
 <section class="content">
@@ -165,6 +168,7 @@
 <script src="numberToWords.js"></script>
 <script src="finance.js"></script>
 <script src="recentTools.js"></script>
+<script src="shareState.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("loan-comparison-calculator.html", "Loan Comparison Calculator");</script>
 <script>
 (function(){
@@ -241,6 +245,23 @@
   });
   compute();
 })();
+</script>
+<script>
+// Shareable / bookmarkable scenario. Runs after the calculator above has
+// registered its listeners, so applying URL values recalculates the page.
+if (window.ShareState) ShareState.init({
+  buttonId: 'compareShareBtn',
+  fields: {
+    'aamount': 'loanAAmount',
+    'arate': 'loanARate',
+    'aterm': 'loanATermValue',
+    'aunit': 'loanATermUnit',
+    'bamount': 'loanBAmount',
+    'brate': 'loanBRate',
+    'bterm': 'loanBTermValue',
+    'bunit': 'loanBTermUnit'
+  }
+});
 </script>
 </body>
 </html>

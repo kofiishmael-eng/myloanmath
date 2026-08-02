@@ -64,6 +64,7 @@
       <span class="nav-sep">|</span>
       <a href="blog.html">Blog</a>
       <a href="glossary.html">Glossary</a>
+      <a href="financial-calendar.html">Financial Calendar</a>
       <a href="which-calculator-do-i-need.html">Which Calculator?</a>
       <a href="methodology.html">Methodology</a>
   </div>
@@ -93,7 +94,7 @@
     <div class="result-text" id="loanOutput">-</div>
     <div class="stat-grid" id="loanStats"></div>
   </div>
-  <div class="actions"><button class="action" id="loanScheduleBtn" type="button">Show yearly breakdown</button><button class="action" id="loanCopyBtn" type="button">Copy result</button></div>
+  <div class="actions"><button class="action" id="loanScheduleBtn" type="button">Show yearly breakdown</button><button class="action" id="loanCopyBtn" type="button">Copy result</button><button class="action" id="loanShareBtn" type="button">Copy link to this scenario</button></div>
   <div id="scheduleChart" style="display:none; margin-bottom:16px;"></div>
   <div class="schedule-wrap" id="scheduleWrap" style="display:none;"><table class="schedule-table" id="scheduleTable"></table></div>
   <p class="note">Uses the standard amortization formula. The final year's numbers may differ by a few cents from a pure formula calculation because real lenders round each monthly payment, and this calculator does too.</p>
@@ -176,6 +177,7 @@
 <script src="numberToWords.js"></script>
 <script src="finance.js"></script>
 <script src="recentTools.js"></script>
+<script src="shareState.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("loan-calculator.html", "Loan Calculator");</script>
 
 <script>
@@ -290,6 +292,19 @@
   compute();
 })();
 
+</script>
+<script>
+// Shareable / bookmarkable scenario. Runs after the calculator above has
+// registered its listeners, so applying URL values recalculates the page.
+if (window.ShareState) ShareState.init({
+  buttonId: 'loanShareBtn',
+  fields: {
+    'amount': 'loanPrincipal',
+    'rate': 'loanRate',
+    'term': 'loanTermValue',
+    'unit': 'loanTermUnit'
+  }
+});
 </script>
 </body>
 </html>

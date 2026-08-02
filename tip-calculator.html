@@ -64,6 +64,7 @@
       <span class="nav-sep">|</span>
       <a href="blog.html">Blog</a>
       <a href="glossary.html">Glossary</a>
+      <a href="financial-calendar.html">Financial Calendar</a>
       <a href="which-calculator-do-i-need.html">Which Calculator?</a>
       <a href="methodology.html">Methodology</a>
   </div>
@@ -89,7 +90,7 @@
     <div class="result-text" id="tipOutput">-</div>
     <div class="stat-grid" id="tipStats"></div>
   </div>
-  <div class="actions"><button class="action" id="tipCopyBtn" type="button">Copy result</button></div>
+  <div class="actions"><button class="action" id="tipCopyBtn" type="button">Copy result</button><button class="action" id="tipShareBtn" type="button">Copy link to this scenario</button></div>
 </div>
 
 <div class="ad-slot"><!-- AD SLOT: below the tool. Once approved, paste your AdSense ad unit code here. --></div>
@@ -131,6 +132,7 @@
 <script src="numberToWords.js"></script>
 <script src="finance.js"></script>
 <script src="recentTools.js"></script>
+<script src="shareState.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("tip-calculator.html", "Tip Calculator");</script>
 <script>
 (function(){
@@ -187,6 +189,18 @@ function copyToClipboard(text, btn){
     try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); }
   }
 }
+</script>
+<script>
+// Shareable / bookmarkable scenario. Runs after the calculator above has
+// registered its listeners, so applying URL values recalculates the page.
+if (window.ShareState) ShareState.init({
+  buttonId: 'tipShareBtn',
+  fields: {
+    'bill': 'tipBill',
+    'percent': 'tipPercent',
+    'people': 'tipPeople'
+  }
+});
 </script>
 </body>
 </html>

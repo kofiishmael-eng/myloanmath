@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XL6TXYDCLD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XL6TXYDCLD');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Financial Calendar — Key Tax &amp; Contribution Deadlines (US &amp; Canada)</title>
+<meta name="description" content="Every deadline that matters: tax filing dates, quarterly estimated payments, IRA/401(k)/RRSP/TFSA contribution cutoffs, and when your W-2 and T4 slips arrive. US and Canada, with a live countdown.">
+<link rel="canonical" href="https://myloanmath.com/financial-calendar.html">
+<meta property="og:title" content="Financial Calendar — Key Tax &amp; Contribution Deadlines (US &amp; Canada)">
+<meta property="og:description" content="Every deadline that matters: tax filing dates, quarterly estimated payments, IRA/401(k)/RRSP/TFSA contribution cutoffs, and when your W-2 and T4 slips arrive.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myloanmath.com/financial-calendar.html">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta property="og:image" content="https://myloanmath.com/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myloanmath.com/assets/og-image.png">
+<link rel="preconnect" href="https://pagead2.googlesyndication.com">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* Countdown hero — the one place this page raises its voice. */
+  .next-up{
+    background:var(--accent); border:1px solid var(--accent); border-radius:8px;
+    padding:22px 24px; margin-bottom:26px; color:#fff; box-shadow:var(--shadow-card);
+  }
+  .next-up .result-label{color:rgba(255,255,255,0.78); margin-bottom:9px;}
+  .next-up .days{font-family:var(--font-mono); font-size:34px; font-weight:700; line-height:1.1; letter-spacing:-0.02em;}
+  .next-up .days small{font-size:14px; font-weight:600; letter-spacing:0.02em; opacity:0.8;}
+  .next-up .what{margin-top:9px; font-size:15px; line-height:1.5;}
+  .next-up .when{margin-top:5px; font-family:var(--font-mono); font-size:12.5px; opacity:0.8;}
+
+  .cal-filter{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px;}
+  .cal-filter button{
+    font-family:var(--font-mono); font-size:12px; font-weight:600; padding:9px 15px; border-radius:20px;
+    border:1px solid var(--line); background:var(--card); color:var(--ink-soft); cursor:pointer;
+    min-height:38px; letter-spacing:0.02em; transition:all 0.15s ease;
+  }
+  .cal-filter button:hover{border-color:var(--brass); color:var(--ink);}
+  .cal-filter button[aria-pressed="true"]{background:var(--ink); border-color:var(--ink); color:var(--paper);}
+
+  .cal-month{
+    font-family:var(--font-mono); font-size:11px; font-weight:700; text-transform:uppercase;
+    letter-spacing:0.12em; color:var(--brass); margin:26px 0 10px; padding-bottom:6px;
+    border-bottom:2px solid var(--brass-soft);
+  }
+  .cal-month:first-of-type{margin-top:0;}
+
+  .cal-item{
+    display:grid; grid-template-columns:78px 1fr; gap:16px; align-items:start;
+    padding:15px 0; border-bottom:1px solid var(--line);
+  }
+  .cal-item:last-child{border-bottom:none;}
+  .cal-item.is-past{opacity:0.45;}
+  .cal-item.is-next{background:var(--accent-soft); margin:0 -14px; padding:15px 14px; border-radius:6px; border-bottom-color:transparent;}
+
+  .cal-date{text-align:center; border-right:1px solid var(--line); padding-right:12px;}
+  .cal-date .d{font-family:var(--font-mono); font-size:23px; font-weight:700; line-height:1; color:var(--ink);}
+  .cal-date .m{font-family:var(--font-mono); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--brass); margin-top:4px;}
+  .cal-date .y{font-family:var(--font-mono); font-size:10px; color:var(--ink-soft); margin-top:2px;}
+
+  .cal-title{font-weight:600; font-size:15.5px; line-height:1.4; margin-bottom:4px;}
+  .cal-detail{font-size:13.5px; color:var(--ink-soft); line-height:1.6;}
+  .cal-meta{margin-top:7px; display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
+  .cal-flag{
+    display:inline-block; font-family:var(--font-mono); font-size:10px; font-weight:700;
+    text-transform:uppercase; letter-spacing:0.06em; padding:3px 8px; border-radius:10px;
+  }
+  .flag-us{background:var(--accent-soft); color:var(--accent);}
+  .flag-ca{background:var(--brass-soft); color:var(--brass);}
+  .cal-count{font-family:var(--font-mono); font-size:11.5px; color:var(--ink-soft);}
+  .cal-note{
+    margin-top:8px; font-size:12.5px; line-height:1.6; color:var(--brass);
+    background:var(--brass-soft); border-radius:5px; padding:8px 11px;
+  }
+  @media (max-width:520px){
+    .cal-item{grid-template-columns:62px 1fr; gap:12px;}
+    .cal-date .d{font-size:20px;}
+    .next-up .days{font-size:28px;}
+  }
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What happens if a tax deadline falls on a weekend?", "acceptedAnswer": {"@type": "Answer", "text": "It moves to the next day that isn't a Saturday, Sunday, or legal holiday. That's why the W-2 deadline is February 1, 2027 rather than January 31 \u2014 January 31, 2027 is a Sunday."}}, {"@type": "Question", "name": "Does an extension give me more time to pay?", "acceptedAnswer": {"@type": "Answer", "text": "No. An extension moves the filing deadline only. Any balance owed is still due on the original April date in the US, and April 30 in Canada, with interest and penalties running from the day after."}}, {"@type": "Question", "name": "When is the last day to contribute to an IRA for a given tax year?", "acceptedAnswer": {"@type": "Answer", "text": "The tax filing deadline for that year, not including extensions \u2014 so April 15, 2027 for the 2026 tax year. This differs from 401(k) contributions, which must come out of payroll by December 31."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9412143347948347" crossorigin="anonymous"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://myloanmath.com/"}, {"@type": "ListItem", "position": 2, "name": "Financial Calendar", "item": "https://myloanmath.com/financial-calendar.html"}]}</script>
+</head>
+<body>
+<a href="#main-heading" class="skip-link">Skip to content</a>
+<nav class="topnav">
+  <a class="brand" href="index.html"><svg class="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+    <rect width="64" height="64" rx="14" fill="#1F5C43"/>
+    <text x="32" y="45" font-family="Georgia, serif" font-size="36" font-weight="700" fill="#F2EFE4" text-anchor="middle">M</text>
+  </svg> myloanmath</a>
+  <div class="links">
+      <a href="index.html">Home</a>
+      <span class="nav-sep">|</span>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <span class="nav-sep">|</span>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="auto-loan-calculator.html">Auto Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="debt-payoff-calculator.html">Debt Payoff Calculator</a>
+      <a href="loan-comparison-calculator.html">Loan Comparison</a>
+      <span class="nav-sep">|</span>
+      <a href="discount-calculator.html">Discount Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+      <a href="savings-goal-calculator.html">Savings Goal Calculator</a>
+      <a href="401k-calculator.html">401(k) Calculator</a>
+      <a href="tip-calculator.html">Tip Calculator</a>
+      <span class="nav-sep">|</span>
+      <a href="salary-calculator.html">Salary Calculator</a>
+      <a href="tax-calculator.html">Tax Calculator (US - IRS)</a>
+      <a href="canada-tax-calculator.html">Tax Calculator (Canada - CRA)</a>
+      <span class="nav-sep">|</span>
+      <a href="blog.html">Blog</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="financial-calendar.html">Financial Calendar</a>
+      <a href="which-calculator-do-i-need.html">Which Calculator?</a>
+      <a href="methodology.html">Methodology</a>
+  </div>
+</nav>
+<div class="wrap">
+<header class="page-head">
+  <div class="eyebrow">// myloanmath reference</div>
+  <h1 id="main-heading">Financial Calendar</h1>
+  <p class="sub">Tax filing dates, quarterly payment deadlines, contribution cutoffs, and when your paperwork actually shows up — for the United States and Canada.</p>
+</header>
+
+<div class="next-up" id="nextUp">
+  <div class="result-label">Next deadline</div>
+  <div class="days" id="nextUpDays">Loading&hellip;</div>
+  <div class="what" id="nextUpWhat"></div>
+  <div class="when" id="nextUpWhen"></div>
+</div>
+
+<div class="cal-filter" role="group" aria-label="Filter deadlines by country">
+  <button type="button" data-region="all" aria-pressed="true">Show all</button>
+  <button type="button" data-region="us" aria-pressed="false">United States</button>
+  <button type="button" data-region="ca" aria-pressed="false">Canada</button>
+</div>
+
+<div class="card" id="calendarCard">
+  <div id="calendarList"></div>
+  <p class="note" id="calNote">Dates shown are the statutory deadlines for filing and paying. Where a deadline lands on a weekend it has already been shifted to the next business day — the shift is called out on the entry itself.</p>
+</div>
+
+<div class="ad-slot"><!-- AD SLOT: below the calendar. Once approved, paste your AdSense ad unit code here. --></div>
+
+<section class="content">
+<h2>The weekend rule, and the one place it surprises people</h2>
+<p>Both the IRS and the CRA follow the same basic principle: if a deadline falls on a Saturday, Sunday, or legal holiday, it moves to the next day that isn't one of those. That's why the W-2 deadline in this calendar reads February 1, 2027 rather than the usual January 31 — January 31, 2027 is a Sunday. The same shift pushes the Canadian T4 slip deadline from February 28 to March 1, 2027.</p>
+<p>The part that trips people up is that the shift only applies when the deadline itself lands on a non-business day. April 15, 2027 is a Thursday, and Washington DC's Emancipation Day holiday falls the very next day, Friday April 16. A holiday sitting one day after the deadline does nothing — the filing deadline stays April 15, 2027. In years where April 15 falls on a weekend and the holiday lands on the following Monday, the deadline can slide two or three days instead, which is where the widely repeated "tax day moves around" idea comes from.</p>
+
+<h2>Filing extensions are not payment extensions</h2>
+<p>This is the single most expensive misunderstanding on the calendar. In the US, a Form 4868 extension moves your filing deadline from April to October, but any tax you owe is still due in April — interest and the failure-to-pay penalty start accruing the day after. In Canada, self-employed filers get until June 15 to file, but any balance owing is still due April 30. In both countries the practical move when you're not ready is the same: estimate what you owe, pay it by the earlier date, then take the extra time to finish the paperwork.</p>
+
+<h2>Contribution deadlines don't all work the same way</h2>
+<p>Retirement contribution cutoffs split into two groups, and mixing them up is common. Contributions that run through payroll — 401(k) and 403(b) employee deferrals — have to happen inside the calendar year, so December 31 is a hard stop. Contributions you make yourself get a grace period into the following year: IRA and HSA contributions count toward a tax year right up to that year's filing deadline in April, and Canadian RRSP contributions count for the prior tax year up to roughly 60 days into the new one. TFSA room is different again — new room simply appears every January 1 and unused room carries forward indefinitely, so there's no deadline to miss.</p>
+</section>
+
+<section class="content">
+<h2>Where these dates come from</h2>
+<p>US dates for 2026 follow IRS Publication 509 (Tax Calendars, for use in 2026) and the statutory due-date rules it sets out. US dates falling in 2027 are derived from those same statutory rules — the 15th day of the fourth month for individual returns, the 15th day of the 4th, 6th, and 9th months plus the month after year-end for estimated payments — with weekend and DC-holiday shifts applied. The IRS publishes its 2027 calendar in late 2026, so treat the 2027 rows as the rule correctly applied rather than as dates copied from a published IRS calendar, and re-check them once Publication 509 for 2027 is out.</p>
+<p>Canadian dates follow the CRA's published due dates for individuals and its RRSP and instalment deadline pages. As of this page's last update the CRA's own page still covers the 2025 tax year, so the 2026-tax-year rows here apply the same published rules — April 30 for filing and payment, June 15 for self-employed filing, 60 days into the new year for RRSP contributions — with weekend shifts applied.</p>
+<p>One date on this page is genuinely unsettled and is flagged as such in the calendar: the closing date of the ACA Marketplace open enrollment period for 2027 coverage. Sources currently disagree between December 15, 2026 and January 15, 2027, because a federal rule change shortening the window is under appeal. The opening date of November 1, 2026 is consistent across sources. Check HealthCare.gov for the current end date before relying on it — this calendar deliberately doesn't pick a side.</p>
+<p class="note">This is a reference for planning, not tax advice, and it doesn't cover state or provincial deadlines, estate and gift tax dates, trust returns, or business filings beyond the two entity deadlines listed. Deadlines can also shift for federally declared disaster areas. Confirm anything consequential against the IRS or CRA directly.</p>
+</section>
+
+<section class="content">
+<h2>Frequently asked questions</h2>
+<div class="faq-item"><h3>What happens if a tax deadline falls on a weekend?</h3><p>It moves to the next day that isn't a Saturday, Sunday, or legal holiday. That's why the W-2 deadline is February 1, 2027 rather than January 31 — January 31, 2027 is a Sunday.</p></div>
+<div class="faq-item"><h3>Does an extension give me more time to pay?</h3><p>No. An extension moves the filing deadline only. Any balance owed is still due on the original April date in the US, and April 30 in Canada, with interest and penalties running from the day after.</p></div>
+<div class="faq-item"><h3>When is the last day to contribute to an IRA for a given tax year?</h3><p>The tax filing deadline for that year, not including extensions — so April 15, 2027 for the 2026 tax year. This differs from 401(k) contributions, which must come out of payroll by December 31.</p></div>
+<div class="faq-item"><h3>Why do the quarterly estimated tax dates look unevenly spaced?</h3><p>Because they are. The US quarters run April 15, June 15, September 15, and January 15 — a two-month gap, then three, then four. They follow the 15th day of the 4th, 6th, and 9th months of the tax year plus the month after it ends, which doesn't produce even quarters.</p></div>
+</section>
+
+<div class="related">
+  <p class="label">Related tools</p>
+  <div class="related-list">
+    <a href="tax-calculator.html">Tax Calculator (US - IRS)</a>
+    <a href="canada-tax-calculator.html">Tax Calculator (Canada - CRA)</a>
+    <a href="401k-calculator.html">401(k) Calculator</a>
+    <a href="glossary.html">Glossary</a>
+  </div>
+</div>
+
+</div>
+<footer class="site-footer">
+  <div>
+    <a href="index.html">Home</a>
+    <a href="blog.html">Blog</a>
+    <a href="about.html">About</a>
+  </div>
+  <div style="margin-top:10px;">
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms-of-use.html">Terms &amp; Disclaimer</a>
+  </div>
+  <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
+</footer>
+<script src="recentTools.js"></script>
+<script>if (window.RecentTools) window.RecentTools.recordVisit("financial-calendar.html", "Financial Calendar");</script>
+<script>
+(function(){
+  // Each date is the deadline as it actually falls, with weekend/holiday shifts
+  // already applied. "shift" documents any move so the reader can see why a
+  // date isn't the one they half-remember.
+  var EVENTS = [
+    // ---------- United States ----------
+    { date:'2026-09-15', region:'us', title:'Q3 estimated tax payment due (2026 tax year)',
+      detail:'Third of four Form 1040-ES payments, for income that has no withholding — self-employment, freelance work, investments, rental income.' },
+    { date:'2026-10-15', region:'us', title:'Extended deadline to file your 2025 return',
+      detail:'Applies only if you requested an extension by April 15, 2026. Anything you owed was still due back in April.' },
+    { date:'2026-10-15', region:'us', title:'Medicare open enrollment opens',
+      detail:'Runs through December 7, 2026. This is the annual window to change Medicare Advantage and Part D coverage for 2027.' },
+    { date:'2026-11-01', region:'us', title:'ACA Marketplace open enrollment opens (2027 coverage)',
+      detail:'The opening date is consistent across sources. The closing date is not.',
+      note:'Unsettled: sources disagree between December 15, 2026 and January 15, 2027 because a rule change shortening the window is under appeal. Confirm at HealthCare.gov.' },
+    { date:'2026-12-07', region:'us', title:'Medicare open enrollment closes',
+      detail:'Last day to change Medicare Advantage or Part D coverage for the 2027 plan year.' },
+    { date:'2026-12-31', region:'us', title:'Last day for 2026 401(k) and 403(b) contributions',
+      detail:'Employee deferrals run through payroll, so they must land inside the calendar year — unlike IRA contributions, there is no grace period into next year.' },
+    { date:'2026-12-31', region:'us', title:'Required minimum distributions due for 2026',
+      detail:'For anyone aged 73 or older. If 2026 is your first RMD year you may delay that first one to April 1, 2027, but you would then take two distributions in one tax year.' },
+    { date:'2026-12-31', region:'us', title:'Last day for charitable gifts deductible on your 2026 return',
+      detail:'The gift has to be made by year end to count toward the 2026 tax year.' },
+    { date:'2027-01-15', region:'us', title:'Q4 estimated tax payment due (2026 tax year)',
+      detail:'The final estimated payment for 2026. Paying enough here is what avoids an underpayment penalty calculated on Form 2210.' },
+    { date:'2027-02-01', region:'us', title:'W-2 and 1099-NEC due to you',
+      detail:'Employers must send Form W-2 and businesses must send Form 1099-NEC by this date. If yours has not arrived within a week or so of it, chase the payer before the filing deadline.',
+      shift:'Moved from January 31, which is a Sunday in 2027.' },
+    { date:'2027-03-15', region:'us', title:'Partnership and S-corporation returns due (2026)',
+      detail:'Forms 1065 and 1120-S, along with the Schedule K-1s partners and shareholders need to complete their own returns.' },
+    { date:'2027-04-15', region:'us', title:'File your 2026 federal return and pay any balance',
+      detail:'The main one. Requesting an extension with Form 4868 moves the filing date to October 15 but does not move the payment date.',
+      note:'DC Emancipation Day falls on Friday, April 16, 2027 — the day after. A holiday landing after the deadline does not shift it, so April 15 stands.' },
+    { date:'2027-04-15', region:'us', title:'Last day for 2026 IRA and HSA contributions',
+      detail:'Traditional IRA, Roth IRA, and HSA contributions can be made up to the filing deadline and still counted toward the 2026 tax year. Extensions do not extend this.' },
+    { date:'2027-04-15', region:'us', title:'Q1 estimated tax payment due (2027 tax year)',
+      detail:'Shares a date with the filing deadline, which catches out people writing one cheque and forgetting the other.' },
+    { date:'2027-06-15', region:'us', title:'Q2 estimated tax payment due (2027 tax year)',
+      detail:'Also the automatic filing deadline for US citizens and resident aliens living abroad, for their 2026 returns.' },
+    { date:'2027-09-15', region:'us', title:'Q3 estimated tax payment due (2027 tax year)',
+      detail:'Third of four for the 2027 tax year.' },
+    { date:'2027-10-15', region:'us', title:'Extended deadline to file your 2026 return',
+      detail:'Only if you requested an extension by April 15, 2027.' },
+
+    // ---------- Canada ----------
+    { date:'2026-09-15', region:'ca', title:'Q3 tax instalment due',
+      detail:'For individuals who pay by instalment because too little tax is withheld at source.' },
+    { date:'2026-12-15', region:'ca', title:'Q4 tax instalment due',
+      detail:'The final instalment for the 2026 tax year.' },
+    { date:'2026-12-31', region:'ca', title:'Final RRSP contribution if you turned 71 in 2026',
+      detail:'December 31 of the year you turn 71 is the last day you can contribute to your own RRSP. After that it must be converted to a RRIF or an annuity, or cashed out.' },
+    { date:'2026-12-31', region:'ca', title:'Last day for RESP contributions counting toward 2026',
+      detail:'Contributions made by year end are what qualify for the Canada Education Savings Grant for that year.' },
+    { date:'2027-01-01', region:'ca', title:'New TFSA contribution room becomes available',
+      detail:'Fresh annual room appears automatically. There is no deadline to miss — unused room carries forward indefinitely.' },
+    { date:'2027-03-01', region:'ca', title:'RRSP contribution deadline for the 2026 tax year',
+      detail:'Contributions made in the first 60 days of 2027 can be deducted on your 2026 return. Also covers PRPP and SPP contributions.' },
+    { date:'2027-03-01', region:'ca', title:'T4, T4A and T5 slips due to you',
+      detail:'Employers and financial institutions must issue slips by the last day of February.',
+      shift:'Moved from February 28, which is a Sunday in 2027.' },
+    { date:'2027-03-15', region:'ca', title:'Q1 tax instalment due',
+      detail:'First instalment for the 2027 tax year.' },
+    { date:'2027-04-30', region:'ca', title:'File your 2026 return and pay any balance owing',
+      detail:'The payment deadline applies to everyone, including self-employed filers who get until June to file.' },
+    { date:'2027-06-15', region:'ca', title:'Filing deadline if you or your spouse are self-employed',
+      detail:'Filing only. Any balance owing was still due April 30, and interest runs from May 1.' },
+    { date:'2027-06-15', region:'ca', title:'Q2 tax instalment due',
+      detail:'Second instalment for the 2027 tax year.' },
+    { date:'2027-06-30', region:'ca', title:'TFSA return and payment deadline, if tax is owed',
+      detail:'Only relevant if you over-contributed or held a non-qualified investment in a TFSA during 2026.' },
+    { date:'2027-09-15', region:'ca', title:'Q3 tax instalment due',
+      detail:'Third instalment for the 2027 tax year.' },
+    { date:'2027-12-15', region:'ca', title:'Q4 tax instalment due',
+      detail:'Final instalment for the 2027 tax year.' }
+  ];
+
+  var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var SHORT  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  function el(id){ return document.getElementById(id); }
+
+  /** Parse 'YYYY-MM-DD' as a local date at noon, so no timezone can shift the day. */
+  function parseDate(iso){
+    var p = iso.split('-');
+    return new Date(+p[0], +p[1] - 1, +p[2], 12, 0, 0, 0);
+  }
+  function todayLocal(){
+    var n = new Date();
+    return new Date(n.getFullYear(), n.getMonth(), n.getDate(), 12, 0, 0, 0);
+  }
+  function daysBetween(from, to){
+    return Math.round((to - from) / 86400000);
+  }
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[c];
+    });
+  }
+
+  var today = todayLocal();
+  var enriched = EVENTS.map(function(ev){
+    var d = parseDate(ev.date);
+    return { ev: ev, when: d, days: daysBetween(today, d) };
+  }).sort(function(a, b){
+    if (a.when - b.when !== 0) return a.when - b.when;
+    return a.ev.region === b.ev.region ? 0 : (a.ev.region === 'us' ? -1 : 1);
+  });
+
+  function countdownText(days){
+    if (days < 0) return 'passed';
+    if (days === 0) return 'today';
+    if (days === 1) return 'tomorrow';
+    return 'in ' + days + ' days';
+  }
+
+  function render(region){
+    var list = el('calendarList');
+    var visible = enriched.filter(function(x){ return region === 'all' || x.ev.region === region; });
+    var upcoming = visible.filter(function(x){ return x.days >= 0; });
+    var nextOne = upcoming.length ? upcoming[0] : null;
+
+    // --- countdown hero ---
+    if (nextOne) {
+      var d = nextOne.days;
+      el('nextUpDays').innerHTML = (d === 0 ? 'Today' : (d === 1 ? '1 <small>day</small>' : d + ' <small>days</small>'));
+      el('nextUpWhat').textContent = nextOne.ev.title;
+      el('nextUpWhen').textContent = MONTHS[nextOne.when.getMonth()] + ' ' + nextOne.when.getDate() + ', ' +
+        nextOne.when.getFullYear() + ' — ' + (nextOne.ev.region === 'us' ? 'United States' : 'Canada');
+    } else {
+      el('nextUpDays').textContent = 'Nothing upcoming';
+      el('nextUpWhat').textContent = 'Every date listed for this filter has already passed.';
+      el('nextUpWhen').textContent = 'This page needs its next annual update.';
+    }
+
+    // --- grouped list ---
+    var html = '';
+    var lastGroup = '';
+    visible.forEach(function(x){
+      var group = MONTHS[x.when.getMonth()] + ' ' + x.when.getFullYear();
+      if (group !== lastGroup) {
+        html += '<div class="cal-month">' + escapeHtml(group) + '</div>';
+        lastGroup = group;
+      }
+      var classes = 'cal-item';
+      if (x.days < 0) classes += ' is-past';
+      if (nextOne && x === nextOne) classes += ' is-next';
+      html += '<div class="' + classes + '">' +
+        '<div class="cal-date">' +
+          '<div class="d">' + x.when.getDate() + '</div>' +
+          '<div class="m">' + SHORT[x.when.getMonth()] + '</div>' +
+          '<div class="y">' + x.when.getFullYear() + '</div>' +
+        '</div>' +
+        '<div class="cal-body">' +
+          '<div class="cal-title">' + escapeHtml(x.ev.title) + '</div>' +
+          '<div class="cal-detail">' + escapeHtml(x.ev.detail) + '</div>' +
+          (x.ev.shift ? '<div class="cal-note">' + escapeHtml(x.ev.shift) + '</div>' : '') +
+          (x.ev.note  ? '<div class="cal-note">' + escapeHtml(x.ev.note)  + '</div>' : '') +
+          '<div class="cal-meta">' +
+            '<span class="cal-flag ' + (x.ev.region === 'us' ? 'flag-us">United States' : 'flag-ca">Canada') + '</span>' +
+            '<span class="cal-count">' + countdownText(x.days) + '</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    });
+    list.innerHTML = html;
+  }
+
+  var buttons = document.querySelectorAll('.cal-filter button');
+  Array.prototype.forEach.call(buttons, function(btn){
+    btn.addEventListener('click', function(){
+      Array.prototype.forEach.call(buttons, function(b){ b.setAttribute('aria-pressed', String(b === btn)); });
+      render(btn.getAttribute('data-region'));
+    });
+  });
+
+  render('all');
+})();
+</script>
+</body>
+</html>

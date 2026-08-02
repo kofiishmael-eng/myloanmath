@@ -64,6 +64,7 @@
       <span class="nav-sep">|</span>
       <a href="blog.html">Blog</a>
       <a href="glossary.html">Glossary</a>
+      <a href="financial-calendar.html">Financial Calendar</a>
       <a href="which-calculator-do-i-need.html">Which Calculator?</a>
       <a href="methodology.html">Methodology</a>
   </div>
@@ -137,7 +138,7 @@
     <p class="note" id="netPayNote"></p>
   </div>
 
-  <div class="actions"><button class="action" id="craBreakdownBtn" type="button">Show bracket-by-bracket breakdown</button><button class="action" id="craCopyBtn" type="button">Copy result</button></div>
+  <div class="actions"><button class="action" id="craBreakdownBtn" type="button">Show bracket-by-bracket breakdown</button><button class="action" id="craCopyBtn" type="button">Copy result</button><button class="action" id="craShareBtn" type="button">Copy link to this scenario</button></div>
   <div class="schedule-wrap" id="craBreakdownWrap" style="display:none;"><table class="schedule-table" id="craBreakdownTable"></table></div>
   <p class="note" id="craPhaseOutNote"></p>
   <p class="note">Federal tax only — does not include provincial/territorial tax (which stacks on top and varies by province), CPP, or EI. Figures use 2026 CRA federal brackets and Basic Personal Amount. For your actual filing, consult a CPA or tax professional — this is an estimate, not tax advice.</p>
@@ -195,6 +196,7 @@
 <script src="numberToWords.js"></script>
 <script src="finance.js"></script>
 <script src="recentTools.js"></script>
+<script src="shareState.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("canada-tax-calculator.html", "Tax Calculator (Canada - CRA)");</script>
 
 <script>
@@ -359,6 +361,20 @@ function copyToClipboard(text, btn){
     try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); }
   }
 }
+</script>
+<script>
+// Shareable / bookmarkable scenario. Runs after the calculator above has
+// registered its listeners, so applying URL values recalculates the page.
+if (window.ShareState) ShareState.init({
+  buttonId: 'craShareBtn',
+  fields: {
+    'income': 'craIncome',
+    'deductions': 'craAdditionalDeductions',
+    'province': 'craProvince',
+    'frequency': 'craPayFrequency',
+    'cppei': 'includeCPPEI'
+  }
+});
 </script>
 </body>
 </html>

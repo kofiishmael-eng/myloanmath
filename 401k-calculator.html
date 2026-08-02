@@ -64,6 +64,7 @@
       <span class="nav-sep">|</span>
       <a href="blog.html">Blog</a>
       <a href="glossary.html">Glossary</a>
+      <a href="financial-calendar.html">Financial Calendar</a>
       <a href="which-calculator-do-i-need.html">Which Calculator?</a>
       <a href="methodology.html">Methodology</a>
   </div>
@@ -99,7 +100,7 @@
     <div class="stat-grid" id="k401Stats"></div>
   </div>
   <div id="k401Chart" style="display:none; margin:16px 0;"></div>
-  <div class="actions"><button class="action" id="k401CopyBtn" type="button">Copy result</button></div>
+  <div class="actions"><button class="action" id="k401CopyBtn" type="button">Copy result</button><button class="action" id="k401ShareBtn" type="button">Copy link to this scenario</button></div>
   <p class="note">Salary is held flat for the full projection (no assumed raises) and contributions compound annually rather than per-paycheck — both are simplifying assumptions. Your contribution is automatically capped at the correct IRS limit for your age each year.</p>
 </div>
 
@@ -155,6 +156,7 @@
 <script src="numberToWords.js"></script>
 <script src="finance.js"></script>
 <script src="recentTools.js"></script>
+<script src="shareState.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("401k-calculator.html", "401(k) Calculator");</script>
 <script>
 (function(){
@@ -249,6 +251,23 @@ function copyToClipboard(text, btn){
     try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); }
   }
 }
+</script>
+<script>
+// Shareable / bookmarkable scenario. Runs after the calculator above has
+// registered its listeners, so applying URL values recalculates the page.
+if (window.ShareState) ShareState.init({
+  buttonId: 'k401ShareBtn',
+  fields: {
+    'age': 'k401CurrentAge',
+    'retire': 'k401RetireAge',
+    'balance': 'k401Balance',
+    'salary': 'k401Salary',
+    'contrib': 'k401Contribution',
+    'return': 'k401Return',
+    'match': 'k401MatchPercent',
+    'matchcap': 'k401MatchLimit'
+  }
+});
 </script>
 </body>
 </html>
