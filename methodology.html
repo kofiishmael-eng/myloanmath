@@ -61,6 +61,8 @@
       <a href="mortgage-calculator.html">Mortgage Calculator</a>
       <a href="debt-payoff-calculator.html">Debt Payoff Calculator</a>
       <a href="loan-comparison-calculator.html">Loan Comparison</a>
+      <a href="extra-payment-calculator.html">Extra Payment Calculator</a>
+      <a href="refinance-calculator.html">Refinance Calculator</a>
       <span class="nav-sep">|</span>
       <a href="discount-calculator.html">Discount Calculator</a>
       <a href="percentage-calculator.html">Percentage Calculator</a>
@@ -145,6 +147,10 @@
   <h3>Amortization, compound interest, and savings goal math</h3>
   <p>These calculations use the same standard formulas taught in financial mathematics and used industry-wide by lenders and financial institutions — the fixed-payment amortization formula, the compound interest formula with periodic contributions, and their mathematical inverses (solving for time-to-payoff or required contribution instead of payment). These aren't sourced from a single external site; they're verified through internal consistency checks — for example, confirming that solving for a payoff time and then feeding that time back into the original payment formula returns the original payment, to the cent.</p>
 </div>
+
+<h3>Extra payments and refinance break-even</h3>
+<p>Both new tools run the loan month by month rather than using a closed-form shortcut, because that is what a servicer does: interest accrues on the balance actually outstanding, and the final payment is trimmed to whatever remains. The extra-payment tool simulates the baseline loan the same way it simulates the accelerated one, so a comparison between them is like-for-like and an extra payment of zero correctly reports a saving of zero rather than a few dollars of rounding artefact.</p>
+<p>The refinance tool reports two figures that frequently disagree: the break-even month, which is closing costs divided by the monthly saving, and the lifetime cost difference, which includes the effect of resetting the loan term. A refinance can break even quickly and still cost more overall, and the calculator says so explicitly when that is the case rather than leading with the flattering number. Neither tool models tax treatment of interest, mortgage insurance, cash-out amounts, or prepayment penalties.</p>
 
 <h2 class="category-heading">Editorial standards</h2>
 <p>Four rules govern every number on this site.</p>

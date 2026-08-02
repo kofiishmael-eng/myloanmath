@@ -1219,7 +1219,185 @@ function assertFiniteNumbers(fields) {
 
 // ---------------------------------------------------------------------
 
-const FinanceTools = { calculateLoan, amortizationScheduleByYear, calculateMortgage, compoundInterest, requiredMonthlyContribution, calculateFederalIncomeTax, TAX_BRACKETS_2026, STANDARD_DEDUCTION_2026, FILING_STATUS_LABELS, calculateFederalIncomeTaxCRA, CRA_FEDERAL_BRACKETS_2026, CRA_BPA_2026, calculateStateTax, STATE_TAX_2026, getProvinceTaxStatus, PROVINCE_TAX_2026, calculateFICA, FICA_2026, calculateCPPEI, CPP_EI_2026, monthsToPayoff, typicalMinimumPayment, calculateDiscount, findDiscountPercent, calculate401kProjection, employee401kLimit, CONTRIB_401K_2026, calculateTip, PercentageTools, round2 };
+/**
+ * Effect of paying more than the required amount on an amortized loan.
+ *
+ * Runs the loan month by month rather than using a closed-form shortcut,
+ * because that is what a real servicer does: interest accrues on the balance
+ * actually outstanding, and the final payment is trimmed to whatever is left
+ * rather than overshooting into a negative balance.
+ *
+ * extraMonthly  — added to every scheduled payment
+ * extraOneTime  — a single lump sum applied at oneTimeMonth (1 = first payment)
+ */
+function calculateExtraPayment(input) {
+  const {
+    principal,
+    annualRatePercent,
+    termMonths,
+    extraMonthly = 0,
+    extraOneTime = 0,
+    oneTimeMonth = 1,
+  } = input;
+
+  if (extraMonthly < 0 || extraOneTime < 0) throw new Error('Extra payments cannot be negative.');
+  if (!Number.isFinite(extraMonthly) || !Number.isFinite(extraOneTime)) throw new Error('Enter a valid extra payment amount.');
+
+  // calculateLoan validates principal / term / rate and gives the required payment.
+  const base = calculateLoan({ principal, annualRatePercent, termMonths });
+  const r = annualRatePercent / 100 / 12;
+  const scheduled = base.monthlyPayment;
+
+  /**
+   * Run the loan month by month. Both the baseline and the accelerated case go
+   * through this same function: comparing a month-by-month simulation against
+   * calculateLoan's closed-form total would show a few dollars of "saving" that
+   * is really just the rounded final payment, and would report a nonzero saving
+   * for an extra payment of zero.
+   */
+  function simulate(extraPerMonth, lumpSum, lumpMonth) {
+    let balance = principal;
+    let totalInterest = 0;
+    let totalPaid = 0;
+    let month = 0;
+    const yearly = [];
+    let interestThisYear = 0;
+
+    // Hard stop at the original term: extra payments can only shorten a loan.
+    while (balance > 0.005 && month < base.numberOfPayments) {
+      month++;
+      const interest = balance * r;
+      let payment = scheduled + extraPerMonth;
+      if (lumpSum > 0 && month === Math.round(lumpMonth)) payment += lumpSum;
+      // Never pay more than the balance plus the interest just accrued.
+      payment = Math.min(payment, balance + interest);
+
+      balance = balance + interest - payment;
+      totalInterest += interest;
+      totalPaid += payment;
+      interestThisYear += interest;
+
+      if (month % 12 === 0 || balance <= 0.005) {
+        yearly.push({
+          year: Math.ceil(month / 12),
+          remainingBalance: round2(Math.max(0, balance)),
+          interestThisYear: round2(interestThisYear),
+        });
+        interestThisYear = 0;
+      }
+    }
+    return { month, totalInterest, totalPaid, yearly };
+  }
+
+  const baseline = simulate(0, 0, 0);
+  const accelerated = simulate(extraMonthly, extraOneTime, oneTimeMonth);
+
+  const monthsSaved = baseline.month - accelerated.month;
+  const interestSaved = baseline.totalInterest - accelerated.totalInterest;
+
+  return {
+    // Baseline (no extra payments)
+    baselineMonthlyPayment: base.monthlyPayment,
+    baselineMonths: baseline.month,
+    baselineTotalInterest: round2(baseline.totalInterest),
+    baselineTotalPaid: round2(baseline.totalPaid),
+    // With extra payments
+    newMonths: accelerated.month,
+    newTotalInterest: round2(accelerated.totalInterest),
+    newTotalPaid: round2(accelerated.totalPaid),
+    // The difference — the reason anyone opens this calculator
+    monthsSaved,
+    yearsSaved: round2(monthsSaved / 12),
+    interestSaved: round2(interestSaved),
+    yearRows: accelerated.yearly,
+  };
+}
+
+/**
+ * Refinance break-even: how many months of lower payments it takes to recover
+ * the cost of refinancing.
+ *
+ * Two numbers matter and they often disagree, so both are returned:
+ *   breakEvenMonths  — when the monthly saving has repaid the closing costs
+ *   lifetimeInterestDifference — whether you pay more or less interest overall
+ *
+ * A refinance that breaks even in 18 months can still cost far more in total
+ * interest, because resetting a part-paid 30-year loan back to 30 years
+ * restarts the amortization. That is the trap this function is built to expose,
+ * so a negative lifetime saving is reported plainly rather than hidden behind a
+ * cheerful break-even month.
+ */
+function calculateRefinanceBreakEven(input) {
+  const {
+    currentBalance,
+    currentRatePercent,
+    remainingMonths,
+    newRatePercent,
+    newTermMonths,
+    closingCosts = 0,
+    rollCostsIntoLoan = false,
+  } = input;
+
+  if (!(currentBalance > 0)) throw new Error('Current loan balance must be greater than zero.');
+  if (!(remainingMonths > 0)) throw new Error('Remaining term must be greater than zero.');
+  if (!(newTermMonths > 0)) throw new Error('New loan term must be greater than zero.');
+  if (closingCosts < 0) throw new Error('Closing costs cannot be negative.');
+  if (!Number.isFinite(closingCosts)) throw new Error('Enter a valid closing cost amount.');
+
+  const current = calculateLoan({
+    principal: currentBalance,
+    annualRatePercent: currentRatePercent,
+    termMonths: remainingMonths,
+  });
+
+  // Rolling costs in means financing them — you pay interest on them too.
+  const newPrincipal = rollCostsIntoLoan ? currentBalance + closingCosts : currentBalance;
+  const refinanced = calculateLoan({
+    principal: newPrincipal,
+    annualRatePercent: newRatePercent,
+    termMonths: newTermMonths,
+  });
+
+  const monthlySaving = round2(current.monthlyPayment - refinanced.monthlyPayment);
+  const upfrontCost = rollCostsIntoLoan ? 0 : closingCosts;
+
+  let breakEvenMonths = null;
+  if (monthlySaving > 0 && upfrontCost > 0) {
+    breakEvenMonths = Math.ceil(upfrontCost / monthlySaving);
+  } else if (monthlySaving > 0 && upfrontCost === 0) {
+    breakEvenMonths = 0; // nothing to recover
+  }
+  // monthlySaving <= 0 leaves breakEvenMonths null: the payment didn't go down,
+  // so there is nothing to break even on.
+
+  // Total remaining cost of each path, including cash paid at closing.
+  const currentTotalCost = current.totalPayment;
+  const refinancedTotalCost = refinanced.totalPayment + upfrontCost;
+  const lifetimeSaving = round2(currentTotalCost - refinancedTotalCost);
+
+  return {
+    currentMonthlyPayment: current.monthlyPayment,
+    currentTotalRemaining: current.totalPayment,
+    currentInterestRemaining: current.totalInterest,
+
+    newMonthlyPayment: refinanced.monthlyPayment,
+    newPrincipal: round2(newPrincipal),
+    newTotalCost: round2(refinancedTotalCost),
+    newInterestTotal: refinanced.totalInterest,
+
+    monthlySaving,
+    breakEvenMonths,
+    breakEvenYears: breakEvenMonths === null ? null : round2(breakEvenMonths / 12),
+    lifetimeSaving,
+    // True when the payment falls but the total cost rises — the trap case.
+    lowerPaymentHigherCost: monthlySaving > 0 && lifetimeSaving < 0,
+    termExtendedBy: newTermMonths - remainingMonths,
+  };
+}
+
+// ---------------------------------------------------------------------
+
+const FinanceTools = { calculateLoan, amortizationScheduleByYear, calculateMortgage, compoundInterest, requiredMonthlyContribution, calculateFederalIncomeTax, TAX_BRACKETS_2026, STANDARD_DEDUCTION_2026, FILING_STATUS_LABELS, calculateFederalIncomeTaxCRA, CRA_FEDERAL_BRACKETS_2026, CRA_BPA_2026, calculateStateTax, STATE_TAX_2026, getProvinceTaxStatus, PROVINCE_TAX_2026, calculateFICA, FICA_2026, calculateCPPEI, CPP_EI_2026, monthsToPayoff, typicalMinimumPayment, calculateDiscount, findDiscountPercent, calculate401kProjection, employee401kLimit, CONTRIB_401K_2026, calculateTip, PercentageTools, round2, calculateExtraPayment, calculateRefinanceBreakEven };
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = FinanceTools;

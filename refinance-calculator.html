@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XL6TXYDCLD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XL6TXYDCLD');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Refinance Calculator — Break-Even &amp; True Cost</title>
+<meta name="description" content="Find out how long a refinance takes to pay for itself, and whether a lower monthly payment actually costs you more over the life of the loan.">
+<link rel="canonical" href="https://myloanmath.com/refinance-calculator.html">
+<meta property="og:title" content="Refinance Calculator — Break-Even &amp; True Cost">
+<meta property="og:description" content="Find out how long a refinance takes to pay for itself, and whether a lower monthly payment actually costs you more over the life of the loan.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myloanmath.com/refinance-calculator.html">
+<meta property="og:image" content="https://myloanmath.com/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myloanmath.com/assets/og-image.png">
+<link rel="preconnect" href="https://pagead2.googlesyndication.com">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is the break-even point on a refinance?", "acceptedAnswer": {"@type": "Answer", "text": "The number of months of lower payments needed to recover what the refinance cost you upfront. Closing costs divided by the monthly saving. If you sell or refinance again before that point, the refinance lost money."}}, {"@type": "Question", "name": "Can a refinance lower my payment but cost more overall?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, and it is common. Resetting a part-paid 30-year loan back to a fresh 30 years lowers the monthly payment by stretching the balance over more months, which can increase total interest even at a lower rate. This calculator reports both numbers so the trade-off is visible."}}, {"@type": "Question", "name": "Should I roll closing costs into the new loan?", "acceptedAnswer": {"@type": "Answer", "text": "It avoids paying cash upfront, but you then borrow and pay interest on those costs for the life of the loan. There is no break-even month because nothing was paid upfront \u2014 the cost shows up in total interest instead."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9412143347948347" crossorigin="anonymous"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://myloanmath.com/"}, {"@type": "ListItem", "position": 2, "name": "Refinance Break-Even Calculator", "item": "https://myloanmath.com/refinance-calculator.html"}]}</script>
+</head>
+<body>
+<a href="#main-heading" class="skip-link">Skip to content</a>
+<nav class="topnav">
+  <a class="brand" href="index.html"><svg class="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+    <rect width="64" height="64" rx="14" fill="#1F5C43"/>
+    <text x="32" y="45" font-family="Georgia, serif" font-size="36" font-weight="700" fill="#F2EFE4" text-anchor="middle">M</text>
+  </svg> myloanmath</a>
+  <div class="links">
+      <a href="index.html">Home</a>
+      <span class="nav-sep">|</span>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <span class="nav-sep">|</span>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="auto-loan-calculator.html">Auto Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="debt-payoff-calculator.html">Debt Payoff Calculator</a>
+      <a href="loan-comparison-calculator.html">Loan Comparison</a>
+      <a href="extra-payment-calculator.html">Extra Payment Calculator</a>
+      <a href="refinance-calculator.html">Refinance Calculator</a>
+      <span class="nav-sep">|</span>
+      <a href="discount-calculator.html">Discount Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+      <a href="savings-goal-calculator.html">Savings Goal Calculator</a>
+      <a href="401k-calculator.html">401(k) Calculator</a>
+      <a href="tip-calculator.html">Tip Calculator</a>
+      <span class="nav-sep">|</span>
+      <a href="salary-calculator.html">Salary Calculator</a>
+      <a href="tax-calculator.html">Tax Calculator (US - IRS)</a>
+      <a href="canada-tax-calculator.html">Tax Calculator (Canada - CRA)</a>
+      <span class="nav-sep">|</span>
+      <a href="blog.html">Blog</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="financial-calendar.html">Financial Calendar</a>
+      <a href="changelog.html">Corrections</a>
+      <a href="which-calculator-do-i-need.html">Which Calculator?</a>
+      <a href="methodology.html">Methodology</a>
+  </div>
+</nav>
+<div class="wrap">
+<div class="fallback-banner" id="fallbackBanner">Something went wrong loading the calculator engine. Open your browser's console (F12) to see the error.</div>
+<header class="page-head">
+  <div class="eyebrow">// myloanmath</div>
+  <h1 id="main-heading">Refinance Break-Even Calculator</h1>
+  <p class="sub">How long a refinance takes to pay for itself — and whether the lower payment is a real saving or just a longer loan.</p>
+</header>
+
+<div class="card">
+  <div class="result-label" style="color:var(--accent);">Your current loan</div>
+  <div class="row">
+    <div class="field"><label for="rfBalance">Current balance</label><input type="text" id="rfBalance" value="280000" inputmode="decimal"></div>
+    <div class="field"><label for="rfCurrentRate">Current interest rate (%)</label><input type="text" id="rfCurrentRate" value="7.5" inputmode="decimal"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="rfRemainingValue">Years remaining</label><input type="text" id="rfRemainingValue" value="24" inputmode="decimal"></div>
+  </div>
+
+  <div class="result-label" style="color:var(--accent); margin-top:22px;">The refinance you're considering</div>
+  <div class="row">
+    <div class="field"><label for="rfNewRate">New interest rate (%)</label><input type="text" id="rfNewRate" value="6" inputmode="decimal"></div>
+    <div class="field"><label for="rfNewTerm">New loan term (years)</label><input type="text" id="rfNewTerm" value="30" inputmode="decimal"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="rfClosingCosts">Closing costs</label><input type="text" id="rfClosingCosts" value="6000" inputmode="decimal"></div>
+    <div class="field"><label for="rfRollIn">Pay closing costs</label><select id="rfRollIn"><option value="0" selected>Upfront, in cash</option><option value="1">Roll into the new loan</option></select></div>
+  </div>
+
+  <div class="result">
+    <div class="result-label">Break-even point</div>
+    <div class="result-text" id="rfOutput">-</div>
+    <div class="stat-grid" id="rfStats"></div>
+  </div>
+  <div class="actions"><button class="action" id="rfCopyBtn" type="button">Copy result</button><button class="action" id="rfShareBtn" type="button">Copy link to this scenario</button></div>
+  <p class="note">Compares the remaining cost of your current loan against the full cost of the new one. Assumes both are fixed-rate and that you make no extra payments on either.</p>
+</div>
+
+<div class="card" id="rfWarningCard" style="display:none; background:var(--brass-soft); border-color:var(--brass); border-left:3px solid var(--brass);">
+  <div class="result-label" style="color:var(--brass);" id="rfWarningTitle">Lower payment, higher total cost</div>
+  <p class="note" id="rfWarningText" style="margin-top:6px;"></p>
+</div>
+
+<div class="ad-slot"><!-- AD SLOT: below the tool. Once approved, paste your AdSense ad unit code here. --></div>
+
+<section class="content">
+<h2>Break-even is the wrong question on its own</h2>
+<p>Almost every refinance calculator answers one question: how many months of lower payments does it take to recover the closing costs? That number matters &mdash; if you expect to sell or refinance again before you reach it, the deal loses money &mdash; but on its own it is misleading, because it can be short and attractive on a refinance that costs you far more in the end.</p>
+<p>The reason is the term reset. Refinancing a mortgage you have already paid down for six years into a fresh thirty-year loan spreads a smaller balance over more months than you had left. The payment falls, sometimes sharply, and the break-even looks excellent. But you have just added years of interest payments, and the total can rise even though the rate fell. This calculator reports the lifetime figure next to the break-even month, and says so plainly when the two disagree.</p>
+
+<h2>What isn't included here</h2>
+<p>This compares interest and closing costs. It does not model the tax treatment of mortgage interest, private mortgage insurance coming off as equity builds, cash taken out at closing, or the value of switching between a fixed and an adjustable rate. It also assumes you keep the new loan to term, which most people do not &mdash; the median mortgage is refinanced or paid off well before maturity, which pushes the real answer back toward the break-even month and away from the lifetime figure.</p>
+<p>One thing worth doing before deciding: run the same balance and rate through the <a href="extra-payment-calculator.html">extra payment calculator</a>. If the goal is paying less interest overall, putting the equivalent of the closing costs straight against principal sometimes beats refinancing outright, with no application and no paperwork.</p>
+
+<h2>Frequently asked questions</h2>
+<div class="faq-item"><h3>What is the break-even point?</h3><p>The number of months of lower payments needed to recover what the refinance cost you upfront &mdash; closing costs divided by the monthly saving. If you sell or refinance again before that point, the refinance lost money.</p></div>
+<div class="faq-item"><h3>Can a refinance lower my payment but cost more overall?</h3><p>Yes, and it is common. Resetting a part-paid 30-year loan back to a fresh 30 years lowers the payment by stretching the balance over more months, which can increase total interest even at a lower rate.</p></div>
+<div class="faq-item"><h3>Should I roll the closing costs into the loan?</h3><p>It avoids paying cash upfront, but you then borrow and pay interest on those costs for the life of the loan. There is no break-even month because nothing was paid upfront &mdash; the cost shows up in total interest instead.</p></div>
+</section>
+
+<div class="related">
+  <p class="label">Related tools</p>
+  <div class="related-list">
+    <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="extra-payment-calculator.html">Extra Payment Calculator</a>
+      <a href="loan-comparison-calculator.html">Loan Comparison</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+  </div>
+</div>
+
+<p class="note" style="text-align:center; margin-top:26px;">Calculations last verified 2026-08-02 against the sources listed in our <a href="methodology.html">methodology</a>. Every correction we have made is public in the <a href="changelog.html">corrections log</a>.</p>
+
+</div>
+<footer class="site-footer">
+  <div>
+    <a href="index.html">Home</a>
+    <a href="blog.html">Blog</a>
+    <a href="about.html">About</a>
+  </div>
+  <div style="margin-top:10px;">
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms-of-use.html">Terms &amp; Disclaimer</a>
+  </div>
+  <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
+</footer>
+<script src="numberToWords.js"></script>
+<script src="finance.js"></script>
+<script src="recentTools.js"></script>
+<script src="shareState.js"></script>
+<script>if (window.RecentTools) window.RecentTools.recordVisit("refinance-calculator.html", "Refinance Break-Even Calculator");</script>
+<script>
+(function(){
+  var mod = window.FinanceTools;
+  if (!mod) { document.getElementById('fallbackBanner').style.display='block'; return; }
+  function el(id){ return document.getElementById(id); }
+  function fmtMoney(n){ return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function parseNum(str){ var s=String(str).trim().replace(/,/g,''); if(!/^-?\d+(\.\d+)?$/.test(s)) return NaN; return parseFloat(s); }
+  function duration(months){
+    var y = Math.floor(months/12), m = months%12;
+    if (y===0) return m + (m===1?' month':' months');
+    if (m===0) return y + (y===1?' year':' years');
+    return y + (y===1?' year':' years') + ', ' + m + (m===1?' month':' months');
+  }
+  var lastResult = null;
+
+  function compute(){
+    var balance = parseNum(el('rfBalance').value);
+    var curRate = parseNum(el('rfCurrentRate').value);
+    var remainingYears = parseNum(el('rfRemainingValue').value);
+    var newRate = parseNum(el('rfNewRate').value);
+    var newTermYears = parseNum(el('rfNewTerm').value);
+    var costs = parseNum(el('rfClosingCosts').value);
+    var rollIn = el('rfRollIn').value === '1';
+    var out = el('rfOutput'), stats = el('rfStats');
+    var warnCard = el('rfWarningCard'), warnText = el('rfWarningText');
+
+    try {
+      if ([balance, curRate, remainingYears, newRate, newTermYears, costs].some(isNaN)) throw new Error('Enter valid numbers for all fields.');
+      var r = mod.calculateRefinanceBreakEven({
+        currentBalance: balance, currentRatePercent: curRate,
+        remainingMonths: Math.round(remainingYears*12),
+        newRatePercent: newRate, newTermMonths: Math.round(newTermYears*12),
+        closingCosts: costs, rollCostsIntoLoan: rollIn
+      });
+      lastResult = r;
+
+      if (r.monthlySaving <= 0) {
+        out.textContent = 'Never — the payment goes up';
+      } else if (r.breakEvenMonths === 0) {
+        out.textContent = 'Immediate — nothing paid upfront';
+      } else {
+        out.textContent = duration(r.breakEvenMonths);
+      }
+      out.classList.remove('error');
+
+      stats.innerHTML =
+        '<div class="stat"><div class="stat-label">Current monthly payment</div><div class="stat-value">' + fmtMoney(r.currentMonthlyPayment) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">New monthly payment</div><div class="stat-value">' + fmtMoney(r.newMonthlyPayment) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Monthly ' + (r.monthlySaving >= 0 ? 'saving' : 'increase') + '</div><div class="stat-value">' + fmtMoney(Math.abs(r.monthlySaving)) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Cost of keeping current loan</div><div class="stat-value">' + fmtMoney(r.currentTotalRemaining) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Cost of refinancing</div><div class="stat-value">' + fmtMoney(r.newTotalCost) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Lifetime ' + (r.lifetimeSaving >= 0 ? 'saving' : 'extra cost') + '</div><div class="stat-value">' + fmtMoney(Math.abs(r.lifetimeSaving)) + '</div></div>';
+
+      if (r.lowerPaymentHigherCost) {
+        warnCard.style.display = 'block';
+        el('rfWarningTitle').textContent = 'Lower payment, higher total cost';
+        warnText.textContent = 'Your monthly payment drops by ' + fmtMoney(r.monthlySaving) +
+          ', and you recover the closing costs after ' + duration(r.breakEvenMonths) + '. But this refinance extends the loan by ' +
+          duration(r.termExtendedBy) + ', so over the full term you would pay ' + fmtMoney(Math.abs(r.lifetimeSaving)) +
+          ' more than staying put. That can still be the right call if the lower payment is what you need right now — but it is a cash-flow decision, not a saving.';
+      } else if (r.monthlySaving < 0 && r.lifetimeSaving > 0) {
+        // The mirror case: shortening the term raises the payment but can save
+        // a great deal overall. Break-even reads "never", which understates it.
+        warnCard.style.display = 'block';
+        el('rfWarningTitle').textContent = 'Higher payment, much lower total cost';
+        warnText.textContent = 'This refinance raises your monthly payment by ' + fmtMoney(Math.abs(r.monthlySaving)) +
+          ', so there is no break-even month in the usual sense — you never recover closing costs through a smaller bill. ' +
+          'But it shortens the loan by ' + duration(Math.abs(r.termExtendedBy)) + ', and over the full term you would pay ' +
+          fmtMoney(r.lifetimeSaving) + ' less than staying put. Judge this one on total cost, not on the break-even figure.';
+      } else {
+        warnCard.style.display = 'none';
+      }
+    } catch(e) {
+      out.textContent = 'Check your numbers'; out.classList.add('error');
+      stats.innerHTML = '<div class="stat" style="grid-column:1/-1;"><div class="stat-label">Problem</div><div class="stat-value" style="font-size:14px;">' + e.message + '</div></div>';
+      warnCard.style.display = 'none';
+      lastResult = null;
+    }
+  }
+
+  ['rfBalance','rfCurrentRate','rfRemainingValue','rfNewRate','rfNewTerm','rfClosingCosts','rfRollIn'].forEach(function(id){
+    el(id).addEventListener('input', compute);
+    el(id).addEventListener('change', compute);
+  });
+
+  el('rfCopyBtn').addEventListener('click', function(){
+    if (!lastResult) return;
+    var t = 'Refinance: payment ' + fmtMoney(lastResult.currentMonthlyPayment) + ' -> ' + fmtMoney(lastResult.newMonthlyPayment) +
+            (lastResult.breakEvenMonths === null ? '' : ', break-even ' + duration(lastResult.breakEvenMonths)) +
+            ', lifetime ' + (lastResult.lifetimeSaving >= 0 ? 'saving ' : 'extra cost ') + fmtMoney(Math.abs(lastResult.lifetimeSaving)) + '.';
+    var btn = this, original = btn.textContent;
+    navigator.clipboard.writeText(t).then(function(){ btn.textContent='Copied!'; }).catch(function(){ btn.textContent='Copy failed'; });
+    setTimeout(function(){ btn.textContent = original; }, 1600);
+  });
+
+  compute();
+})();
+</script>
+<script>
+if (window.ShareState) ShareState.init({
+  buttonId: 'rfShareBtn',
+  fields: {
+    'balance': 'rfBalance',
+    'rate': 'rfCurrentRate',
+    'left': 'rfRemainingValue',
+    'newrate': 'rfNewRate',
+    'newterm': 'rfNewTerm',
+    'costs': 'rfClosingCosts',
+    'roll': 'rfRollIn'
+  }
+});
+</script>
+</body>
+</html>
