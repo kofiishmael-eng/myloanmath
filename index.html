@@ -27,7 +27,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="stylesheet" href="style.css">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "MyLoanMath", "url": "https://myloanmath.com/", "potentialAction": {"@type": "SearchAction", "target": "https://myloanmath.com/?q={search_term_string}", "query-input": "required name=search_term_string"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "MyLoanMath", "url": "https://myloanmath.com/"}</script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9412143347948347" crossorigin="anonymous"></script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "MyLoanMath", "url": "https://myloanmath.com/", "logo": "https://myloanmath.com/assets/icon-512.png", "email": "contact@myloanmath.com", "foundingDate": "2026", "description": "Free, browser-based financial calculators with every figure verified against primary sources and every correction published.", "publishingPrinciples": "https://myloanmath.com/methodology.html", "correctionsPolicy": "https://myloanmath.com/changelog.html", "contactPoint": {"@type": "ContactPoint", "contactType": "editorial", "email": "contact@myloanmath.com", "availableLanguage": "English"}}</script>
 </head>
@@ -263,7 +263,9 @@
   var input = el('siteSearch');
   input.addEventListener('input', function(){ applyFilter(input.value); });
 
-  // If the page was loaded with ?q=... (matching this site's own SearchAction schema), apply it on load.
+  // If the page was loaded with ?q=..., pre-filter the tool list. Kept as a
+  // convenience for sharing a filtered view; it is not advertised in structured
+  // data, since Google retired the sitelinks search box that used to consume it.
   var params = new URLSearchParams(window.location.search);
   var initialQuery = params.get('q');
   if (initialQuery) {
