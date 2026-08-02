@@ -112,16 +112,27 @@ const FOOTER = slice('<footer class="site-footer">', '</footer>');
 const HEAD_STYLE = slice('<style>', '</style>');
 
 function relatedLinks(currentSlug) {
-  const others = PAIRS.filter(p => p.slug !== currentSlug).slice(0, 2);
+  // Link every guide to every sibling. With only two siblings each, the newer
+  // pages ended up with a single inbound link from the blog index, which is
+  // thin for a cluster that is meant to be crawled as a set.
   let out = '    <a href="salary-calculator.html">Salary Calculator</a>\n';
   out += '      <a href="tax-calculator.html">Tax Calculator (US - IRS)</a>\n';
-  if (currentSlug !== 'california-vs-texas') {
-    out += '      <a href="blog-take-home-pay-california-vs-texas.html">California vs. Texas</a>\n';
-  }
-  others.forEach(p => {
-    out += `      <a href="blog-take-home-pay-${p.slug}.html">${esc(titleOf(p))}</a>\n`;
-  });
   return out;
+}
+
+/** The full set of sibling comparisons, rendered as its own block. */
+function siblingBlock(currentSlug) {
+  const others = PAIRS.filter(p => p.slug !== currentSlug);
+  let items = others.map(p =>
+    `    <a href="blog-take-home-pay-${p.slug}.html">${esc(titleOf(p))}</a>`).join('\n');
+  return `
+<div class="related">
+  <p class="label">Compare other states</p>
+  <div class="related-list">
+${items}
+  </div>
+</div>
+`;
 }
 
 function titleOf(pair) {
@@ -205,7 +216,7 @@ ${sections}
   <div class="related-list">
 ${relatedLinks(pair.slug)}  </div>
 </div>
-`;
+${siblingBlock(pair.slug)}`;
 
   const html = `<!DOCTYPE html>
 <html lang="en">
