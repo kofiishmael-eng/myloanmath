@@ -26,6 +26,16 @@
     Cache-Control = "public, max-age=3600, must-revalidate"
 
 [[headers]]
+  for = "/recentTools.js"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
+[[headers]]
+  for = "/shareState.js"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
+[[headers]]
   for = "/finance.js"
   [headers.values]
     Cache-Control = "public, max-age=3600, must-revalidate"
@@ -54,6 +64,7 @@
   from = "/cheque-amount-in-words.html"
   to = "/currency-to-words.html"
   status = 301
+  force = true
 
 # Custom 404 page (Netlify serves this automatically for any unmatched path)
 [[redirects]]
