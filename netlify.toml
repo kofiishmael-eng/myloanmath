@@ -59,6 +59,23 @@
   status = 301
   force = true
 
+# Collapse the www hostname on HTTPS too. Netlify usually does this from the
+# dashboard's primary-domain setting, but only the http:// variants were pinned
+# here — so if www is ever served over https without that setting, the entire
+# site would exist twice at two hostnames. Belt and braces.
+[[redirects]]
+  from = "https://www.myloanmath.com/*"
+  to = "https://myloanmath.com/:splat"
+  status = 301
+  force = true
+
+# Note on /index.html: it serves the same page as / and is technically a
+# duplicate, but the canonical tag on index.html already points at / and Search
+# Console has never reported /index.html as a crawled duplicate. A forced
+# redirect here interacts with Netlify's own directory-index resolution, and the
+# failure mode is a site-wide redirect loop. Not worth it for a problem that
+# isn't happening — revisit only if Search Console actually reports /index.html.
+
 # Removed tool — redirect anyone with a bookmark or old search result
 [[redirects]]
   from = "/cheque-amount-in-words.html"
