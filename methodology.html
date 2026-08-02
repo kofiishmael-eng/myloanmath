@@ -63,6 +63,7 @@
       <a href="loan-comparison-calculator.html">Loan Comparison</a>
       <a href="extra-payment-calculator.html">Extra Payment Calculator</a>
       <a href="refinance-calculator.html">Refinance Calculator</a>
+      <a href="rent-vs-buy-calculator.html">Rent vs. Buy Calculator</a>
       <span class="nav-sep">|</span>
       <a href="discount-calculator.html">Discount Calculator</a>
       <a href="percentage-calculator.html">Percentage Calculator</a>
@@ -151,6 +152,10 @@
 <h3>Extra payments and refinance break-even</h3>
 <p>Both new tools run the loan month by month rather than using a closed-form shortcut, because that is what a servicer does: interest accrues on the balance actually outstanding, and the final payment is trimmed to whatever remains. The extra-payment tool simulates the baseline loan the same way it simulates the accelerated one, so a comparison between them is like-for-like and an extra payment of zero correctly reports a saving of zero rather than a few dollars of rounding artefact.</p>
 <p>The refinance tool reports two figures that frequently disagree: the break-even month, which is closing costs divided by the monthly saving, and the lifetime cost difference, which includes the effect of resetting the loan term. A refinance can break even quickly and still cost more overall, and the calculator says so explicitly when that is the case rather than leading with the flattering number. Neither tool models tax treatment of interest, mortgage insurance, cash-out amounts, or prepayment penalties.</p>
+
+<h3>Rent vs. buy</h3>
+<p>This is the only tool on the site that cannot produce a single correct answer, and it is built to say so. Both paths are compared on net worth at the end of the period: the buyer holds the home's value less selling costs and any remaining mortgage, the renter holds a portfolio seeded with the down payment and closing costs the buyer spent. Whoever has the lower monthly outgoing invests the difference &mdash; in both directions, since a model that only ever lets the renter invest is tilted toward buying without admitting it. Property tax and maintenance are charged against the home's current value rather than its purchase price, and PMI applies while the loan exceeds 80% of the original price.</p>
+<p>Every assumption is an input rather than a hidden constant, and the tool reports the home appreciation rate at which the two options come out level, because that figure is checkable against what a reader knows about their own market in a way a verdict is not. The mortgage interest deduction is deliberately excluded, since most filers now take the standard deduction and including it by default would overstate the case for buying for the majority of users. Capital gains treatment, moving costs, and the non-financial value of either option are also outside the model.</p>
 
 <h2 class="category-heading">Editorial standards</h2>
 <p>Four rules govern every number on this site.</p>

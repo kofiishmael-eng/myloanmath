@@ -1397,7 +1397,194 @@ function calculateRefinanceBreakEven(input) {
 
 // ---------------------------------------------------------------------
 
-const FinanceTools = { calculateLoan, amortizationScheduleByYear, calculateMortgage, compoundInterest, requiredMonthlyContribution, calculateFederalIncomeTax, TAX_BRACKETS_2026, STANDARD_DEDUCTION_2026, FILING_STATUS_LABELS, calculateFederalIncomeTaxCRA, CRA_FEDERAL_BRACKETS_2026, CRA_BPA_2026, calculateStateTax, STATE_TAX_2026, getProvinceTaxStatus, PROVINCE_TAX_2026, calculateFICA, FICA_2026, calculateCPPEI, CPP_EI_2026, monthsToPayoff, typicalMinimumPayment, calculateDiscount, findDiscountPercent, calculate401kProjection, employee401kLimit, CONTRIB_401K_2026, calculateTip, PercentageTools, round2, calculateExtraPayment, calculateRefinanceBreakEven };
+/**
+ * Rent vs. buy, compared on net worth after a fixed number of years.
+ *
+ * Unlike the other tools in this file, this one cannot produce a single correct
+ * answer, because it depends on assumptions about the future that nobody knows:
+ * home appreciation, investment returns, and rent growth. Every one of those is
+ * an input rather than a hidden constant, and the accompanying page exposes all
+ * of them. Treat the output as "what follows from these assumptions", not as a
+ * prediction.
+ *
+ * The comparison is deliberately symmetric. Buying usually costs more per month
+ * than renting, so the renter invests the difference — but when renting costs
+ * more, the buyer invests the difference instead. A model that only ever lets
+ * the renter invest is quietly rigged toward buying, and vice versa. The renter
+ * also invests the cash the buyer sank into the down payment and closing costs,
+ * since that money genuinely is available to them.
+ *
+ * Not modelled, and disclosed on the page: the mortgage interest deduction
+ * (most filers now take the standard deduction), capital gains treatment on
+ * either the home sale or the portfolio, and the transaction costs of moving.
+ */
+function calculateRentVsBuy(input) {
+  const {
+    homePrice,
+    downPaymentPercent,
+    mortgageRatePercent,
+    mortgageTermYears = 30,
+    monthlyRent,
+    yearsStaying,
+    // assumptions — all exposed in the UI
+    homeAppreciationPercent = 3,
+    rentGrowthPercent = 3,
+    investmentReturnPercent = 7,
+    propertyTaxPercent = 1.1,
+    maintenancePercent = 1,
+    annualHomeInsurance = 1800,
+    monthlyHoa = 0,
+    buyingCostsPercent = 2,
+    sellingCostsPercent = 6,
+    pmiAnnualPercent = 0.5,
+  } = input;
+
+  if (!(homePrice > 0)) throw new Error('Home price must be greater than zero.');
+  if (!(monthlyRent > 0)) throw new Error('Monthly rent must be greater than zero.');
+  if (!(yearsStaying > 0)) throw new Error('Years staying must be greater than zero.');
+  if (yearsStaying > 60) throw new Error('Try a horizon of 60 years or less.');
+  if (downPaymentPercent < 0 || downPaymentPercent > 100) throw new Error('Down payment must be between 0 and 100 percent.');
+  assertFiniteNumbers({
+    homeAppreciationPercent, rentGrowthPercent, investmentReturnPercent,
+    propertyTaxPercent, maintenancePercent, annualHomeInsurance, monthlyHoa,
+    buyingCostsPercent, sellingCostsPercent, pmiAnnualPercent,
+  });
+
+  const months = Math.round(yearsStaying * 12);
+  const downPayment = homePrice * (downPaymentPercent / 100);
+  const loanPrincipal = homePrice - downPayment;
+  const purchaseCosts = homePrice * (buyingCostsPercent / 100);
+
+  // Convert annual rates to the equivalent monthly compounding rate.
+  const mAppreciation = Math.pow(1 + homeAppreciationPercent / 100, 1 / 12) - 1;
+  const mInvestment = Math.pow(1 + investmentReturnPercent / 100, 1 / 12) - 1;
+  const mMortgage = mortgageRatePercent / 100 / 12;
+
+  const termMonths = Math.round(mortgageTermYears * 12);
+  let mortgagePayment = 0;
+  if (loanPrincipal > 0) {
+    mortgagePayment = calculateLoan({
+      principal: loanPrincipal,
+      annualRatePercent: mortgageRatePercent,
+      termMonths,
+    }).monthlyPayment;
+  }
+
+  let homeValue = homePrice;
+  let balance = loanPrincipal;
+  let rent = monthlyRent;
+
+  // The renter starts with the cash the buyer just spent and cannot invest.
+  let renterPortfolio = downPayment + purchaseCosts;
+  let buyerPortfolio = 0;
+
+  let totalInterestPaid = 0;
+  let totalRentPaid = 0;
+  let totalOwnershipCost = 0; // everything that doesn't build equity
+  const yearRows = [];
+
+  for (let m = 1; m <= months; m++) {
+    // --- buyer's monthly outgoings, based on the home's CURRENT value -----
+    let interest = 0;
+    let payment = 0;
+    if (balance > 0.005) {
+      interest = balance * mMortgage;
+      payment = Math.min(mortgagePayment, balance + interest);
+      balance = balance + interest - payment;
+      totalInterestPaid += interest;
+    }
+    const propertyTax = (homeValue * (propertyTaxPercent / 100)) / 12;
+    const maintenance = (homeValue * (maintenancePercent / 100)) / 12;
+    const insurance = annualHomeInsurance / 12;
+    // PMI applies while the loan exceeds 80% of the ORIGINAL purchase price,
+    // which is the standard automatic-termination rule.
+    const pmi = (balance > homePrice * 0.8) ? (loanPrincipal * (pmiAnnualPercent / 100)) / 12 : 0;
+
+    const buyerCost = payment + propertyTax + maintenance + insurance + monthlyHoa + pmi;
+    const renterCost = rent;
+
+    totalOwnershipCost += interest + propertyTax + maintenance + insurance + monthlyHoa + pmi;
+    totalRentPaid += rent;
+
+    // --- whoever spends less invests the difference ----------------------
+    const difference = buyerCost - renterCost;
+    if (difference > 0) renterPortfolio += difference;
+    else buyerPortfolio += -difference;
+
+    renterPortfolio *= 1 + mInvestment;
+    buyerPortfolio *= 1 + mInvestment;
+    homeValue *= 1 + mAppreciation;
+
+    // Rent resets once a year, not every month.
+    if (m % 12 === 0) rent *= 1 + rentGrowthPercent / 100;
+
+    if (m % 12 === 0 || m === months) {
+      const saleProceeds = homeValue * (1 - sellingCostsPercent / 100) - balance;
+      yearRows.push({
+        year: Math.ceil(m / 12),
+        homeValue: round2(homeValue),
+        mortgageBalance: round2(Math.max(0, balance)),
+        buyNetWorth: round2(saleProceeds + buyerPortfolio),
+        rentNetWorth: round2(renterPortfolio),
+      });
+    }
+  }
+
+  const sellingCosts = homeValue * (sellingCostsPercent / 100);
+  const buyNetWorth = homeValue - sellingCosts - balance + buyerPortfolio;
+  const rentNetWorth = renterPortfolio;
+  const advantage = buyNetWorth - rentNetWorth;
+
+  return {
+    monthlyMortgagePayment: round2(mortgagePayment),
+    downPayment: round2(downPayment),
+    purchaseCosts: round2(purchaseCosts),
+    finalHomeValue: round2(homeValue),
+    remainingMortgage: round2(Math.max(0, balance)),
+    sellingCosts: round2(sellingCosts),
+    totalInterestPaid: round2(totalInterestPaid),
+    totalRentPaid: round2(totalRentPaid),
+    totalOwnershipCost: round2(totalOwnershipCost),
+    buyNetWorth: round2(buyNetWorth),
+    rentNetWorth: round2(rentNetWorth),
+    advantage: round2(advantage),
+    betterOption: Math.abs(advantage) < 1 ? 'tie' : (advantage > 0 ? 'buy' : 'rent'),
+    yearRows,
+  };
+}
+
+/**
+ * The appreciation rate at which buying and renting come out level, holding
+ * every other assumption fixed. This is the single most useful number on the
+ * page: it converts "buying wins" into "buying wins IF homes appreciate faster
+ * than X", which is a claim the reader can actually judge.
+ *
+ * Returns null when no crossing exists in a plausible range (-10% to +20%),
+ * which happens when one option wins regardless.
+ */
+function rentVsBuyBreakEvenAppreciation(input) {
+  const at = (rate) => calculateRentVsBuy({ ...input, homeAppreciationPercent: rate }).advantage;
+
+  let lo = -10;
+  let hi = 20;
+  let fLo = at(lo);
+  let fHi = at(hi);
+  if (fLo === 0) return lo;
+  if (fHi === 0) return hi;
+  if (fLo > 0 === fHi > 0) return null; // same sign at both ends: no crossing
+
+  for (let i = 0; i < 80; i++) {
+    const mid = (lo + hi) / 2;
+    const fMid = at(mid);
+    if (fMid > 0 === fLo > 0) { lo = mid; fLo = fMid; }
+    else { hi = mid; }
+  }
+  return round2((lo + hi) / 2);
+}
+
+// ---------------------------------------------------------------------
+
+const FinanceTools = { calculateLoan, amortizationScheduleByYear, calculateMortgage, compoundInterest, requiredMonthlyContribution, calculateFederalIncomeTax, TAX_BRACKETS_2026, STANDARD_DEDUCTION_2026, FILING_STATUS_LABELS, calculateFederalIncomeTaxCRA, CRA_FEDERAL_BRACKETS_2026, CRA_BPA_2026, calculateStateTax, STATE_TAX_2026, getProvinceTaxStatus, PROVINCE_TAX_2026, calculateFICA, FICA_2026, calculateCPPEI, CPP_EI_2026, monthsToPayoff, typicalMinimumPayment, calculateDiscount, findDiscountPercent, calculate401kProjection, employee401kLimit, CONTRIB_401K_2026, calculateTip, PercentageTools, round2, calculateExtraPayment, calculateRefinanceBreakEven, calculateRentVsBuy, rentVsBuyBreakEvenAppreciation };
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = FinanceTools;

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XL6TXYDCLD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XL6TXYDCLD');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rent vs. Buy Calculator — With the Assumptions Shown</title>
+<meta name="description" content="Compare renting against buying on net worth, with every assumption exposed — and see the exact home appreciation rate at which the answer flips.">
+<link rel="canonical" href="https://myloanmath.com/rent-vs-buy-calculator.html">
+<meta property="og:title" content="Rent vs. Buy Calculator — With the Assumptions Shown">
+<meta property="og:description" content="Compare renting against buying on net worth, with every assumption exposed — and see the exact home appreciation rate at which the answer flips.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myloanmath.com/rent-vs-buy-calculator.html">
+<meta property="og:image" content="https://myloanmath.com/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myloanmath.com/assets/og-image.png">
+<link rel="preconnect" href="https://pagead2.googlesyndication.com">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+<style>
+  .verdict{border-radius:8px; padding:20px 22px; margin-bottom:6px; color:#fff;}
+  .verdict.buy{background:var(--accent);}
+  .verdict.rent{background:var(--brass);}
+  .verdict.tie{background:var(--ink-soft);}
+  .verdict .result-label{color:rgba(255,255,255,0.78);}
+  .verdict .big{font-family:var(--font-mono); font-size:29px; font-weight:700; line-height:1.15; margin-top:6px;}
+  .verdict .small{margin-top:8px; font-size:14.5px; line-height:1.55;}
+
+  .flip{background:var(--brass-soft); border-left:3px solid var(--brass); border-radius:6px; padding:14px 16px; margin-top:14px;}
+  .flip .k{font-family:var(--font-mono); font-size:22px; font-weight:700; color:var(--brass);}
+
+  .sens{width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:11.5px; margin-top:12px;}
+  .sens th,.sens td{padding:7px 5px; text-align:center; border:1px solid var(--line);}
+  .sens th{background:var(--paper-dark, #E9E5D6); font-weight:700; font-size:10.5px; letter-spacing:0.03em;}
+  .sens td.b{background:rgba(31,92,67,0.13); color:var(--accent); font-weight:700;}
+  .sens td.r{background:rgba(122,93,42,0.15); color:var(--brass); font-weight:700;}
+  .sens caption{caption-side:top; text-align:left; font-size:12.5px; color:var(--ink-soft); padding-bottom:8px; line-height:1.5;}
+  .assump-note{font-size:12.5px; color:var(--brass); background:var(--brass-soft); border-radius:5px; padding:9px 12px; margin-bottom:14px; line-height:1.6;}
+  @media (max-width:560px){ .sens{font-size:10px;} .sens th,.sens td{padding:5px 2px;} .verdict .big{font-size:23px;} }
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is it better to rent or buy?", "acceptedAnswer": {"@type": "Answer", "text": "There is no general answer. It depends on how fast homes appreciate where you are, what your money would earn if invested instead, how long you stay, and the gap between rent and ownership costs. Change home appreciation by two percentage points and the answer often reverses, which is why this calculator reports the appreciation rate at which the two come out level rather than declaring a winner."}}, {"@type": "Question", "name": "Why does how long I stay matter so much?", "acceptedAnswer": {"@type": "Answer", "text": "Buying carries large one-off costs at both ends \u2014 typically around 2% to buy and 6% to sell. Those costs are spread over however long you own, so a short stay can leave you worse off even if the home appreciates well. The longer you stay, the more thinly those costs are spread."}}, {"@type": "Question", "name": "Does this include the mortgage interest deduction?", "acceptedAnswer": {"@type": "Answer", "text": "No. Since the standard deduction rose, most filers no longer itemize, so including it by default would overstate the case for buying for the majority of people. If you do itemize, buying will look somewhat better than shown here."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9412143347948347" crossorigin="anonymous"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://myloanmath.com/"}, {"@type": "ListItem", "position": 2, "name": "Rent vs. Buy Calculator", "item": "https://myloanmath.com/rent-vs-buy-calculator.html"}]}</script>
+</head>
+<body>
+<a href="#main-heading" class="skip-link">Skip to content</a>
+<nav class="topnav">
+  <a class="brand" href="index.html"><svg class="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+    <rect width="64" height="64" rx="14" fill="#1F5C43"/>
+    <text x="32" y="45" font-family="Georgia, serif" font-size="36" font-weight="700" fill="#F2EFE4" text-anchor="middle">M</text>
+  </svg> myloanmath</a>
+  <div class="links">
+      <a href="index.html">Home</a>
+      <span class="nav-sep">|</span>
+      <a href="numbers-to-words.html">Numbers to Words</a>
+      <a href="words-to-numbers.html">Words to Numbers</a>
+      <a href="currency-to-words.html">Currency to Words</a>
+      <span class="nav-sep">|</span>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="auto-loan-calculator.html">Auto Loan Calculator</a>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="debt-payoff-calculator.html">Debt Payoff Calculator</a>
+      <a href="loan-comparison-calculator.html">Loan Comparison</a>
+      <a href="extra-payment-calculator.html">Extra Payment Calculator</a>
+      <a href="refinance-calculator.html">Refinance Calculator</a>
+      <span class="nav-sep">|</span>
+      <a href="discount-calculator.html">Discount Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
+      <a href="savings-goal-calculator.html">Savings Goal Calculator</a>
+      <a href="401k-calculator.html">401(k) Calculator</a>
+      <a href="tip-calculator.html">Tip Calculator</a>
+      <span class="nav-sep">|</span>
+      <a href="salary-calculator.html">Salary Calculator</a>
+      <a href="tax-calculator.html">Tax Calculator (US - IRS)</a>
+      <a href="canada-tax-calculator.html">Tax Calculator (Canada - CRA)</a>
+      <span class="nav-sep">|</span>
+      <a href="blog.html">Blog</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="financial-calendar.html">Financial Calendar</a>
+      <a href="changelog.html">Corrections</a>
+      <a href="which-calculator-do-i-need.html">Which Calculator?</a>
+      <a href="methodology.html">Methodology</a>
+  </div>
+</nav>
+<div class="wrap">
+<div class="fallback-banner" id="fallbackBanner">Something went wrong loading the calculator engine. Open your browser's console (F12) to see the error.</div>
+<header class="page-head">
+  <div class="eyebrow">// myloanmath</div>
+  <h1 id="main-heading">Rent vs. Buy Calculator</h1>
+  <p class="sub">Compares the two on net worth after however long you stay &mdash; with every assumption on screen, because this is the one calculation where the assumptions decide the answer.</p>
+</header>
+
+<div class="card">
+  <div class="result-label" style="color:var(--accent);">Your situation</div>
+  <div class="row">
+    <div class="field"><label for="rbPrice">Home price</label><input type="text" id="rbPrice" value="450000" inputmode="decimal"></div>
+    <div class="field"><label for="rbRent">Comparable monthly rent</label><input type="text" id="rbRent" value="2400" inputmode="decimal"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="rbDown">Down payment (%)</label><input type="text" id="rbDown" value="20" inputmode="decimal"></div>
+    <div class="field"><label for="rbRate">Mortgage rate (%)</label><input type="text" id="rbRate" value="6.5" inputmode="decimal"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="rbTerm">Mortgage term (years)</label><input type="text" id="rbTerm" value="30" inputmode="decimal"></div>
+    <div class="field"><label for="rbYears">Years you expect to stay</label><input type="text" id="rbYears" value="7" inputmode="decimal"></div>
+  </div>
+
+  <div class="verdict" id="rbVerdict">
+    <div class="result-label">After the period you entered</div>
+    <div class="big" id="rbVerdictText">-</div>
+    <div class="small" id="rbVerdictDetail"></div>
+  </div>
+
+  <div class="flip" id="rbFlipBox">
+    <div class="result-label" style="color:var(--brass);">The answer flips at</div>
+    <div class="k" id="rbFlip">-</div>
+    <p class="note" id="rbFlipText" style="margin-top:6px; margin-bottom:0;"></p>
+  </div>
+
+  <div class="stat-grid" id="rbStats" style="margin-top:16px;"></div>
+  <div class="actions"><button class="action" id="rbCopyBtn" type="button">Copy result</button><button class="action" id="rbShareBtn" type="button">Copy link to this scenario</button></div>
+</div>
+
+<div class="card">
+  <div class="result-label" style="color:var(--accent);">Assumptions</div>
+  <p class="assump-note">These are not facts &mdash; they are guesses about the future, and they decide the answer above. The defaults are ordinary long-run figures, not predictions for your market. Change them and watch the verdict move.</p>
+  <div class="row">
+    <div class="field"><label for="rbAppreciation">Home appreciation (% / year)</label><input type="text" id="rbAppreciation" value="3" inputmode="decimal"></div>
+    <div class="field"><label for="rbReturn">Investment return (% / year)</label><input type="text" id="rbReturn" value="7" inputmode="decimal"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="rbRentGrowth">Rent growth (% / year)</label><input type="text" id="rbRentGrowth" value="3" inputmode="decimal"></div>
+    <div class="field"><label for="rbPropertyTax">Property tax (% of value / year)</label><input type="text" id="rbPropertyTax" value="1.1" inputmode="decimal"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="rbMaintenance">Maintenance (% of value / year)</label><input type="text" id="rbMaintenance" value="1" inputmode="decimal"></div>
+    <div class="field"><label for="rbInsurance">Home insurance (per year)</label><input type="text" id="rbInsurance" value="1800" inputmode="decimal"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="rbHoa">HOA / condo fee (per month)</label><input type="text" id="rbHoa" value="0" inputmode="decimal"></div>
+    <div class="field"><label for="rbPmi">PMI (% of loan / year, if under 20% down)</label><input type="text" id="rbPmi" value="0.5" inputmode="decimal"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="rbBuyCosts">Costs to buy (% of price)</label><input type="text" id="rbBuyCosts" value="2" inputmode="decimal"></div>
+    <div class="field"><label for="rbSellCosts">Costs to sell (% of price)</label><input type="text" id="rbSellCosts" value="6" inputmode="decimal"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="result-label" style="color:var(--accent);">Where the answer flips</div>
+  <table class="sens" id="rbSensTable">
+    <caption>Winner at each combination of home appreciation and investment return, holding everything else as entered. If your verdict sits next to a colour change, it is not a robust answer.</caption>
+  </table>
+</div>
+
+<div class="ad-slot"><!-- AD SLOT: below the tool. Once approved, paste your AdSense ad unit code here. --></div>
+
+<section class="content">
+<h2>Why this calculator refuses to just tell you</h2>
+<p>Every other tool on this site has one right answer. Give it a balance, a rate and a term and the monthly payment is a fact you can check against a lender's letter. Rent versus buy is not like that. It depends on how fast homes appreciate where you live, what your money would have earned invested instead, how long you actually stay, and how rents move &mdash; four things nobody knows in advance.</p>
+<p>The consequence is that the answer is unstable in a way most rent-versus-buy calculators hide. In the default scenario on this page, shifting home appreciation from 3% to 5% a year moves the result by roughly $70,000 and reverses which option wins. A calculator that quietly assumes 5% and shows you a confident green tick is not computing anything &mdash; it is making an argument. That is why the assumptions here sit on screen, and why the headline number is the appreciation rate at which the two come out level rather than a verdict.</p>
+
+<h2>How the comparison is built</h2>
+<p>Both paths are compared on net worth at the end of the period. The buyer's position is the home's value minus selling costs minus whatever mortgage remains. The renter's is the value of a portfolio funded with the money the buyer sank into the down payment and closing costs, invested from day one.</p>
+<p>The important detail is that whoever spends less each month invests the difference. Buying usually costs more monthly, so the renter typically invests the gap &mdash; but when renting is dearer, the buyer invests instead. Models that only ever let the renter invest are tilted toward buying without saying so, and the reverse is equally true. This one runs the comparison symmetrically, which you can verify: set every rate to zero, buy the home outright, and the buyer ends ahead by exactly the rent they avoided, no more.</p>
+
+<h2>What isn't modelled</h2>
+<p>The mortgage interest deduction is excluded. Since the standard deduction rose, most filers no longer itemize, so applying it by default would overstate the case for buying for the majority of people &mdash; if you do itemize, buying looks somewhat better than shown. Also excluded: capital gains treatment on the home sale or the portfolio, the cost and disruption of moving, the risk that a home does not sell quickly, and anything unpriceable &mdash; security of tenure, the freedom to leave, whether you want to be the person who fixes the boiler.</p>
+<p>Property tax and maintenance are charged against the home's current value rather than its purchase price, so they rise as the home appreciates. PMI applies while the loan exceeds 80% of the original purchase price and stops automatically after that.</p>
+
+<h2>Frequently asked questions</h2>
+<div class="faq-item"><h3>Is it better to rent or buy?</h3><p>There is no general answer. Change home appreciation by two percentage points and the answer often reverses. That is why this page reports the rate at which the two come out level &mdash; a claim you can judge against what you know about your own market.</p></div>
+<div class="faq-item"><h3>Why does how long I stay matter so much?</h3><p>Buying carries large one-off costs at both ends &mdash; around 2% to buy and 6% to sell by default here. Those are spread over however long you own, so a short stay can leave you worse off even when the home appreciates well.</p></div>
+<div class="faq-item"><h3>Does this include the mortgage interest deduction?</h3><p>No, for the reason given above. If you itemize, buying will come out somewhat better than the figures here suggest.</p></div>
+</section>
+
+<div class="related">
+  <p class="label">Related tools</p>
+  <div class="related-list">
+    <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="extra-payment-calculator.html">Extra Payment Calculator</a>
+      <a href="refinance-calculator.html">Refinance Calculator</a>
+      <a href="blog-buying-a-house-walkthrough.html">Buying a House: A Walkthrough</a>
+  </div>
+</div>
+
+<p class="note" style="text-align:center; margin-top:26px;">Calculations last verified 2026-08-02 against the sources listed in our <a href="methodology.html">methodology</a>. Every correction we have made is public in the <a href="changelog.html">corrections log</a>.</p>
+
+</div>
+<footer class="site-footer">
+  <div>
+    <a href="index.html">Home</a>
+    <a href="blog.html">Blog</a>
+    <a href="about.html">About</a>
+  </div>
+  <div style="margin-top:10px;">
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms-of-use.html">Terms &amp; Disclaimer</a>
+  </div>
+  <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
+</footer>
+<script src="numberToWords.js"></script>
+<script src="finance.js"></script>
+<script src="recentTools.js"></script>
+<script src="shareState.js"></script>
+<script>if (window.RecentTools) window.RecentTools.recordVisit("rent-vs-buy-calculator.html", "Rent vs. Buy Calculator");</script>
+<script>
+(function(){
+  var mod = window.FinanceTools;
+  if (!mod) { document.getElementById('fallbackBanner').style.display='block'; return; }
+  function el(id){ return document.getElementById(id); }
+  function fmtMoney(n){ return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function fmtShort(n){
+    var a = Math.abs(n);
+    if (a >= 1000000) return (n/1000000).toFixed(1) + 'M';
+    if (a >= 1000) return Math.round(n/1000) + 'k';
+    return String(Math.round(n));
+  }
+  function parseNum(str){ var s=String(str).trim().replace(/,/g,''); if(!/^-?\d+(\.\d+)?$/.test(s)) return NaN; return parseFloat(s); }
+
+  var FIELDS = ['rbPrice','rbRent','rbDown','rbRate','rbTerm','rbYears','rbAppreciation','rbReturn',
+                'rbRentGrowth','rbPropertyTax','rbMaintenance','rbInsurance','rbHoa','rbPmi','rbBuyCosts','rbSellCosts'];
+  var lastResult = null;
+
+  function gather(){
+    var v = {};
+    FIELDS.forEach(function(id){ v[id] = parseNum(el(id).value); });
+    if (Object.keys(v).some(function(k){ return isNaN(v[k]); })) throw new Error('Enter valid numbers for all fields.');
+    return {
+      homePrice: v.rbPrice, downPaymentPercent: v.rbDown, mortgageRatePercent: v.rbRate,
+      mortgageTermYears: v.rbTerm, monthlyRent: v.rbRent, yearsStaying: v.rbYears,
+      homeAppreciationPercent: v.rbAppreciation, rentGrowthPercent: v.rbRentGrowth,
+      investmentReturnPercent: v.rbReturn, propertyTaxPercent: v.rbPropertyTax,
+      maintenancePercent: v.rbMaintenance, annualHomeInsurance: v.rbInsurance,
+      monthlyHoa: v.rbHoa, buyingCostsPercent: v.rbBuyCosts, sellingCostsPercent: v.rbSellCosts,
+      pmiAnnualPercent: v.rbPmi
+    };
+  }
+
+  function renderSensitivity(args, years){
+    var appreciations = [0, 1, 2, 3, 4, 5, 6];
+    var returns = [3, 5, 7, 9, 11];
+    var html = '<caption>Winner at each combination of home appreciation and investment return, holding everything else as entered. ' +
+               'If your verdict sits next to a colour change, it is not a robust answer.</caption>' +
+               '<tr><th>Appreciation \\ Return</th>';
+    returns.forEach(function(r){ html += '<th>' + r + '%</th>'; });
+    html += '</tr>';
+    appreciations.forEach(function(a){
+      html += '<tr><th>' + a + '%</th>';
+      returns.forEach(function(r){
+        var out;
+        try {
+          out = mod.calculateRentVsBuy(Object.assign({}, args, { homeAppreciationPercent: a, investmentReturnPercent: r }));
+        } catch(e) { html += '<td>-</td>'; return; }
+        var cls = out.betterOption === 'buy' ? 'b' : (out.betterOption === 'rent' ? 'r' : '');
+        var label = out.betterOption === 'tie' ? 'tie' : (out.betterOption === 'buy' ? 'Buy' : 'Rent');
+        html += '<td class="' + cls + '">' + label + '<br>' + fmtShort(Math.abs(out.advantage)) + '</td>';
+      });
+      html += '</tr>';
+    });
+    el('rbSensTable').innerHTML = html;
+  }
+
+  function compute(){
+    var verdict = el('rbVerdict'), vText = el('rbVerdictText'), vDetail = el('rbVerdictDetail');
+    var stats = el('rbStats');
+    try {
+      var args = gather();
+      var r = mod.calculateRentVsBuy(args);
+      lastResult = r;
+
+      verdict.className = 'verdict ' + r.betterOption;
+      var yrs = args.yearsStaying;
+      if (r.betterOption === 'tie') {
+        vText.textContent = 'Too close to call';
+        vDetail.textContent = 'Over ' + yrs + ' years the two land within a dollar of each other on these assumptions.';
+      } else {
+        vText.textContent = (r.betterOption === 'buy' ? 'Buying' : 'Renting') + ' comes out ' + fmtMoney(Math.abs(r.advantage)) + ' ahead';
+        vDetail.textContent = 'After ' + yrs + ' years: buying leaves you with ' + fmtMoney(r.buyNetWorth) +
+          ', renting and investing the difference leaves you with ' + fmtMoney(r.rentNetWorth) + '.';
+      }
+
+      var flip = mod.rentVsBuyBreakEvenAppreciation(args);
+      if (flip === null) {
+        el('rbFlip').textContent = 'It does not flip';
+        el('rbFlipText').textContent = 'Across any plausible appreciation rate from -10% to +20% a year, ' +
+          (r.betterOption === 'buy' ? 'buying' : 'renting') + ' stays ahead on these assumptions. That is a rare and fairly robust result.';
+      } else {
+        el('rbFlip').textContent = flip.toFixed(2) + '% a year';
+        el('rbFlipText').textContent = 'If homes appreciate faster than ' + flip.toFixed(2) + '% a year, buying wins; slower than that, renting wins. ' +
+          'You have assumed ' + args.homeAppreciationPercent + '%. The real question is not which number this calculator prints — it is whether you believe your market beats ' +
+          flip.toFixed(2) + '% a year over ' + yrs + ' years.';
+      }
+
+      stats.innerHTML =
+        '<div class="stat"><div class="stat-label">Monthly mortgage (P&amp;I)</div><div class="stat-value">' + fmtMoney(r.monthlyMortgagePayment) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Cash needed upfront</div><div class="stat-value">' + fmtMoney(r.downPayment + r.purchaseCosts) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Home value after ' + yrs + ' years</div><div class="stat-value">' + fmtMoney(r.finalHomeValue) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Mortgage still owed</div><div class="stat-value">' + fmtMoney(r.remainingMortgage) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Total interest paid</div><div class="stat-value">' + fmtMoney(r.totalInterestPaid) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Total rent paid</div><div class="stat-value">' + fmtMoney(r.totalRentPaid) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Ownership costs that build no equity</div><div class="stat-value">' + fmtMoney(r.totalOwnershipCost) + '</div></div>' +
+        '<div class="stat"><div class="stat-label">Cost to sell</div><div class="stat-value">' + fmtMoney(r.sellingCosts) + '</div></div>';
+
+      renderSensitivity(args, yrs);
+    } catch(e) {
+      verdict.className = 'verdict tie';
+      vText.textContent = 'Check your numbers';
+      vDetail.textContent = e.message;
+      el('rbFlip').textContent = '-';
+      el('rbFlipText').textContent = '';
+      stats.innerHTML = '';
+      el('rbSensTable').innerHTML = '';
+      lastResult = null;
+    }
+  }
+
+  FIELDS.forEach(function(id){
+    el(id).addEventListener('input', compute);
+    el(id).addEventListener('change', compute);
+  });
+
+  el('rbCopyBtn').addEventListener('click', function(){
+    if (!lastResult) return;
+    var t = 'Rent vs buy over ' + el('rbYears').value + ' years: ' +
+      (lastResult.betterOption === 'tie' ? 'too close to call' :
+        (lastResult.betterOption === 'buy' ? 'buying' : 'renting') + ' ahead by ' + fmtMoney(Math.abs(lastResult.advantage))) +
+      ' (buy ' + fmtMoney(lastResult.buyNetWorth) + ' vs rent ' + fmtMoney(lastResult.rentNetWorth) + ').';
+    var btn = this, original = btn.textContent;
+    navigator.clipboard.writeText(t).then(function(){ btn.textContent='Copied!'; }).catch(function(){ btn.textContent='Copy failed'; });
+    setTimeout(function(){ btn.textContent = original; }, 1600);
+  });
+
+  compute();
+})();
+</script>
+<script>
+if (window.ShareState) ShareState.init({
+  buttonId: 'rbShareBtn',
+  fields: {
+    'price': 'rbPrice', 'rent': 'rbRent', 'down': 'rbDown', 'rate': 'rbRate',
+    'term': 'rbTerm', 'years': 'rbYears', 'appr': 'rbAppreciation', 'ret': 'rbReturn',
+    'rentgrowth': 'rbRentGrowth', 'proptax': 'rbPropertyTax', 'maint': 'rbMaintenance',
+    'ins': 'rbInsurance', 'hoa': 'rbHoa', 'pmi': 'rbPmi', 'buycost': 'rbBuyCosts', 'sellcost': 'rbSellCosts'
+  }
+});
+</script>
+</body>
+</html>
