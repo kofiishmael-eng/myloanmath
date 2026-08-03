@@ -50,49 +50,56 @@ const PAIRS = [
     from: 'CA', to: 'TX', slug: 'california-vs-texas', published: '2026-07-31', modified: PUBLISHED,
     copy: {
       hook: '"How much more would I actually take home in Texas?" is one of the most common questions behind a relocation or remote-work decision, and it has a precise answer \u2014 because federal tax and FICA are identical in every state, the entire gap between California and Texas take-home pay comes down to exactly one number: California\u2019s state income tax.',
-      pattern: 'The gap does not stay flat as income rises \u2014 it grows, because California\u2019s tax is progressive while Texas\u2019s is a flat zero. For higher earners specifically, the state-tax gap between a state like California and a no-income-tax state widens considerably faster than income does.'
+      pattern: 'The gap does not stay flat as income rises \u2014 it grows, because California\u2019s tax is progressive while Texas\u2019s is a flat zero. For higher earners specifically, the state-tax gap between a state like California and a no-income-tax state widens considerably faster than income does.',
+      offsets: 'State income tax is one line in a much larger budget, and for this pair the counterweight is property tax. Texas funds itself without an income tax partly through property tax rates that rank among the highest in the country, and it has no equivalent of California\'s Proposition 13 limit on how fast an assessment can rise. A Texas homeowner can therefore hand back a large share of the income-tax saving through the annual property tax bill, while a Texas renter keeps far more of it.'
     }
   },
   {
     from: 'NY', to: 'FL', slug: 'new-york-vs-florida',
     copy: {
       hook: 'New York to Florida is one of the most travelled relocation routes in the country, and the income-tax half of that decision has an exact answer. Federal tax and FICA are identical in both states, so the entire take-home gap reduces to a single line: New York\u2019s state income tax, against Florida\u2019s zero.',
-      pattern: 'New York\u2019s own $8,000 standard deduction takes a bite out of the bill at lower salaries, which is why the gap at $75,000 is smaller than New York\u2019s reputation suggests. It stops helping as income climbs \u2014 by $250,000 the difference is over $1,000 a month, because a fixed deduction matters less and less against a progressive rate schedule.'
+      pattern: 'New York\u2019s own $8,000 standard deduction takes a bite out of the bill at lower salaries, which is why the gap at $75,000 is smaller than New York\u2019s reputation suggests. It stops helping as income climbs \u2014 by $250,000 the difference is over $1,000 a month, because a fixed deduction matters less and less against a progressive rate schedule.',
+      offsets: 'One caveat matters more here than anywhere else on the site: New York City levies its own local income tax on residents, on top of the state tax modelled below. If you live in the five boroughs your real gap against Florida is meaningfully larger than these figures show, because this calculator models state-level tax only. Running the other way, Florida\'s headline household cost is homeowners insurance, which across much of the state has risen far faster than general inflation.'
     }
   },
   {
     from: 'CA', to: 'WA', slug: 'california-vs-washington',
     copy: {
       hook: 'For anyone weighing a move up the west coast \u2014 or negotiating a remote role that could be based in either state \u2014 California versus Washington is the comparison that matters. Washington levies no personal income tax, so every dollar of the difference below is California state tax and nothing else.',
-      pattern: 'This is the steepest curve of any pair on the site. California\u2019s brackets climb to 9.3% well before $250,000, so the gap more than doubles between $150,000 and $250,000 alone. Note that Washington funds itself differently \u2014 a higher sales tax, and a capital gains tax on large investment gains that a salaried comparison like this one never touches.'
+      pattern: 'This is the steepest curve of any pair on the site. California\u2019s brackets climb to 9.3% well before $250,000, so the gap more than doubles between $150,000 and $250,000 alone. Note that Washington funds itself differently \u2014 a higher sales tax, and a capital gains tax on large investment gains that a salaried comparison like this one never touches.',
+      offsets: 'Washington funds itself differently rather than more cheaply. It carries one of the highest combined state and local sales tax rates in the country, and it taxes large long-term capital gains \u2014 something a salaried comparison like this one never touches, but which matters a great deal if a meaningful part of your compensation arrives as equity.'
     }
   },
   {
     from: 'IL', to: 'TN', slug: 'illinois-vs-tennessee',
     copy: {
       hook: 'Chicago to Nashville has become a well-worn path, and the tax side of it is unusually simple to model: Illinois charges a flat 4.95% regardless of income, and Tennessee charges nothing at all.',
-      pattern: 'Because Illinois is flat rather than progressive, the gap grows in a straight line with taxable income rather than accelerating. That makes this pair predictable in a way the California and New York comparisons are not \u2014 roughly 4.95 cents of every additional taxable dollar, at any salary.'
+      pattern: 'Because Illinois is flat rather than progressive, the gap grows in a straight line with taxable income rather than accelerating. That makes this pair predictable in a way the California and New York comparisons are not \u2014 roughly 4.95 cents of every additional taxable dollar, at any salary.',
+      offsets: 'Both states lean on other taxes instead. Illinois carries some of the highest effective property tax rates in the country, so an Illinois homeowner\'s total burden is worse than the income tax figure alone suggests. Tennessee has among the highest combined state and local sales tax rates anywhere in the US, which claws back part of the income-tax advantage through everyday spending rather than through a single annual bill.'
     }
   },
   {
     from: 'MA', to: 'NH', slug: 'massachusetts-vs-new-hampshire',
     copy: {
       hook: 'The Massachusetts\u2013New Hampshire border is one of the few places in the country where people routinely live on one side and work on the other specifically because of tax. Massachusetts applies a 5% rate; New Hampshire has no tax on wages at all.',
-      pattern: 'The gap tracks a clean 5% of taxable income at every level shown. One important caveat this comparison cannot capture: if you live in New Hampshire but physically work in Massachusetts, Massachusetts generally taxes that income anyway. The figures below describe someone who both lives and works in the state listed.'
+      pattern: 'The gap tracks a clean 5% of taxable income at every level shown. One important caveat this comparison cannot capture: if you live in New Hampshire but physically work in Massachusetts, Massachusetts generally taxes that income anyway. The figures below describe someone who both lives and works in the state listed.',
+      offsets: 'New Hampshire has neither an income tax on wages nor a general sales tax, and pays for that with property tax rates among the highest in the country \u2014 so the advantage below is far larger for a renter than for a homeowner. The other caveat is jurisdictional: if you live in New Hampshire but physically work in Massachusetts, Massachusetts generally taxes that income anyway, and this comparison does not describe you.'
     }
   },
   {
     from: 'OR', to: 'WA', slug: 'oregon-vs-washington',
     copy: {
       hook: 'Portland and Vancouver sit ten minutes apart across the Columbia River, in two states with opposite tax structures. Oregon has one of the highest state income tax burdens on middle incomes in the country; Washington has none.',
-      pattern: 'This is the widest gap of any pair here at every salary level, and it is wide from the very bottom \u2014 Oregon\u2019s brackets reach 8.75% at income levels where most states are still in low single digits. The offsetting fact every local knows: Oregon has no sales tax and Washington\u2019s is high, so shopping habits genuinely claw some of this back.'
+      pattern: 'This is the widest gap of any pair here at every salary level, and it is wide from the very bottom \u2014 Oregon\u2019s brackets reach 8.75% at income levels where most states are still in low single digits. The offsetting fact every local knows: Oregon has no sales tax and Washington\u2019s is high, so shopping habits genuinely claw some of this back.',
+      offsets: 'Two local factors cut hard against these figures. Residents of the Portland area pay additional local income taxes on top of Oregon state tax, and this calculator models state-level tax only \u2014 so a Portland resident\'s real gap against Washington is wider than shown. Pulling the other way, Oregon has no sales tax at all while Washington\'s is among the highest, which is exactly why cross-river shopping is a local habit rather than a curiosity.'
     }
   },
   {
     from: 'CA', to: 'AZ', slug: 'california-vs-arizona',
     copy: {
       hook: 'Unlike most comparisons involving California, this one is between two states that both tax income \u2014 Arizona simply does it at a flat 2.5%, one of the lowest rates in the country, against California\u2019s progressive schedule.',
-      pattern: 'This pair inverts the usual shape. At $75,000 the two states are close enough that income tax alone should not decide anything \u2014 a couple of hundred dollars a year. The divergence is almost entirely a high-earner phenomenon: by $250,000 the annual difference is larger than the entire California tax bill at $75,000, because a flat 2.5% simply cannot keep pace with brackets that reach 9.3%.'
+      pattern: 'This pair inverts the usual shape. At $75,000 the two states are close enough that income tax alone should not decide anything \u2014 a couple of hundred dollars a year. The divergence is almost entirely a high-earner phenomenon: by $250,000 the annual difference is larger than the entire California tax bill at $75,000, because a flat 2.5% simply cannot keep pace with brackets that reach 9.3%.',
+      offsets: 'The offsetting factors here are smaller than in most pairs, which is part of why this comparison is unusually clean. Arizona\'s property tax burden is modest by national standards and its sales tax moderate, so the income tax gap below is closer to the whole story than it would be against Texas or Tennessee. The main omission is housing: the cost gap between California and Arizona metros is large enough to dwarf the tax difference at every income level shown.'
     }
   }
 ];
@@ -201,7 +208,7 @@ ${sections}
 <p>${pair.copy.pattern} ${spread}</p>
 
 <h2>What this comparison doesn&rsquo;t include</h2>
-<p>State income tax is one line in a much larger budget. Housing costs, sales tax, property tax rates, and general cost of living all move independently of income tax and can comfortably outweigh it in either direction \u2014 a smaller state tax bill does not automatically mean more money left at the end of the month once rent or a mortgage is paid. This comparison isolates income tax because that is the part with a precise, calculable answer.</p>
+<p>${pair.copy.offsets}</p>
 <p>A note on precision: these figures apply each state&rsquo;s bracket schedule to your <em>federal</em> taxable income. ${approximationNote} States also have their own credits, exemptions and deductions that this model does not carry, so treat the numbers as a close estimate of the gap rather than a filled-in tax return. The <a href="methodology.html">methodology page</a> sets out exactly what is and is not modelled.</p>
 
 <h2>Run your own numbers</h2>
