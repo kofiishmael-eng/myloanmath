@@ -114,7 +114,7 @@ function slice(startMark, endMark) {
   return templateHtml.slice(a, b + endMark.length);
 }
 // Reuse the live nav and footer so generated pages can never drift out of sync.
-const NAV = slice('<nav class="topnav">', '</nav>');
+const NAV = slice('<nav class="topnav', '</nav>');
 const FOOTER = slice('<footer class="site-footer">', '</footer>');
 const HEAD_STYLE = slice('<style>', '</style>');
 

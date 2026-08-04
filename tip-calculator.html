@@ -34,45 +34,55 @@
 </head>
 <body>
 <a href="#main-heading" class="skip-link">Skip to content</a>
-<nav class="topnav">
+<nav class="topnav" aria-label="Main">
   <a class="brand" href="index.html"><svg class="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
     <rect width="64" height="64" rx="14" fill="#1F5C43"/>
     <text x="32" y="45" font-family="Georgia, serif" font-size="36" font-weight="700" fill="#F2EFE4" text-anchor="middle">M</text>
   </svg> myloanmath</a>
-  <div class="links">
-      <a href="index.html">Home</a>
-      <span class="nav-sep">|</span>
-      <a href="numbers-to-words.html">Numbers to Words</a>
-      <a href="words-to-numbers.html">Words to Numbers</a>
-      <a href="currency-to-words.html">Currency to Words</a>
-      <span class="nav-sep">|</span>
-      <a href="loan-calculator.html">Loan Calculator</a>
-      <a href="auto-loan-calculator.html">Auto Loan Calculator</a>
-      <a href="mortgage-calculator.html">Mortgage Calculator</a>
-      <a href="debt-payoff-calculator.html">Debt Payoff Calculator</a>
-      <a href="loan-comparison-calculator.html">Loan Comparison</a>
-      <a href="extra-payment-calculator.html">Extra Payment Calculator</a>
-      <a href="refinance-calculator.html">Refinance Calculator</a>
-      <a href="rent-vs-buy-calculator.html">Rent vs. Buy Calculator</a>
-      <span class="nav-sep">|</span>
-      <a href="discount-calculator.html">Discount Calculator</a>
-      <a href="percentage-calculator.html">Percentage Calculator</a>
-      <a href="compound-interest-calculator.html">Compound Interest Calculator</a>
-      <a href="savings-goal-calculator.html">Savings Goal Calculator</a>
-      <a href="401k-calculator.html">401(k) Calculator</a>
-      <a href="tip-calculator.html">Tip Calculator</a>
-      <span class="nav-sep">|</span>
-      <a href="salary-calculator.html">Salary Calculator</a>
-      <a href="tax-calculator.html">Tax Calculator (US - IRS)</a>
-      <a href="canada-tax-calculator.html">Tax Calculator (Canada - CRA)</a>
-      <span class="nav-sep">|</span>
-      <a href="blog.html">Blog</a>
-      <a href="glossary.html">Glossary</a>
-      <a href="financial-calendar.html">Financial Calendar</a>
-      <a href="changelog.html">Corrections</a>
-      <a href="which-calculator-do-i-need.html">Which Calculator?</a>
-      <a href="methodology.html">Methodology</a>
-  </div>
+  <details class="nav-disclosure">
+    <summary aria-label="Browse all calculators">Menu</summary>
+    <div class="links">
+      <a class="nav-home" href="index.html">Home</a>
+      <div class="nav-group"><span class="nav-group-title">Loans &amp; mortgages</span>
+        <a href="loan-calculator.html">Loan Calculator</a>
+        <a href="auto-loan-calculator.html">Auto Loan Calculator</a>
+        <a href="mortgage-calculator.html">Mortgage Calculator</a>
+        <a href="loan-comparison-calculator.html">Loan Comparison</a>
+        <a href="extra-payment-calculator.html">Extra Payment</a>
+        <a href="refinance-calculator.html">Refinance Break-Even</a>
+        <a href="rent-vs-buy-calculator.html">Rent vs. Buy</a>
+        <a href="debt-payoff-calculator.html">Debt Payoff</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Income &amp; tax</span>
+        <a href="salary-calculator.html">Salary Calculator</a>
+        <a href="tax-calculator.html">Tax Calculator (US)</a>
+        <a href="canada-tax-calculator.html">Tax Calculator (Canada)</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Saving &amp; growth</span>
+        <a href="compound-interest-calculator.html">Compound Interest</a>
+        <a href="savings-goal-calculator.html">Savings Goal</a>
+        <a href="401k-calculator.html">401(k) Calculator</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Everyday math</span>
+        <a href="percentage-calculator.html">Percentage Calculator</a>
+        <a href="discount-calculator.html">Discount Calculator</a>
+        <a href="tip-calculator.html">Tip Calculator</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Number to words</span>
+        <a href="numbers-to-words.html">Numbers to Words</a>
+        <a href="words-to-numbers.html">Words to Numbers</a>
+        <a href="currency-to-words.html">Currency to Words</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Reference</span>
+        <a href="blog.html">Blog</a>
+        <a href="glossary.html">Glossary</a>
+        <a href="financial-calendar.html">Financial Calendar</a>
+        <a href="which-calculator-do-i-need.html">Which Calculator?</a>
+        <a href="methodology.html">Methodology</a>
+        <a href="changelog.html">Corrections</a>
+      </div>
+    </div>
+  </details>
 </nav>
 <div class="wrap">
 <div class="fallback-banner" id="fallbackBanner">Something went wrong loading the calculator engine. Open your browser's console (F12) to see the error.</div>
@@ -90,7 +100,7 @@
   <div class="row">
     <div class="field"><label for="tipPeople">Split between how many people</label><input type="text" id="tipPeople" value="1" inputmode="decimal"></div>
   </div>
-  <div class="result">
+  <div class="result" aria-live="polite" aria-atomic="true">
     <div class="result-label">Tip amount</div>
     <div class="result-text" id="tipOutput">-</div>
     <div class="stat-grid" id="tipStats"></div>

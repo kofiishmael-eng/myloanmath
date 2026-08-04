@@ -171,3 +171,71 @@ footer.site-footer a:hover{color:var(--accent);}
   .eyebrow{font-size:11px;}
   h1{font-size:22px;}
 }
+
+
+/* ---- Grouped, collapsible navigation ------------------------------------
+   26 flat links wrapped to roughly eight lines on a phone before any content
+   appeared. Links are now grouped and collapsed behind a disclosure on small
+   screens. Every anchor remains in the HTML at all widths, so crawling and
+   internal linking are unaffected. */
+.nav-disclosure{position:relative;}
+.nav-disclosure > summary{
+  list-style:none; cursor:pointer; font-family:var(--font-mono); font-size:12.5px;
+  font-weight:600; color:var(--ink-soft); padding:7px 13px; border:1px solid var(--line);
+  border-radius:5px; background:var(--card); user-select:none; min-height:38px;
+  display:inline-flex; align-items:center; gap:7px;
+}
+.nav-disclosure > summary::-webkit-details-marker{display:none;}
+.nav-disclosure > summary::after{content:"▾"; font-size:10px;}
+.nav-disclosure[open] > summary::after{content:"▴";}
+.nav-disclosure > summary:hover{border-color:var(--brass); color:var(--ink);}
+.nav-disclosure > summary:focus-visible{outline:2px solid var(--brass); outline-offset:2px;}
+.nav-group{display:flex; flex-wrap:wrap; gap:14px; align-items:baseline;}
+.nav-group-title{
+  font-family:var(--font-mono); font-size:9.5px; font-weight:700; letter-spacing:0.11em;
+  text-transform:uppercase; color:var(--brass); width:100%;
+}
+
+@media (min-width:900px){
+  /* Desktop: no disclosure, show the grouped links inline. */
+  .nav-disclosure > summary{display:none;}
+  .nav-disclosure > .links{display:flex !important; position:static; flex-direction:row;
+    align-items:center; border:0; background:none; box-shadow:none; padding:0; margin:0; gap:16px;}
+  .nav-group{gap:14px; width:auto;}
+  .nav-group-title{display:none;}
+}
+
+@media (max-width:899px){
+  .topnav{position:relative;}
+  .nav-disclosure > .links{
+    display:flex; flex-direction:column; gap:15px; align-items:flex-start;
+    position:absolute; left:16px; right:16px; top:calc(100% + 8px); z-index:40;
+    background:var(--card); border:1px solid var(--line); border-radius:8px;
+    padding:18px; box-shadow:0 8px 24px rgba(25,31,27,0.12); max-height:70vh; overflow-y:auto;
+  }
+  .nav-disclosure > .links a{padding:3px 0;}
+  .nav-group{gap:12px;}
+}
+
+/* ---- Print: strip everything that isn't the answer --------------------- */
+@media print{
+  .topnav, .site-footer, .ad-slot, .actions, .related, .skip-link,
+  .fallback-banner, .recent-tools{display:none !important;}
+  body{background:#fff; color:#000;}
+  .wrap{max-width:100%; padding:0;}
+  .card{border:1px solid #999; box-shadow:none; background:#fff; background-image:none;
+        break-inside:avoid; page-break-inside:avoid;}
+  table{break-inside:auto;} tr{break-inside:avoid; page-break-inside:avoid;}
+  thead{display:table-header-group;}
+  a{text-decoration:none; color:#000;}
+  .content a[href^="http"]::after{content:" (" attr(href) ")"; font-size:10px; color:#555;}
+  h1,h2,h3{break-after:avoid; page-break-after:avoid;}
+}
+
+/* ---- Respect a reduced-motion preference ------------------------------- */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:0.01ms !important; animation-iteration-count:1 !important;
+    transition-duration:0.01ms !important; scroll-behavior:auto !important;
+  }
+}
