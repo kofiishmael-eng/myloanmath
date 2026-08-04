@@ -197,7 +197,7 @@ function buildPage(pair) {
   const body = `<header class="page-head">
   <div class="eyebrow">// myloanmath state guide</div>
   <h1 id="main-heading">${esc(title)}</h1>
-  <p class="article-meta">Published ${published}${modified !== published ? ' &middot; Updated ' + modified : ''}</p>
+  <p class="article-meta">By <a href="about.html">Ishmael</a>, accountant &middot; Published ${published}${modified !== published ? ' &middot; Updated ' + modified : ''}</p>
 </header>
 
 <div class="card article-body">
@@ -257,7 +257,7 @@ ${HEAD_STYLE}
 <script type="application/ld+json">${JSON.stringify({
     '@context': 'https://schema.org', '@type': 'Article', headline: title, description: desc,
     datePublished: published, dateModified: modified,
-    author: { '@type': 'Organization', name: 'MyLoanMath' },
+    author: { '@type': 'Person', name: 'Ishmael', jobTitle: 'Accountant', url: 'https://myloanmath.com/about.html' },
     publisher: { '@type': 'Organization', name: 'MyLoanMath' },
     mainEntityOfPage: url
   })}</script>
