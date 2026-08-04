@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XL6TXYDCLD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XL6TXYDCLD');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sales Tax Calculator — Add or Remove Sales Tax</title>
+<meta name="description" content="Add sales tax to a price, or work backwards to strip the tax out of a total. Both directions, with the arithmetic explained.">
+<link rel="canonical" href="https://myloanmath.com/sales-tax-calculator.html">
+<meta property="og:title" content="Sales Tax Calculator — Add or Remove Sales Tax">
+<meta property="og:description" content="Add sales tax to a price, or work backwards to strip the tax out of a total. Both directions, with the arithmetic explained.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myloanmath.com/sales-tax-calculator.html">
+<meta property="og:image" content="https://myloanmath.com/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myloanmath.com/assets/og-image.png">
+<link rel="preconnect" href="https://pagead2.googlesyndication.com">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How do I remove sales tax from a total?", "acceptedAnswer": {"@type": "Answer", "text": "Divide by one plus the rate as a decimal, rather than subtracting the percentage. To strip 8.25% from $270.61, divide by 1.0825 to get $249.99. Subtracting 8.25% instead would give $248.29, which is wrong."}}, {"@type": "Question", "name": "Why is the tax on my receipt higher than my state rate?", "acceptedAnswer": {"@type": "Answer", "text": "Most states let counties, cities and special districts add their own rate on top of the state base rate. The combined figure is what you actually pay, and it can differ between two shops a few miles apart."}}, {"@type": "Question", "name": "Does this calculator know my local rate?", "acceptedAnswer": {"@type": "Answer", "text": "No, and deliberately so. Combined rates vary by exact address within a state, so a state-level table would be wrong for most transactions. Take the rate from a recent receipt or your state revenue authority\\u2019s address lookup."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9412143347948347" crossorigin="anonymous"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://myloanmath.com/"}, {"@type": "ListItem", "position": 2, "name": "Financial Calculators", "item": "https://myloanmath.com/financial-calculators.html"}, {"@type": "ListItem", "position": 3, "name": "Sales Tax Calculator", "item": "https://myloanmath.com/sales-tax-calculator.html"}]}</script>
+</head>
+<body>
+<a href="#main-heading" class="skip-link">Skip to content</a>
+<nav class="topnav" aria-label="Main">
+  <a class="brand" href="index.html"><svg class="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+    <rect width="64" height="64" rx="14" fill="#1F5C43"/>
+    <text x="32" y="45" font-family="Georgia, serif" font-size="36" font-weight="700" fill="#F2EFE4" text-anchor="middle">M</text>
+  </svg> myloanmath</a>
+  <details class="nav-disclosure">
+    <summary aria-label="Browse all calculators">Menu</summary>
+    <div class="links">
+      <a class="nav-home" href="index.html">Home</a>
+      <div class="nav-group"><span class="nav-group-title">Loans &amp; mortgages</span>
+        <a href="financial-calculators.html">All Financial Calculators</a>
+        <a href="loan-calculator.html">Loan Calculator</a>
+        <a href="auto-loan-calculator.html">Auto Loan Calculator</a>
+        <a href="mortgage-calculator.html">Mortgage Calculator</a>
+        <a href="loan-comparison-calculator.html">Loan Comparison</a>
+        <a href="amortization-calculator.html">Amortization Schedule</a>
+        <a href="interest-rate-calculator.html">Interest Rate Calculator</a>
+        <a href="extra-payment-calculator.html">Extra Payment</a>
+        <a href="refinance-calculator.html">Refinance Break-Even</a>
+        <a href="rent-vs-buy-calculator.html">Rent vs. Buy</a>
+        <a href="debt-payoff-calculator.html">Debt Payoff</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Income &amp; tax</span>
+        <a href="salary-calculator.html">Salary Calculator</a>
+        <a href="tax-calculator.html">Tax Calculator (US)</a>
+        <a href="canada-tax-calculator.html">Tax Calculator (Canada)</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Saving &amp; growth</span>
+        <a href="compound-interest-calculator.html">Compound Interest</a>
+        <a href="savings-goal-calculator.html">Savings Goal</a>
+        <a href="401k-calculator.html">401(k) Calculator</a>
+        <a href="investment-calculator.html">Investment Calculator</a>
+        <a href="retirement-calculator.html">Retirement Calculator</a>
+        <a href="inflation-calculator.html">Inflation Calculator</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Everyday math</span>
+        <a href="percentage-calculator.html">Percentage Calculator</a>
+        <a href="discount-calculator.html">Discount Calculator</a>
+        <a href="tip-calculator.html">Tip Calculator</a>
+        <a href="sales-tax-calculator.html">Sales Tax Calculator</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Number to words</span>
+        <a href="numbers-to-words.html">Numbers to Words</a>
+        <a href="words-to-numbers.html">Words to Numbers</a>
+        <a href="currency-to-words.html">Currency to Words</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Reference</span>
+        <a href="blog.html">Blog</a>
+        <a href="glossary.html">Glossary</a>
+        <a href="financial-calendar.html">Financial Calendar</a>
+        <a href="which-calculator-do-i-need.html">Which Calculator?</a>
+        <a href="methodology.html">Methodology</a>
+        <a href="changelog.html">Corrections</a>
+      </div>
+    </div>
+  </details>
+</nav>
+<div class="wrap">
+<div class="fallback-banner" id="fallbackBanner">Something went wrong loading the calculator engine. Open your browser's console (F12) to see the error.</div>
+<header class="page-head">
+  <div class="eyebrow">// myloanmath</div>
+  <h1 id="main-heading">Sales Tax Calculator</h1>
+  <p class="sub">Add tax to a price, or pull it back out of a total — the reverse calculation is the one people get wrong by hand.</p>
+</header>
+
+<div class="card">
+  <div class="row"><div class="field"><label for="stAmount">Amount</label><input type="text" id="stAmount" value="249.99" inputmode="decimal"></div><div class="field"><label for="stRate">Sales tax rate (%)</label><input type="text" id="stRate" value="8.25" inputmode="decimal"></div></div>
+  <div class="row"><div class="field"><label for="stMode">Direction</label><select id="stMode"><option value="add" selected>Add tax to this price</option><option value="extract">Remove tax from this total</option></select></div></div>
+
+  <div class="result" aria-live="polite" aria-atomic="true">
+    <div class="result-label">Total including tax</div>
+    <div class="result-text" id="stOutput">-</div>
+    <div class="stat-grid" id="stStats"></div>
+  </div>
+  <div class="actions"><button class="action" id="stCopyBtn" type="button">Copy result</button><button class="action" id="stShareBtn" type="button">Copy link to this scenario</button></div>
+  <p class="note">Enter the combined rate you actually pay. In most US states that is a state rate plus county and city rates, which is why the figure on your receipt rarely matches the state rate alone.</p>
+</div>
+
+<div class="ad-slot"><!-- AD SLOT: below the tool. Paste your AdSense ad unit code here once approved. --></div>
+
+<section class="content">
+<h2>Removing sales tax is a division, not a subtraction</h2>
+<p>Adding tax is straightforward: multiply by the rate and add it on. Removing it is where the arithmetic trips people, because the tax was calculated on the pre-tax price, not on the total you are now holding.</p>
+<p>If a receipt totals $270.61 at 8.25%, the pre-tax price is <strong>not</strong> $270.61 minus 8.25%. That would give $248.29, which is wrong by more than a dollar. The correct step is to divide by 1.0825, giving $249.99. The gap widens as the rate rises &mdash; at 20% the subtraction method is out by about 4% of the total, which matters on anything expensive.</p>
+
+<h2>Why your receipt never matches the state rate</h2>
+<p>Sales tax in the United States is rarely a single rate. Most states set a base rate and then permit counties, cities, and special districts to add their own on top, so the combined figure at the till can be several percentage points above the state number. Two shops a few miles apart can charge different totals on an identical item.</p>
+<p>This is why the calculator asks for the rate rather than the state: the only reliable source for a combined rate is a receipt from the exact location, or your state revenue authority's own rate lookup for that address. A state-level table would be confidently wrong for most transactions inside that state.</p>
+
+<h2>What is and isn't taxed varies too</h2>
+<p>Rates are only half the picture. States differ sharply on what falls into the tax base: groceries are frequently exempt or taxed at a reduced rate, prescription medicines are usually exempt, and clothing is exempt in some states and taxed in others. Several states run annual tax holidays where specific categories become exempt for a weekend. Five states levy no general statewide sales tax at all, though some of those permit local ones.</p>
+<p>For a business rather than a shopper, the harder question is usually not the rate but the obligation: whether you have to collect at all in a given state depends on economic nexus thresholds that differ state by state, and that is a question for your state revenue authority or an accountant, not a calculator.</p>
+<h2>Frequently asked questions</h2>
+<div class="faq-item"><h3>How do I remove sales tax from a total?</h3><p>Divide by one plus the rate as a decimal, rather than subtracting the percentage. To strip 8.25% from $270.61, divide by 1.0825 to get $249.99. Subtracting 8.25% instead would give $248.29, which is wrong.</p></div>
+<div class="faq-item"><h3>Why is the tax on my receipt higher than my state rate?</h3><p>Most states let counties, cities and special districts add their own rate on top of the state base rate. The combined figure is what you actually pay, and it can differ between two shops a few miles apart.</p></div>
+<div class="faq-item"><h3>Does this calculator know my local rate?</h3><p>No, and deliberately so. Combined rates vary by exact address within a state, so a state-level table would be wrong for most transactions. Take the rate from a recent receipt or your state revenue authority\u2019s address lookup.</p></div>
+</section>
+
+<div class="related">
+  <p class="label">Related tools</p>
+  <div class="related-list">
+    <a href="financial-calculators.html">All Financial Calculators</a>
+      <a href="discount-calculator.html">Discount Calculator</a>
+      <a href="percentage-calculator.html">Percentage Calculator</a>
+      <a href="tax-calculator.html">Income Tax Calculator</a>
+  </div>
+</div>
+
+<p class="note" style="text-align:center; margin-top:26px;">Calculations last verified 2026-08-02 against the sources listed in our <a href="methodology.html">methodology</a>. Every correction we have made is public in the <a href="changelog.html">corrections log</a>.</p>
+
+</div>
+<footer class="site-footer">
+  <div>
+    <a href="index.html">Home</a>
+    <a href="blog.html">Blog</a>
+    <a href="about.html">About</a>
+  </div>
+  <div style="margin-top:10px;">
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms-of-use.html">Terms &amp; Disclaimer</a>
+  </div>
+  <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
+  <p style="margin-top:8px; max-width:62ch; margin-left:auto; margin-right:auto;">Built and maintained by <a href="about.html">Ishmael</a>, an accountant. Educational information only &mdash; not financial, tax, or accounting advice. See <a href="terms-of-use.html">Terms &amp; Disclaimer</a>.</p>
+</footer>
+<script src="numberToWords.js"></script>
+<script src="finance.js"></script>
+<script src="recentTools.js"></script>
+<script src="shareState.js"></script>
+<script>if (window.RecentTools) window.RecentTools.recordVisit("sales-tax-calculator.html", "Sales Tax Calculator");</script>
+<script>
+(function(){
+  var mod = window.FinanceTools;
+  if (!mod) { document.getElementById('fallbackBanner').style.display='block'; return; }
+  function el(id){ return document.getElementById(id); }
+  function money(n){ return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function num(str){ var s=String(str).trim().replace(/,/g,''); if(!/^-?\d+(\.\d+)?$/.test(s)) return NaN; return parseFloat(s); }
+  var last = null;
+  function compute(){
+    var out=el('stOutput'), stats=el('stStats');
+    try{
+      var a=num(el('stAmount').value), r=num(el('stRate').value), mode=el('stMode').value;
+      if([a,r].some(isNaN)) throw new Error('Enter valid numbers for all fields.');
+      var res=mod.calculateSalesTax({amount:a, taxRatePercent:r, mode:mode});
+      out.textContent=money(res.grossAmount); out.classList.remove('error');
+      stats.innerHTML=
+        '<div class="stat"><div class="stat-label">Price before tax</div><div class="stat-value">'+money(res.netAmount)+'</div></div>'+
+        '<div class="stat"><div class="stat-label">Sales tax</div><div class="stat-value">'+money(res.taxAmount)+'</div></div>'+
+        '<div class="stat"><div class="stat-label">Total with tax</div><div class="stat-value">'+money(res.grossAmount)+'</div></div>'+
+        '<div class="stat"><div class="stat-label">Tax rate applied</div><div class="stat-value">'+r+'%</div></div>';
+      last='Price before tax '+money(res.netAmount)+', sales tax '+money(res.taxAmount)+', total '+money(res.grossAmount)+'.';
+    }catch(e){ out.textContent='Check your numbers'; out.classList.add('error');
+      stats.innerHTML='<div class="stat" style="grid-column:1/-1;"><div class="stat-label">Problem</div><div class="stat-value" style="font-size:14px;">'+e.message+'</div></div>'; last=null; }
+  }
+  ['stAmount','stRate','stMode'].forEach(function(id){ el(id).addEventListener('input',compute); el(id).addEventListener('change',compute); });
+
+  el('stCopyBtn').addEventListener('click', function(){
+    if(!last) return;
+    var btn=this, o=btn.textContent;
+    navigator.clipboard.writeText(last).then(function(){btn.textContent='Copied!';}).catch(function(){btn.textContent='Copy failed';});
+    setTimeout(function(){btn.textContent=o;},1600);
+  });
+  compute();
+})();
+</script>
+<script>
+if (window.ShareState) ShareState.init({ buttonId: 'stShareBtn', fields: {"amount": "stAmount", "rate": "stRate", "mode": "stMode"} });
+</script>
+</body>
+</html>

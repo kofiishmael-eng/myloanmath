@@ -1584,7 +1584,314 @@ function rentVsBuyBreakEvenAppreciation(input) {
 
 // ---------------------------------------------------------------------
 
-const FinanceTools = { calculateLoan, amortizationScheduleByYear, calculateMortgage, compoundInterest, requiredMonthlyContribution, calculateFederalIncomeTax, TAX_BRACKETS_2026, STANDARD_DEDUCTION_2026, FILING_STATUS_LABELS, calculateFederalIncomeTaxCRA, CRA_FEDERAL_BRACKETS_2026, CRA_BPA_2026, calculateStateTax, STATE_TAX_2026, getProvinceTaxStatus, PROVINCE_TAX_2026, calculateFICA, FICA_2026, calculateCPPEI, CPP_EI_2026, monthsToPayoff, typicalMinimumPayment, calculateDiscount, findDiscountPercent, calculate401kProjection, employee401kLimit, CONTRIB_401K_2026, calculateTip, PercentageTools, round2, calculateExtraPayment, calculateRefinanceBreakEven, calculateRentVsBuy, rentVsBuyBreakEvenAppreciation };
+/**
+ * Sales tax, in both directions.
+ *
+ * mode 'add'     — you have a pre-tax price and want the total.
+ * mode 'extract' — you have a tax-inclusive total and want the pre-tax amount.
+ *
+ * The extract case is the one people get wrong by hand: removing 8% from a
+ * total is a division by 1.08, not a subtraction of 8%.
+ */
+function calculateSalesTax(input) {
+  const { amount, taxRatePercent, mode = 'add' } = input;
+  if (!(amount >= 0)) throw new Error('Amount cannot be negative.');
+  if (!Number.isFinite(amount)) throw new Error('Enter a valid amount.');
+  if (!(taxRatePercent >= 0)) throw new Error('Tax rate cannot be negative.');
+  if (!Number.isFinite(taxRatePercent)) throw new Error('Enter a valid tax rate.');
+
+  const rate = taxRatePercent / 100;
+  let netAmount, taxAmount, grossAmount;
+
+  if (mode === 'extract') {
+    grossAmount = amount;
+    netAmount = amount / (1 + rate);
+    taxAmount = grossAmount - netAmount;
+  } else {
+    netAmount = amount;
+    taxAmount = amount * rate;
+    grossAmount = netAmount + taxAmount;
+  }
+
+  return {
+    netAmount: round2(netAmount),
+    taxAmount: round2(taxAmount),
+    grossAmount: round2(grossAmount),
+    effectiveRatePercent: netAmount > 0 ? round2((taxAmount / netAmount) * 100) : 0,
+  };
+}
+
+/**
+ * Purchasing power at a given inflation rate.
+ *
+ * Deliberately rate-based rather than driven by a historical CPI table: a CPI
+ * series would have to be sourced, dated and maintained, and quoting one from
+ * memory would be exactly the kind of unverified figure this project avoids.
+ * The user supplies the rate, so the result is theirs to judge.
+ *
+ * direction 'future' — what today's amount will be worth later.
+ * direction 'past'   — what a past amount is worth in today's money.
+ */
+function calculateInflation(input) {
+  const { amount, annualRatePercent, years, direction = 'future' } = input;
+  if (!(amount > 0)) throw new Error('Amount must be greater than zero.');
+  if (!(years > 0)) throw new Error('Number of years must be greater than zero.');
+  if (years > 200) throw new Error('Try a period of 200 years or less.');
+  if (!Number.isFinite(annualRatePercent)) throw new Error('Enter a valid inflation rate.');
+  if (annualRatePercent <= -100) throw new Error('Inflation rate must be above -100%.');
+
+  const factor = Math.pow(1 + annualRatePercent / 100, years);
+
+  // 'future': the same nominal sum buys less later, so we report its real value.
+  // 'past':   an older sum is restated in today's money by inflating it forward.
+  const equivalentAmount = direction === 'past' ? amount * factor : amount / factor;
+  const nominalNeeded = amount * factor;
+
+  return {
+    equivalentAmount: round2(equivalentAmount),
+    nominalNeeded: round2(nominalNeeded),
+    purchasingPowerLostPercent: round2((1 - 1 / factor) * 100),
+    totalInflationPercent: round2((factor - 1) * 100),
+    cumulativeFactor: round2(factor * 10000) / 10000,
+  };
+}
+
+/**
+ * Solve for the interest rate implied by a loan's principal, payment and term.
+ *
+ * There is no closed form for the rate in the amortization formula, so this
+ * bisects. The payment rises monotonically with the rate, which makes bisection
+ * both safe and exact to well below a basis point.
+ */
+function solveInterestRate(input) {
+  const { principal, monthlyPayment, termMonths } = input;
+  if (!(principal > 0)) throw new Error('Loan amount must be greater than zero.');
+  if (!(monthlyPayment > 0)) throw new Error('Monthly payment must be greater than zero.');
+  if (!(termMonths > 0)) throw new Error('Loan term must be greater than zero.');
+  if (termMonths > 1200) throw new Error('Loan term looks unusually long (over 100 years).');
+
+  const n = Math.round(termMonths);
+
+  // A payment at or below principal/n implies a zero or negative rate.
+  // The payment is normally supplied rounded to cents, so across n payments the
+  // total can fall up to half a cent per payment short of the principal without
+  // the rate actually being negative. A flat one-cent tolerance wrongly rejected
+  // genuine 0% loans (e.g. $8,000 over 24 months at $333.33 totals $7,999.92).
+  const roundingSlack = 0.005 * n + 0.01;
+  if (monthlyPayment * n <= principal + roundingSlack) {
+    if (monthlyPayment * n >= principal - roundingSlack) {
+      return { annualRatePercent: 0, monthlyRatePercent: 0, totalInterest: 0, totalPaid: round2(principal) };
+    }
+    throw new Error('That payment is too small to ever repay this loan — total payments come to less than the amount borrowed.');
+  }
+
+  const paymentAt = (monthlyRate) => {
+    if (monthlyRate === 0) return principal / n;
+    const f = Math.pow(1 + monthlyRate, n);
+    return (principal * monthlyRate * f) / (f - 1);
+  };
+
+  let lo = 0;
+  let hi = 1; // 100% per month, far above any real loan
+  if (paymentAt(hi) < monthlyPayment) throw new Error('That payment is unusually high for this balance and term — check the figures.');
+
+  for (let i = 0; i < 200; i++) {
+    const mid = (lo + hi) / 2;
+    if (paymentAt(mid) < monthlyPayment) lo = mid; else hi = mid;
+  }
+  const monthlyRate = (lo + hi) / 2;
+  const totalPaid = monthlyPayment * n;
+
+  return {
+    annualRatePercent: round2(monthlyRate * 12 * 100),
+    monthlyRatePercent: Math.round(monthlyRate * 100 * 10000) / 10000,
+    totalPaid: round2(totalPaid),
+    totalInterest: round2(totalPaid - principal),
+  };
+}
+
+/**
+ * Full month-by-month amortization schedule.
+ *
+ * amortizationScheduleByYear already summarises by year; this returns every
+ * payment, which is what someone checking a servicer's statement needs.
+ */
+function amortizationScheduleMonthly(input) {
+  const { principal, annualRatePercent, termMonths } = input;
+  const { monthlyPayment, numberOfPayments } = calculateLoan(input);
+  const r = annualRatePercent / 100 / 12;
+
+  let balance = principal;
+  let cumulativeInterest = 0;
+  let cumulativePrincipal = 0;
+  const rows = [];
+
+  for (let month = 1; month <= numberOfPayments; month++) {
+    const interestPortion = round2(balance * r);
+    let principalPortion = round2(monthlyPayment - interestPortion);
+    // Final payment clears the balance exactly rather than leaving a stray cent.
+    if (month === numberOfPayments) principalPortion = round2(balance);
+
+    balance = round2(balance - principalPortion);
+    cumulativeInterest = round2(cumulativeInterest + interestPortion);
+    cumulativePrincipal = round2(cumulativePrincipal + principalPortion);
+
+    rows.push({
+      month,
+      payment: round2(interestPortion + principalPortion),
+      interestPortion,
+      principalPortion,
+      cumulativeInterest,
+      cumulativePrincipal,
+      remainingBalance: Math.max(0, balance),
+    });
+  }
+
+  return {
+    monthlyPayment,
+    numberOfPayments,
+    totalInterest: cumulativeInterest,
+    // calculateLoan derives total interest from the closed form
+    // (payment x n - principal), whereas a schedule rounds each month's
+    // interest to whole cents and trims the final payment — which is what a
+    // servicer actually does. Over a 30-year loan the two differ by a few
+    // dollars (under a cent per payment). The schedule figure is the truer one;
+    // both are returned so the discrepancy is visible rather than surprising.
+    closedFormTotalInterest: round2(monthlyPayment * numberOfPayments - principal),
+    roundingDifference: round2(cumulativeInterest - (monthlyPayment * numberOfPayments - principal)),
+    rows,
+    // The month where principal first exceeds interest in a single payment —
+    // the point a long loan starts genuinely paying itself down.
+    crossoverMonth: (rows.find(x => x.principalPortion > x.interestPortion) || {}).month || null,
+  };
+}
+
+/**
+ * Investment projection, reported in both nominal and inflation-adjusted terms.
+ *
+ * A 30-year nominal figure without a real-terms counterpart flatters itself
+ * badly, so both are always returned.
+ */
+function investmentProjection(input) {
+  const {
+    initialAmount = 0, monthlyContribution = 0, annualReturnPercent,
+    years, inflationPercent = 0,
+  } = input;
+
+  if (initialAmount < 0) throw new Error('Starting amount cannot be negative.');
+  if (monthlyContribution < 0) throw new Error('Monthly contribution cannot be negative.');
+  if (!(years > 0)) throw new Error('Number of years must be greater than zero.');
+  if (years > 100) throw new Error('Try a period of 100 years or less.');
+  if (!Number.isFinite(annualReturnPercent)) throw new Error('Enter a valid return rate.');
+  if (!Number.isFinite(inflationPercent)) throw new Error('Enter a valid inflation rate.');
+  if (initialAmount === 0 && monthlyContribution === 0) throw new Error('Enter a starting amount or a monthly contribution.');
+
+  const r = annualReturnPercent / 100 / 12;
+  const n = Math.round(years * 12);
+
+  let balance = initialAmount;
+  let contributed = initialAmount;
+  const yearRows = [];
+
+  for (let m = 1; m <= n; m++) {
+    balance = balance * (1 + r) + monthlyContribution;
+    contributed += monthlyContribution;
+    if (m % 12 === 0 || m === n) {
+      yearRows.push({
+        year: Math.ceil(m / 12),
+        balance: round2(balance),
+        contributed: round2(contributed),
+        growth: round2(balance - contributed),
+      });
+    }
+  }
+
+  const inflationFactor = Math.pow(1 + inflationPercent / 100, years);
+
+  return {
+    finalBalance: round2(balance),
+    totalContributed: round2(contributed),
+    totalGrowth: round2(balance - contributed),
+    realFinalBalance: round2(balance / inflationFactor),
+    yearRows,
+  };
+}
+
+/**
+ * Retirement: accumulate to a retirement date, then draw down against it.
+ *
+ * Reports the year savings run out, if they do. Spending is inflated each year
+ * while the balance keeps earning, which is the interaction that decides
+ * whether a pot lasts — treating either as static gives a badly wrong answer.
+ */
+function retirementProjection(input) {
+  const {
+    currentAge, retirementAge, currentSavings = 0, monthlyContribution = 0,
+    annualReturnPercent, annualSpending, inflationPercent = 2.5,
+    returnInRetirementPercent, lifeExpectancy = 95,
+  } = input;
+
+  if (!(currentAge >= 0)) throw new Error('Current age cannot be negative.');
+  if (!(retirementAge > currentAge)) throw new Error('Retirement age must be greater than your current age.');
+  if (!(lifeExpectancy > retirementAge)) throw new Error('Life expectancy must be greater than your retirement age.');
+  if (currentSavings < 0) throw new Error('Current savings cannot be negative.');
+  if (monthlyContribution < 0) throw new Error('Monthly contribution cannot be negative.');
+  if (!(annualSpending > 0)) throw new Error('Annual spending in retirement must be greater than zero.');
+  assertFiniteNumbers({ annualReturnPercent, inflationPercent, annualSpending });
+
+  const drawdownReturn = returnInRetirementPercent === undefined
+    ? annualReturnPercent : returnInRetirementPercent;
+
+  // --- accumulation ---
+  const yearsToRetirement = retirementAge - currentAge;
+  const r = annualReturnPercent / 100 / 12;
+  let balance = currentSavings;
+  let contributed = currentSavings;
+  const rows = [];
+
+  for (let m = 1; m <= Math.round(yearsToRetirement * 12); m++) {
+    balance = balance * (1 + r) + monthlyContribution;
+    contributed += monthlyContribution;
+    if (m % 12 === 0) {
+      rows.push({ age: currentAge + m / 12, balance: round2(balance), phase: 'saving' });
+    }
+  }
+  const balanceAtRetirement = balance;
+
+  // --- drawdown: spending inflates, the remaining balance keeps earning ---
+  const dr = drawdownReturn / 100;
+  const inf = inflationPercent / 100;
+  // Spending is given in today's money; it must first be inflated to the
+  // retirement date before drawdown begins.
+  let spending = annualSpending * Math.pow(1 + inf, yearsToRetirement);
+  let ranOutAtAge = null;
+
+  for (let age = retirementAge; age < lifeExpectancy; age++) {
+    balance = balance * (1 + dr) - spending;
+    if (balance <= 0 && ranOutAtAge === null) {
+      ranOutAtAge = age + 1;
+      balance = 0;
+    }
+    rows.push({ age: age + 1, balance: round2(Math.max(0, balance)), phase: 'retired' });
+    spending *= 1 + inf;
+  }
+
+  return {
+    balanceAtRetirement: round2(balanceAtRetirement),
+    totalContributed: round2(contributed),
+    growthDuringSaving: round2(balanceAtRetirement - contributed),
+    firstYearSpending: round2(annualSpending * Math.pow(1 + inf, yearsToRetirement)),
+    balanceAtLifeExpectancy: round2(Math.max(0, balance)),
+    ranOutAtAge,
+    yearsOfRetirementFunded: ranOutAtAge === null ? lifeExpectancy - retirementAge : ranOutAtAge - retirementAge,
+    shortfallYears: ranOutAtAge === null ? 0 : lifeExpectancy - ranOutAtAge,
+    rows,
+  };
+}
+
+// ---------------------------------------------------------------------
+
+const FinanceTools = { calculateLoan, amortizationScheduleByYear, calculateMortgage, compoundInterest, requiredMonthlyContribution, calculateFederalIncomeTax, TAX_BRACKETS_2026, STANDARD_DEDUCTION_2026, FILING_STATUS_LABELS, calculateFederalIncomeTaxCRA, CRA_FEDERAL_BRACKETS_2026, CRA_BPA_2026, calculateStateTax, STATE_TAX_2026, getProvinceTaxStatus, PROVINCE_TAX_2026, calculateFICA, FICA_2026, calculateCPPEI, CPP_EI_2026, monthsToPayoff, typicalMinimumPayment, calculateDiscount, findDiscountPercent, calculate401kProjection, employee401kLimit, CONTRIB_401K_2026, calculateTip, PercentageTools, round2, calculateExtraPayment, calculateRefinanceBreakEven, calculateRentVsBuy, rentVsBuyBreakEvenAppreciation, calculateSalesTax, calculateInflation, solveInterestRate, amortizationScheduleMonthly, investmentProjection, retirementProjection };
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = FinanceTools;

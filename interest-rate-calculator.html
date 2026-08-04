@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XL6TXYDCLD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XL6TXYDCLD');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interest Rate Calculator — Find the Rate on a Loan</title>
+<meta name="description" content="Work out the interest rate implied by a loan's balance, monthly payment and term — useful when a lender quotes a payment but not a rate.">
+<link rel="canonical" href="https://myloanmath.com/interest-rate-calculator.html">
+<meta property="og:title" content="Interest Rate Calculator — Find the Rate on a Loan">
+<meta property="og:description" content="Work out the interest rate implied by a loan's balance, monthly payment and term — useful when a lender quotes a payment but not a rate.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myloanmath.com/interest-rate-calculator.html">
+<meta property="og:image" content="https://myloanmath.com/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myloanmath.com/assets/og-image.png">
+<link rel="preconnect" href="https://pagead2.googlesyndication.com">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is the rate this gives me the same as the APR?", "acceptedAnswer": {"@type": "Answer", "text": "No. This is the interest rate implied by the payment schedule. APR also includes origination fees, points and other closing charges, which a payment schedule cannot reveal, so a loan with fees has a higher APR than the rate shown here."}}, {"@type": "Question", "name": "Why does the calculator solve numerically instead of using a formula?", "acceptedAnswer": {"@type": "Answer", "text": "The amortization formula cannot be rearranged to isolate the interest rate. The tool narrows the range by repeated bisection instead, which converges to well below a basis point because payment rises steadily with rate."}}, {"@type": "Question", "name": "Can I use this on a loan with no stated rate?", "acceptedAnswer": {"@type": "Answer", "text": "Yes \\u2014 that is the main use. Dealer finance, store credit and pay-monthly plans often quote only a payment. Entering the amount, payment and term recovers the rate that payment implies."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9412143347948347" crossorigin="anonymous"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://myloanmath.com/"}, {"@type": "ListItem", "position": 2, "name": "Financial Calculators", "item": "https://myloanmath.com/financial-calculators.html"}, {"@type": "ListItem", "position": 3, "name": "Interest Rate Calculator", "item": "https://myloanmath.com/interest-rate-calculator.html"}]}</script>
+</head>
+<body>
+<a href="#main-heading" class="skip-link">Skip to content</a>
+<nav class="topnav" aria-label="Main">
+  <a class="brand" href="index.html"><svg class="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+    <rect width="64" height="64" rx="14" fill="#1F5C43"/>
+    <text x="32" y="45" font-family="Georgia, serif" font-size="36" font-weight="700" fill="#F2EFE4" text-anchor="middle">M</text>
+  </svg> myloanmath</a>
+  <details class="nav-disclosure">
+    <summary aria-label="Browse all calculators">Menu</summary>
+    <div class="links">
+      <a class="nav-home" href="index.html">Home</a>
+      <div class="nav-group"><span class="nav-group-title">Loans &amp; mortgages</span>
+        <a href="financial-calculators.html">All Financial Calculators</a>
+        <a href="loan-calculator.html">Loan Calculator</a>
+        <a href="auto-loan-calculator.html">Auto Loan Calculator</a>
+        <a href="mortgage-calculator.html">Mortgage Calculator</a>
+        <a href="loan-comparison-calculator.html">Loan Comparison</a>
+        <a href="amortization-calculator.html">Amortization Schedule</a>
+        <a href="interest-rate-calculator.html">Interest Rate Calculator</a>
+        <a href="extra-payment-calculator.html">Extra Payment</a>
+        <a href="refinance-calculator.html">Refinance Break-Even</a>
+        <a href="rent-vs-buy-calculator.html">Rent vs. Buy</a>
+        <a href="debt-payoff-calculator.html">Debt Payoff</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Income &amp; tax</span>
+        <a href="salary-calculator.html">Salary Calculator</a>
+        <a href="tax-calculator.html">Tax Calculator (US)</a>
+        <a href="canada-tax-calculator.html">Tax Calculator (Canada)</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Saving &amp; growth</span>
+        <a href="compound-interest-calculator.html">Compound Interest</a>
+        <a href="savings-goal-calculator.html">Savings Goal</a>
+        <a href="401k-calculator.html">401(k) Calculator</a>
+        <a href="investment-calculator.html">Investment Calculator</a>
+        <a href="retirement-calculator.html">Retirement Calculator</a>
+        <a href="inflation-calculator.html">Inflation Calculator</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Everyday math</span>
+        <a href="percentage-calculator.html">Percentage Calculator</a>
+        <a href="discount-calculator.html">Discount Calculator</a>
+        <a href="tip-calculator.html">Tip Calculator</a>
+        <a href="sales-tax-calculator.html">Sales Tax Calculator</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Number to words</span>
+        <a href="numbers-to-words.html">Numbers to Words</a>
+        <a href="words-to-numbers.html">Words to Numbers</a>
+        <a href="currency-to-words.html">Currency to Words</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Reference</span>
+        <a href="blog.html">Blog</a>
+        <a href="glossary.html">Glossary</a>
+        <a href="financial-calendar.html">Financial Calendar</a>
+        <a href="which-calculator-do-i-need.html">Which Calculator?</a>
+        <a href="methodology.html">Methodology</a>
+        <a href="changelog.html">Corrections</a>
+      </div>
+    </div>
+  </details>
+</nav>
+<div class="wrap">
+<div class="fallback-banner" id="fallbackBanner">Something went wrong loading the calculator engine. Open your browser's console (F12) to see the error.</div>
+<header class="page-head">
+  <div class="eyebrow">// myloanmath</div>
+  <h1 id="main-heading">Interest Rate Calculator</h1>
+  <p class="sub">You know the balance, the payment and the term. This solves for the rate the lender is actually charging.</p>
+</header>
+
+<div class="card">
+  <div class="row"><div class="field"><label for="irPrincipal">Amount borrowed</label><input type="text" id="irPrincipal" value="25000" inputmode="decimal"></div><div class="field"><label for="irPayment">Monthly payment</label><input type="text" id="irPayment" value="489.15" inputmode="decimal"></div></div>
+  <div class="row"><div class="field"><label for="irTermValue">Loan term</label><input type="text" id="irTermValue" value="5" inputmode="decimal"></div><div class="field"><label for="irTermUnit">Term unit</label><select id="irTermUnit"><option value="years" selected>Years</option><option value="months">Months</option></select></div></div>
+
+  <div class="result" aria-live="polite" aria-atomic="true">
+    <div class="result-label">Implied annual interest rate</div>
+    <div class="result-text" id="irOutput">-</div>
+    <div class="stat-grid" id="irStats"></div>
+  </div>
+  <div class="actions"><button class="action" id="irCopyBtn" type="button">Copy result</button><button class="action" id="irShareBtn" type="button">Copy link to this scenario</button></div>
+  <p class="note">Solves the amortization formula backwards. This gives the interest rate, not the APR — fees charged at closing are not visible in a payment schedule and would push the true APR higher.</p>
+</div>
+
+<div class="ad-slot"><!-- AD SLOT: below the tool. Paste your AdSense ad unit code here once approved. --></div>
+
+<section class="content">
+<h2>When you need this</h2>
+<p>Some offers lead with a monthly payment and never mention a rate. Dealer financing, in-store credit, rent-to-own agreements and buy-now-pay-later plans are all commonly presented as "just $X a month", which makes them hard to compare against anything. Feeding the balance, the payment and the term into this tool recovers the rate that payment implies, and the number is occasionally startling.</p>
+<p>It is also a check on paperwork. If a contract states a rate and the payment schedule implies a different one, something is wrong &mdash; usually fees folded into the balance, occasionally an error worth challenging before you sign.</p>
+
+<h2>Interest rate is not APR</h2>
+<p>What this calculates is the interest rate implied by the payment schedule. That is not the same as the APR, which also folds in origination fees, discount points and other charges levied at closing. A payment schedule cannot see those costs, so if a lender charged fees up front, the true APR is higher than the figure here.</p>
+<p>The practical consequence is that this number is the right one for comparing against another payment schedule, and the wrong one for comparing against an advertised APR. For that comparison, ask the lender for the APR in writing &mdash; in the United States, consumer lenders are generally required to disclose it.</p>
+
+<h2>How the calculation works</h2>
+<p>The amortization formula has no closed-form solution for the rate: you can rearrange it to find the payment, the term or the balance, but not the rate. So the tool solves it numerically, narrowing the range by repeated bisection until the payment implied by the rate matches the payment you entered to well below a basis point. That works because payment rises steadily with the rate, so there is exactly one rate that fits.</p>
+<p>One consequence worth knowing: because the payment you enter is rounded to the nearest cent, the recovered rate is only as precise as that rounding allows. A payment of $2,358.01 on a 30-year mortgage is consistent with a small band of rates around 7.12%, so treat the last decimal place as an approximation rather than a certainty.</p>
+<h2>Frequently asked questions</h2>
+<div class="faq-item"><h3>Is the rate this gives me the same as the APR?</h3><p>No. This is the interest rate implied by the payment schedule. APR also includes origination fees, points and other closing charges, which a payment schedule cannot reveal, so a loan with fees has a higher APR than the rate shown here.</p></div>
+<div class="faq-item"><h3>Why does the calculator solve numerically instead of using a formula?</h3><p>The amortization formula cannot be rearranged to isolate the interest rate. The tool narrows the range by repeated bisection instead, which converges to well below a basis point because payment rises steadily with rate.</p></div>
+<div class="faq-item"><h3>Can I use this on a loan with no stated rate?</h3><p>Yes \u2014 that is the main use. Dealer finance, store credit and pay-monthly plans often quote only a payment. Entering the amount, payment and term recovers the rate that payment implies.</p></div>
+</section>
+
+<div class="related">
+  <p class="label">Related tools</p>
+  <div class="related-list">
+    <a href="financial-calculators.html">All Financial Calculators</a>
+      <a href="loan-calculator.html">Loan Calculator</a>
+      <a href="loan-comparison-calculator.html">Loan Comparison</a>
+      <a href="amortization-calculator.html">Amortization Schedule</a>
+  </div>
+</div>
+
+<p class="note" style="text-align:center; margin-top:26px;">Calculations last verified 2026-08-02 against the sources listed in our <a href="methodology.html">methodology</a>. Every correction we have made is public in the <a href="changelog.html">corrections log</a>.</p>
+
+</div>
+<footer class="site-footer">
+  <div>
+    <a href="index.html">Home</a>
+    <a href="blog.html">Blog</a>
+    <a href="about.html">About</a>
+  </div>
+  <div style="margin-top:10px;">
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms-of-use.html">Terms &amp; Disclaimer</a>
+  </div>
+  <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
+  <p style="margin-top:8px; max-width:62ch; margin-left:auto; margin-right:auto;">Built and maintained by <a href="about.html">Ishmael</a>, an accountant. Educational information only &mdash; not financial, tax, or accounting advice. See <a href="terms-of-use.html">Terms &amp; Disclaimer</a>.</p>
+</footer>
+<script src="numberToWords.js"></script>
+<script src="finance.js"></script>
+<script src="recentTools.js"></script>
+<script src="shareState.js"></script>
+<script>if (window.RecentTools) window.RecentTools.recordVisit("interest-rate-calculator.html", "Interest Rate Calculator");</script>
+<script>
+(function(){
+  var mod = window.FinanceTools;
+  if (!mod) { document.getElementById('fallbackBanner').style.display='block'; return; }
+  function el(id){ return document.getElementById(id); }
+  function money(n){ return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function num(str){ var s=String(str).trim().replace(/,/g,''); if(!/^-?\d+(\.\d+)?$/.test(s)) return NaN; return parseFloat(s); }
+  var last = null;
+  function compute(){
+    var out=el('irOutput'), stats=el('irStats');
+    try{
+      var p=num(el('irPrincipal').value), pay=num(el('irPayment').value), t=num(el('irTermValue').value);
+      if([p,pay,t].some(isNaN)) throw new Error('Enter valid numbers for all fields.');
+      var months = el('irTermUnit').value==='years' ? Math.round(t*12) : Math.round(t);
+      var res=mod.solveInterestRate({principal:p, monthlyPayment:pay, termMonths:months});
+      out.textContent=res.annualRatePercent+'% per year'; out.classList.remove('error');
+      stats.innerHTML=
+        '<div class="stat"><div class="stat-label">Annual rate</div><div class="stat-value">'+res.annualRatePercent+'%</div></div>'+
+        '<div class="stat"><div class="stat-label">Monthly rate</div><div class="stat-value">'+res.monthlyRatePercent+'%</div></div>'+
+        '<div class="stat"><div class="stat-label">Total repaid</div><div class="stat-value">'+money(res.totalPaid)+'</div></div>'+
+        '<div class="stat"><div class="stat-label">Total interest</div><div class="stat-value">'+money(res.totalInterest)+'</div></div>';
+      last='Borrowing '+money(p)+' over '+months+' months at '+money(pay)+'/month implies '+res.annualRatePercent+'% a year, '+money(res.totalInterest)+' total interest.';
+    }catch(e){ out.textContent='Check your numbers'; out.classList.add('error');
+      stats.innerHTML='<div class="stat" style="grid-column:1/-1;"><div class="stat-label">Problem</div><div class="stat-value" style="font-size:14px;">'+e.message+'</div></div>'; last=null; }
+  }
+  ['irPrincipal','irPayment','irTermValue','irTermUnit'].forEach(function(id){ el(id).addEventListener('input',compute); el(id).addEventListener('change',compute); });
+
+  el('irCopyBtn').addEventListener('click', function(){
+    if(!last) return;
+    var btn=this, o=btn.textContent;
+    navigator.clipboard.writeText(last).then(function(){btn.textContent='Copied!';}).catch(function(){btn.textContent='Copy failed';});
+    setTimeout(function(){btn.textContent=o;},1600);
+  });
+  compute();
+})();
+</script>
+<script>
+if (window.ShareState) ShareState.init({ buttonId: 'irShareBtn', fields: {"amount": "irPrincipal", "payment": "irPayment", "term": "irTermValue", "unit": "irTermUnit"} });
+</script>
+</body>
+</html>

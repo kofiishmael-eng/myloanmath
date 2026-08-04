@@ -59,6 +59,8 @@
         <a href="auto-loan-calculator.html">Auto Loan Calculator</a>
         <a href="mortgage-calculator.html">Mortgage Calculator</a>
         <a href="loan-comparison-calculator.html">Loan Comparison</a>
+        <a href="amortization-calculator.html">Amortization Schedule</a>
+        <a href="interest-rate-calculator.html">Interest Rate Calculator</a>
         <a href="extra-payment-calculator.html">Extra Payment</a>
         <a href="refinance-calculator.html">Refinance Break-Even</a>
         <a href="rent-vs-buy-calculator.html">Rent vs. Buy</a>
@@ -73,11 +75,15 @@
         <a href="compound-interest-calculator.html">Compound Interest</a>
         <a href="savings-goal-calculator.html">Savings Goal</a>
         <a href="401k-calculator.html">401(k) Calculator</a>
+        <a href="investment-calculator.html">Investment Calculator</a>
+        <a href="retirement-calculator.html">Retirement Calculator</a>
+        <a href="inflation-calculator.html">Inflation Calculator</a>
       </div>
       <div class="nav-group"><span class="nav-group-title">Everyday math</span>
         <a href="percentage-calculator.html">Percentage Calculator</a>
         <a href="discount-calculator.html">Discount Calculator</a>
         <a href="tip-calculator.html">Tip Calculator</a>
+        <a href="sales-tax-calculator.html">Sales Tax Calculator</a>
       </div>
       <div class="nav-group"><span class="nav-group-title">Number to words</span>
         <a href="numbers-to-words.html">Numbers to Words</a>
@@ -170,6 +176,10 @@
 <h3>Rent vs. buy</h3>
 <p>This is the only tool on the site that cannot produce a single correct answer, and it is built to say so. Both paths are compared on net worth at the end of the period: the buyer holds the home's value less selling costs and any remaining mortgage, the renter holds a portfolio seeded with the down payment and closing costs the buyer spent. Whoever has the lower monthly outgoing invests the difference &mdash; in both directions, since a model that only ever lets the renter invest is tilted toward buying without admitting it. Property tax and maintenance are charged against the home's current value rather than its purchase price, and PMI applies while the loan exceeds 80% of the original price.</p>
 <p>Every assumption is an input rather than a hidden constant, and the tool reports the home appreciation rate at which the two options come out level, because that figure is checkable against what a reader knows about their own market in a way a verdict is not. The mortgage interest deduction is deliberately excluded, since most filers now take the standard deduction and including it by default would overstate the case for buying for the majority of users. Capital gains treatment, moving costs, and the non-financial value of either option are also outside the model.</p>
+
+<h3>Sales tax, inflation, interest rate, amortization, investment and retirement</h3>
+<p>The sales tax tool applies a rate you supply rather than a stored table, because combined US rates vary by exact address within a state and a state-level table would be wrong for most transactions. The inflation tool is rate-based for the same reason: a published price index embeds a choice of index, basket and base year, and the assumption belongs to the reader. The interest rate tool solves the amortization formula numerically by bisection, since that formula cannot be rearranged to isolate the rate; precision is limited by the fact that the payment you enter is rounded to cents.</p>
+<p>The amortization schedule computes each month&rsquo;s interest as the outstanding balance times the monthly rate, rounded to whole cents, with the final payment trimmed to clear the balance exactly &mdash; the method a servicer uses. This differs from the closed-form total (payment times term, less principal) by roughly $4.71 over a 30-year loan, under a cent per payment. Both figures are returned so the difference is visible rather than surprising. The investment tool reports nominal and inflation-adjusted balances together, and the retirement tool inflates spending to the retirement date before drawing down. Neither models variable returns, and the retirement tool excludes Social Security, pensions, and tax on withdrawals, all disclosed on the page itself.</p>
 
 <h2 class="category-heading">Editorial standards</h2>
 <p>Four rules govern every number on this site.</p>

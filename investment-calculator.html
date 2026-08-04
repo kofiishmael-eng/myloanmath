@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XL6TXYDCLD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XL6TXYDCLD');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Investment Calculator — Nominal and Real Returns</title>
+<meta name="description" content="Project what an investment grows to with regular contributions, reported in both nominal and inflation-adjusted terms.">
+<link rel="canonical" href="https://myloanmath.com/investment-calculator.html">
+<meta property="og:title" content="Investment Calculator — Nominal and Real Returns">
+<meta property="og:description" content="Project what an investment grows to with regular contributions, reported in both nominal and inflation-adjusted terms.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myloanmath.com/investment-calculator.html">
+<meta property="og:image" content="https://myloanmath.com/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myloanmath.com/assets/og-image.png">
+<link rel="preconnect" href="https://pagead2.googlesyndication.com">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Should I look at the nominal or the real figure?", "acceptedAnswer": {"@type": "Answer", "text": "The real one, for planning. Nominal is what the statement will say; real is what it will buy. Over thirty years at 2.5% inflation the two differ by roughly half."}}, {"@type": "Question", "name": "When does growth overtake what I have contributed?", "acceptedAnswer": {"@type": "Answer", "text": "At ordinary rates it usually happens somewhere past year fifteen, though it depends on your contribution and return. The split of contributions against growth is shown above for your own figures."}}, {"@type": "Question", "name": "Does this account for market ups and downs?", "acceptedAnswer": {"@type": "Answer", "text": "No \\u2014 it applies a constant rate. While you are only contributing, the order of returns barely affects the final balance. Once you are withdrawing it matters a great deal, which is why the retirement calculator treats the two phases separately."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9412143347948347" crossorigin="anonymous"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://myloanmath.com/"}, {"@type": "ListItem", "position": 2, "name": "Financial Calculators", "item": "https://myloanmath.com/financial-calculators.html"}, {"@type": "ListItem", "position": 3, "name": "Investment Calculator", "item": "https://myloanmath.com/investment-calculator.html"}]}</script>
+</head>
+<body>
+<a href="#main-heading" class="skip-link">Skip to content</a>
+<nav class="topnav" aria-label="Main">
+  <a class="brand" href="index.html"><svg class="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+    <rect width="64" height="64" rx="14" fill="#1F5C43"/>
+    <text x="32" y="45" font-family="Georgia, serif" font-size="36" font-weight="700" fill="#F2EFE4" text-anchor="middle">M</text>
+  </svg> myloanmath</a>
+  <details class="nav-disclosure">
+    <summary aria-label="Browse all calculators">Menu</summary>
+    <div class="links">
+      <a class="nav-home" href="index.html">Home</a>
+      <div class="nav-group"><span class="nav-group-title">Loans &amp; mortgages</span>
+        <a href="financial-calculators.html">All Financial Calculators</a>
+        <a href="loan-calculator.html">Loan Calculator</a>
+        <a href="auto-loan-calculator.html">Auto Loan Calculator</a>
+        <a href="mortgage-calculator.html">Mortgage Calculator</a>
+        <a href="loan-comparison-calculator.html">Loan Comparison</a>
+        <a href="extra-payment-calculator.html">Extra Payment</a>
+        <a href="refinance-calculator.html">Refinance Break-Even</a>
+        <a href="rent-vs-buy-calculator.html">Rent vs. Buy</a>
+        <a href="debt-payoff-calculator.html">Debt Payoff</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Income &amp; tax</span>
+        <a href="salary-calculator.html">Salary Calculator</a>
+        <a href="tax-calculator.html">Tax Calculator (US)</a>
+        <a href="canada-tax-calculator.html">Tax Calculator (Canada)</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Saving &amp; growth</span>
+        <a href="compound-interest-calculator.html">Compound Interest</a>
+        <a href="savings-goal-calculator.html">Savings Goal</a>
+        <a href="401k-calculator.html">401(k) Calculator</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Everyday math</span>
+        <a href="percentage-calculator.html">Percentage Calculator</a>
+        <a href="discount-calculator.html">Discount Calculator</a>
+        <a href="tip-calculator.html">Tip Calculator</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Number to words</span>
+        <a href="numbers-to-words.html">Numbers to Words</a>
+        <a href="words-to-numbers.html">Words to Numbers</a>
+        <a href="currency-to-words.html">Currency to Words</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Reference</span>
+        <a href="blog.html">Blog</a>
+        <a href="glossary.html">Glossary</a>
+        <a href="financial-calendar.html">Financial Calendar</a>
+        <a href="which-calculator-do-i-need.html">Which Calculator?</a>
+        <a href="methodology.html">Methodology</a>
+        <a href="changelog.html">Corrections</a>
+      </div>
+    </div>
+  </details>
+</nav>
+<div class="wrap">
+<div class="fallback-banner" id="fallbackBanner">Something went wrong loading the calculator engine. Open your browser's console (F12) to see the error.</div>
+<header class="page-head">
+  <div class="eyebrow">// myloanmath</div>
+  <h1 id="main-heading">Investment Calculator</h1>
+  <p class="sub">What regular investing adds up to — shown in today's money as well as the headline number.</p>
+</header>
+
+<div class="card">
+  <div class="row"><div class="field"><label for="ivInitial">Starting amount</label><input type="text" id="ivInitial" value="10000" inputmode="decimal"></div><div class="field"><label for="ivMonthly">Monthly contribution</label><input type="text" id="ivMonthly" value="500" inputmode="decimal"></div></div>
+  <div class="row"><div class="field"><label for="ivReturn">Annual return (%)</label><input type="text" id="ivReturn" value="7" inputmode="decimal"></div><div class="field"><label for="ivYears">Years invested</label><input type="text" id="ivYears" value="20" inputmode="decimal"></div></div>
+  <div class="row"><div class="field"><label for="ivInflation">Inflation rate (%)</label><input type="text" id="ivInflation" value="2.5" inputmode="decimal"></div></div>
+
+  <div class="result" aria-live="polite" aria-atomic="true">
+    <div class="result-label">Value at the end</div>
+    <div class="result-text" id="ivOutput">-</div>
+    <div class="stat-grid" id="ivStats"></div>
+  </div>
+  <div class="actions"><button class="action" id="ivCopyBtn" type="button">Copy result</button><button class="action" id="ivShareBtn" type="button">Copy link to this scenario</button></div>
+  <p class="note">A projection at a constant rate, not a forecast. Real returns arrive unevenly, and the order in which good and bad years fall changes the outcome — especially once you start withdrawing.</p>
+</div>
+
+<div class="ad-slot"><!-- AD SLOT: below the tool. Paste your AdSense ad unit code here once approved. --></div>
+
+<section class="content">
+<h2>Why the real figure sits next to the nominal one</h2>
+<p>A thirty-year projection that reports only the headline balance flatters itself badly. Money in the future is not money today, and the difference over a long horizon is not a rounding detail &mdash; at 2.5% inflation, a sum thirty years out is worth roughly half what the same number means now.</p>
+<p>That is why both figures appear above and always will. The nominal number is what the account statement will say. The real number is what it will actually buy, and it is the one worth planning around. A projection showing a large nominal total while quietly assuming three decades of inflation away is not being helpful.</p>
+
+<h2>Contributions matter more than returns, early on</h2>
+<p>Over shorter horizons the balance is dominated by what you put in, not what it earns. The crossover, where cumulative growth first exceeds cumulative contributions, typically arrives somewhere past the fifteen-year mark at ordinary rates &mdash; and the split above shows you exactly where your own scenario sits.</p>
+<p>The practical implication is that arguing over a percentage point of return is far less productive than increasing the contribution in the early years, when there is little balance for a better return to work on. The order flips later: once the balance is large, returns dominate and contributions become the smaller lever.</p>
+
+<h2>What a constant rate hides</h2>
+<p>This model applies the same return every month. Real markets do not, and the difference matters in a specific way: while you are only contributing, the order of good and bad years is largely irrelevant to the final balance. Once you begin withdrawing, it stops being irrelevant. A poor sequence of early returns during withdrawals can permanently damage a portfolio that would have survived the same returns in a different order &mdash; the reason this is treated as a distinct risk in retirement planning rather than folded into an average.</p>
+<p>Treat the output as arithmetic on your assumptions rather than a forecast. Change the return by two percentage points and see how far the answer moves; if the plan only works at the optimistic end, it is not really a plan. The <a href="retirement-calculator.html">retirement calculator</a> extends this through the withdrawal phase, and the <a href="inflation-calculator.html">inflation calculator</a> handles purchasing power on its own.</p>
+<h2>Frequently asked questions</h2>
+<div class="faq-item"><h3>Should I look at the nominal or the real figure?</h3><p>The real one, for planning. Nominal is what the statement will say; real is what it will buy. Over thirty years at 2.5% inflation the two differ by roughly half.</p></div>
+<div class="faq-item"><h3>When does growth overtake what I have contributed?</h3><p>At ordinary rates it usually happens somewhere past year fifteen, though it depends on your contribution and return. The split of contributions against growth is shown above for your own figures.</p></div>
+<div class="faq-item"><h3>Does this account for market ups and downs?</h3><p>No \u2014 it applies a constant rate. While you are only contributing, the order of returns barely affects the final balance. Once you are withdrawing it matters a great deal, which is why the retirement calculator treats the two phases separately.</p></div>
+</section>
+
+<div class="related">
+  <p class="label">Related tools</p>
+  <div class="related-list">
+    <a href="financial-calculators.html">All Financial Calculators</a>
+      <a href="compound-interest-calculator.html">Compound Interest</a>
+      <a href="retirement-calculator.html">Retirement Calculator</a>
+      <a href="inflation-calculator.html">Inflation Calculator</a>
+  </div>
+</div>
+
+<p class="note" style="text-align:center; margin-top:26px;">Calculations last verified 2026-08-02 against the sources listed in our <a href="methodology.html">methodology</a>. Every correction we have made is public in the <a href="changelog.html">corrections log</a>.</p>
+
+</div>
+<footer class="site-footer">
+  <div>
+    <a href="index.html">Home</a>
+    <a href="blog.html">Blog</a>
+    <a href="about.html">About</a>
+  </div>
+  <div style="margin-top:10px;">
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms-of-use.html">Terms &amp; Disclaimer</a>
+  </div>
+  <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
+  <p style="margin-top:8px; max-width:62ch; margin-left:auto; margin-right:auto;">Built and maintained by <a href="about.html">Ishmael</a>, an accountant. Educational information only &mdash; not financial, tax, or accounting advice. See <a href="terms-of-use.html">Terms &amp; Disclaimer</a>.</p>
+</footer>
+<script src="numberToWords.js"></script>
+<script src="finance.js"></script>
+<script src="recentTools.js"></script>
+<script src="shareState.js"></script>
+<script>if (window.RecentTools) window.RecentTools.recordVisit("investment-calculator.html", "Investment Calculator");</script>
+<script>
+(function(){
+  var mod = window.FinanceTools;
+  if (!mod) { document.getElementById('fallbackBanner').style.display='block'; return; }
+  function el(id){ return document.getElementById(id); }
+  function money(n){ return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function num(str){ var s=String(str).trim().replace(/,/g,''); if(!/^-?\d+(\.\d+)?$/.test(s)) return NaN; return parseFloat(s); }
+  var last = null;
+  function compute(){
+    var out=el('ivOutput'), stats=el('ivStats');
+    try{
+      var i=num(el('ivInitial').value), m=num(el('ivMonthly').value), r=num(el('ivReturn').value),
+          y=num(el('ivYears').value), inf=num(el('ivInflation').value);
+      if([i,m,r,y,inf].some(isNaN)) throw new Error('Enter valid numbers for all fields.');
+      var res=mod.investmentProjection({initialAmount:i, monthlyContribution:m, annualReturnPercent:r, years:y, inflationPercent:inf});
+      out.textContent=money(res.finalBalance); out.classList.remove('error');
+      stats.innerHTML=
+        '<div class="stat"><div class="stat-label">You put in</div><div class="stat-value">'+money(res.totalContributed)+'</div></div>'+
+        '<div class="stat"><div class="stat-label">Investment growth</div><div class="stat-value">'+money(res.totalGrowth)+'</div></div>'+
+        '<div class="stat"><div class="stat-label">Final balance</div><div class="stat-value">'+money(res.finalBalance)+'</div></div>'+
+        '<div class="stat"><div class="stat-label">Worth in today\'s money</div><div class="stat-value">'+money(res.realFinalBalance)+'</div></div>';
+      last='After '+y+' years: '+money(res.finalBalance)+' nominal, '+money(res.realFinalBalance)+' in today\'s money, of which '+money(res.totalGrowth)+' is growth.';
+    }catch(e){ out.textContent='Check your numbers'; out.classList.add('error');
+      stats.innerHTML='<div class="stat" style="grid-column:1/-1;"><div class="stat-label">Problem</div><div class="stat-value" style="font-size:14px;">'+e.message+'</div></div>'; last=null; }
+  }
+  ['ivInitial','ivMonthly','ivReturn','ivYears','ivInflation'].forEach(function(id){ el(id).addEventListener('input',compute); el(id).addEventListener('change',compute); });
+
+  el('ivCopyBtn').addEventListener('click', function(){
+    if(!last) return;
+    var btn=this, o=btn.textContent;
+    navigator.clipboard.writeText(last).then(function(){btn.textContent='Copied!';}).catch(function(){btn.textContent='Copy failed';});
+    setTimeout(function(){btn.textContent=o;},1600);
+  });
+  compute();
+})();
+</script>
+<script>
+if (window.ShareState) ShareState.init({ buttonId: 'ivShareBtn', fields: {"initial": "ivInitial", "monthly": "ivMonthly", "ret": "ivReturn", "years": "ivYears", "inf": "ivInflation"} });
+</script>
+</body>
+</html>
