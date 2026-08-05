@@ -102,6 +102,14 @@
         <a href="words-to-numbers.html">Words to Numbers</a>
         <a href="currency-to-words.html">Currency to Words</a>
       </div>
+      <div class="nav-group"><span class="nav-group-title">Unit converters</span>
+        <a href="unit-converters.html">All Unit Converters</a>
+        <a href="kg-to-lbs-converter.html">kg to lbs</a>
+        <a href="cm-to-inches-converter.html">cm to Inches</a>
+        <a href="celsius-to-fahrenheit-converter.html">Celsius to Fahrenheit</a>
+        <a href="miles-to-km-converter.html">Miles to km</a>
+        <a href="liters-to-gallons-converter.html">Liters to Gallons</a>
+      </div>
       <div class="nav-group"><span class="nav-group-title">Reference</span>
         <a href="blog.html">Blog</a>
         <a href="glossary.html">Glossary</a>
@@ -130,6 +138,12 @@
   </p>
 
 <div class="log-date">2026-08-02 <span class="log-count">5 corrections</span></div>
+<div class="log-item log-change">
+  <span class="log-tag tag-change">Change</span>
+  <div class="log-title">Twenty unit converters, on a separate engine</div>
+  <p class="log-detail">Weight, length, volume, area, speed, temperature, energy, pressure and data storage. Conversion logic lives in a new units.js rather than finance.js, so a fault in one cannot take down the other. Most factors are exact by definition rather than measured &mdash; 1 inch is 2.54 cm and 1 pound is 0.45359237 kg under the 1959 International Yard and Pound Agreement &mdash; and every one was verified against its definition and round-tripped. The pages that need it carry a US or Imperial toggle: the two gallons differ by 20% and, counterintuitively, the two fluid ounces differ by 4% in the opposite direction. Cups to grams asks which ingredient you mean, because volume and mass have no fixed relationship.</p>
+</div>
+
 <div class="log-item log-change">
   <span class="log-tag tag-change">Change</span>
   <div class="log-title">Six new financial calculators, and a category structure</div>

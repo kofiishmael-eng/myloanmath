@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XL6TXYDCLD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XL6TXYDCLD');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>mpg to L/100km Converter — The Inverse Conversion</title>
+<meta name="description" content="Convert miles per gallon to litres per 100 km and back. This is an inverse relationship, not a multiplication, and US and UK gallons differ.">
+<link rel="canonical" href="https://myloanmath.com/mpg-to-l-100km-converter.html">
+<meta property="og:title" content="mpg to L/100km Converter — The Inverse Conversion">
+<meta property="og:description" content="Convert miles per gallon to litres per 100 km and back. This is an inverse relationship, not a multiplication, and US and UK gallons differ.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myloanmath.com/mpg-to-l-100km-converter.html">
+<meta property="og:image" content="https://myloanmath.com/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myloanmath.com/assets/og-image.png">
+<link rel="preconnect" href="https://pagead2.googlesyndication.com">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+<style>
+  .conv-swap{
+    display:flex; align-items:center; justify-content:center; margin:6px 0;
+  }
+  .conv-swap button{
+    font-family:var(--font-mono); font-size:12px; font-weight:600; padding:8px 16px;
+    border:1px solid var(--line); border-radius:20px; background:var(--card);
+    color:var(--ink-soft); cursor:pointer; min-height:38px;
+  }
+  .conv-swap button:hover{border-color:var(--brass); color:var(--ink);}
+  .ref-table{width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:12.5px; margin-top:10px;}
+  .ref-table th,.ref-table td{padding:7px 10px; border:1px solid var(--line); text-align:right;}
+  .ref-table th{background:var(--brass-soft); color:var(--brass); font-weight:700; font-size:11px; letter-spacing:0.04em;}
+  .ref-table td:first-child, .ref-table th:first-child{text-align:left;}
+  .exact-box{
+    background:var(--accent-soft); border-left:3px solid var(--accent); border-radius:6px;
+    padding:14px 16px; margin:16px 0; font-size:14px; line-height:1.65;
+  }
+  .exact-box strong{font-family:var(--font-mono); font-size:13.5px;}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why is mpg to L/100km a division rather than a multiplication?", "acceptedAnswer": {"@type": "Answer", "text": "Because the units are inverses. Mpg is distance per fuel and L/100km is fuel per distance, so doubling one halves the other. L/100km equals 235.215 divided by US mpg."}}, {"@type": "Question", "name": "Why do UK cars have higher mpg figures than US ones?", "acceptedAnswer": {"@type": "Answer", "text": "The Imperial gallon is about 20% larger, so a car travels further on one. A car doing 40 mpg in the UK is doing about 33 mpg in the US for identical real-world efficiency."}}, {"@type": "Question", "name": "Is going from 30 to 35 mpg the same saving as 10 to 15 mpg?", "acceptedAnswer": {"@type": "Answer", "text": "No, and it is far smaller. Over 10,000 miles, improving from 10 to 15 mpg saves 167 gallons while improving from 30 to 35 saves 48. Mpg gains are worth much more at the thirsty end."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9412143347948347" crossorigin="anonymous"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://myloanmath.com/"}, {"@type": "ListItem", "position": 2, "name": "Unit Converters", "item": "https://myloanmath.com/unit-converters.html"}, {"@type": "ListItem", "position": 3, "name": "mpg to L/100km Converter", "item": "https://myloanmath.com/mpg-to-l-100km-converter.html"}]}</script>
+</head>
+<body>
+<a href="#main-heading" class="skip-link">Skip to content</a>
+<nav class="topnav" aria-label="Main">
+  <a class="brand" href="index.html"><svg class="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+    <rect width="64" height="64" rx="14" fill="#1F5C43"/>
+    <text x="32" y="45" font-family="Georgia, serif" font-size="36" font-weight="700" fill="#F2EFE4" text-anchor="middle">M</text>
+  </svg> myloanmath</a>
+  <details class="nav-disclosure">
+    <summary aria-label="Browse all calculators">Menu</summary>
+    <div class="links">
+      <a class="nav-home" href="index.html">Home</a>
+      <div class="nav-group"><span class="nav-group-title">Loans &amp; mortgages</span>
+        <a href="financial-calculators.html">All Financial Calculators</a>
+        <a href="loan-calculator.html">Loan Calculator</a>
+        <a href="auto-loan-calculator.html">Auto Loan Calculator</a>
+        <a href="mortgage-calculator.html">Mortgage Calculator</a>
+        <a href="loan-comparison-calculator.html">Loan Comparison</a>
+        <a href="amortization-calculator.html">Amortization Schedule</a>
+        <a href="interest-rate-calculator.html">Interest Rate Calculator</a>
+        <a href="extra-payment-calculator.html">Extra Payment</a>
+        <a href="refinance-calculator.html">Refinance Break-Even</a>
+        <a href="rent-vs-buy-calculator.html">Rent vs. Buy</a>
+        <a href="debt-payoff-calculator.html">Debt Payoff</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Income &amp; tax</span>
+        <a href="salary-calculator.html">Salary Calculator</a>
+        <a href="tax-calculator.html">Tax Calculator (US)</a>
+        <a href="canada-tax-calculator.html">Tax Calculator (Canada)</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Saving &amp; growth</span>
+        <a href="compound-interest-calculator.html">Compound Interest</a>
+        <a href="savings-goal-calculator.html">Savings Goal</a>
+        <a href="401k-calculator.html">401(k) Calculator</a>
+        <a href="investment-calculator.html">Investment Calculator</a>
+        <a href="retirement-calculator.html">Retirement Calculator</a>
+        <a href="inflation-calculator.html">Inflation Calculator</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Everyday math</span>
+        <a href="percentage-calculator.html">Percentage Calculator</a>
+        <a href="discount-calculator.html">Discount Calculator</a>
+        <a href="tip-calculator.html">Tip Calculator</a>
+        <a href="sales-tax-calculator.html">Sales Tax Calculator</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Number to words</span>
+        <a href="numbers-to-words.html">Numbers to Words</a>
+        <a href="words-to-numbers.html">Words to Numbers</a>
+        <a href="currency-to-words.html">Currency to Words</a>
+      </div>
+      <div class="nav-group"><span class="nav-group-title">Reference</span>
+        <a href="blog.html">Blog</a>
+        <a href="glossary.html">Glossary</a>
+        <a href="financial-calendar.html">Financial Calendar</a>
+        <a href="which-calculator-do-i-need.html">Which Calculator?</a>
+        <a href="methodology.html">Methodology</a>
+        <a href="changelog.html">Corrections</a>
+      </div>
+    </div>
+  </details>
+</nav>
+<div class="wrap">
+<div class="fallback-banner" id="fallbackBanner">Something went wrong loading the converter. Open your browser's console (F12) to see the error.</div>
+<header class="page-head">
+  <div class="eyebrow">// myloanmath converter</div>
+  <h1 id="main-heading">mpg to L/100km Converter</h1>
+  <p class="sub">The one conversion on this site where doubling the input halves the output — because the two units measure opposite things.</p>
+</header>
+
+<div class="card">
+  <div class="row"><div class="field"><label for="cvValue">Value</label><input type="text" id="cvValue" value="30" inputmode="decimal"></div><div class="field"><label for="cvDir">Convert</label><select id="cvDir"><option value="fwd">mpg to L/100km</option><option value="rev">L/100km to mpg</option></select></div></div>
+  <div class="row"><div class="field"><label for="cvSystem">Gallon type</label><select id="cvSystem"><option value="us">US gallon</option><option value="uk">Imperial (UK) gallon</option></select></div></div>
+  <div class="conv-swap"><button type="button" id="cvSwap">Swap direction</button></div>
+
+  <div class="result" aria-live="polite" aria-atomic="true">
+    <div class="result-label" id="cvLabel">Result</div>
+    <div class="result-text" id="cvOutput">-</div>
+  </div>
+  <div class="actions"><button class="action" id="cvCopyBtn" type="button">Copy result</button><button class="action" id="cvShareBtn" type="button">Copy link to this conversion</button></div>
+  <p class="note">An inverse conversion: L/100km = 235.215 divided by US mpg, or 282.481 divided by UK mpg. Doubling one halves the other.</p>
+</div>
+
+<div class="card">
+  <div class="result-label" style="color:var(--accent);">Quick reference</div>
+  <table class="ref-table"><tr><th>mpg (US)</th><th>L/100km</th><th>L/100km</th><th>mpg (US)</th></tr><tr><td>20</td><td>11.76</td><td>5</td><td>47.04</td></tr><tr><td>25</td><td>9.41</td><td>6</td><td>39.2</td></tr><tr><td>30</td><td>7.84</td><td>8</td><td>29.4</td></tr><tr><td>35</td><td>6.72</td><td>10</td><td>23.52</td></tr><tr><td>40</td><td>5.88</td><td>12</td><td>19.6</td></tr><tr><td>50</td><td>4.7</td><td>15</td><td>15.68</td></tr><tr><td>60</td><td>3.92</td><td>20</td><td>11.76</td></tr><tr><td>70</td><td>3.36</td><td>25</td><td>9.41</td></tr></table>
+</div>
+
+<div class="ad-slot"><!-- AD SLOT: below the converter. Paste your AdSense ad unit code here once approved. --></div>
+
+<section class="content">
+<h2>Why this is not a multiplication</h2>
+<div class="exact-box"><strong>L/100km = 235.215 &divide; mpg (US)</strong> &nbsp;&middot;&nbsp; <strong>L/100km = 282.481 &divide; mpg (UK)</strong></div>
+<p>Every other conversion on this site multiplies. This one divides, because the two units measure opposite things. Miles per gallon is distance per unit of fuel, so higher is better. Litres per 100 km is fuel per unit of distance, so lower is better.</p>
+<p>The consequence is that the relationship is inverse: doubling mpg halves L/100km. A car at 30 US mpg uses 7.84 L/100km; at 60 mpg it uses 3.92. Multiplying by a fixed factor cannot produce that behaviour, and treating this as a linear conversion is the most common error in fuel economy comparison.</p>
+
+<h2>Which gallon, and why UK figures look flattering</h2>
+<p>A UK gallon is about 20% larger than a US gallon, so a car travels further on one. British fuel economy figures are therefore about 20% higher than American ones for identical real-world efficiency: a car doing 40 mpg in the UK is doing about 33 mpg in the US.</p>
+<p>This is not a rounding difference and it is not a difference in the car. Comparing a British review against an American one without switching the toggle above will make the same vehicle appear substantially more efficient in Britain, and the mistake is common enough to appear in published comparisons.</p>
+
+<h2>Why Europe measures fuel the other way round</h2>
+<p>L/100km looks backwards to anyone raised on mpg, but it has a real advantage: it is proportional to what you actually spend. Fuel used, and therefore cost, scales linearly with L/100km, so a car at 10 L/100km costs exactly twice as much to run per kilometre as one at 5.</p>
+<p>Mpg does not behave that way, and this is the source of a genuine and widely misunderstood effect. Improving from 10 to 15 mpg saves far more fuel over the same distance than improving from 30 to 35 mpg, despite both being a five-mpg gain. Over 10,000 miles, the first saves 167 gallons and the second saves 48. Judging efficiency gains by mpg alone systematically undervalues improvements at the thirsty end of the range &mdash; which is why replacing an old truck matters more than upgrading an already-efficient car.</p>
+
+<h2>Reading the ratings sceptically</h2>
+<p>Official figures come from standardised test cycles, not from driving, and real-world consumption is routinely worse. Cold weather, short journeys, roof boxes, underinflated tyres, air conditioning and aggressive acceleration all cost fuel, and electric range figures are affected even more sharply by temperature.</p>
+<p>The honest use of a manufacturer's figure is comparative rather than absolute: it tells you which of two cars is more efficient under identical test conditions, not what either will cost you. For that, track your own consumption over several tanks and convert the result. The <a href="liters-to-gallons-converter.html">litres to gallons converter</a> handles the volume side if your pump and your dashboard disagree.</p>
+<h2>Frequently asked questions</h2>
+<div class="faq-item"><h3>Why is mpg to L/100km a division rather than a multiplication?</h3><p>Because the units are inverses. Mpg is distance per fuel and L/100km is fuel per distance, so doubling one halves the other. L/100km equals 235.215 divided by US mpg.</p></div>
+<div class="faq-item"><h3>Why do UK cars have higher mpg figures than US ones?</h3><p>The Imperial gallon is about 20% larger, so a car travels further on one. A car doing 40 mpg in the UK is doing about 33 mpg in the US for identical real-world efficiency.</p></div>
+<div class="faq-item"><h3>Is going from 30 to 35 mpg the same saving as 10 to 15 mpg?</h3><p>No, and it is far smaller. Over 10,000 miles, improving from 10 to 15 mpg saves 167 gallons while improving from 30 to 35 saves 48. Mpg gains are worth much more at the thirsty end.</p></div>
+</section>
+
+<div class="related">
+  <p class="label">Related converters</p>
+  <div class="related-list">
+    <a href="unit-converters.html">All Unit Converters</a>
+      <a href="liters-to-gallons-converter.html">Liters to Gallons</a>
+      <a href="miles-to-km-converter.html">Miles to km</a>
+      <a href="mph-to-kph-converter.html">mph to km/h</a>
+  </div>
+</div>
+
+<p class="note" style="text-align:center; margin-top:26px;">Conversion factors last verified 2026-08-02 against the definitions listed in our <a href="methodology.html">methodology</a>. Every correction we have made is public in the <a href="changelog.html">corrections log</a>.</p>
+
+</div>
+<footer class="site-footer">
+  <div>
+    <a href="index.html">Home</a>
+    <a href="blog.html">Blog</a>
+    <a href="about.html">About</a>
+  </div>
+  <div style="margin-top:10px;">
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms-of-use.html">Terms &amp; Disclaimer</a>
+  </div>
+  <p style="margin-top:10px;">Runs entirely in your browser &mdash; nothing you type is sent anywhere.</p>
+  <p style="margin-top:8px; max-width:62ch; margin-left:auto; margin-right:auto;">Built and maintained by <a href="about.html">Ishmael</a>, an accountant. Educational information only &mdash; not financial, tax, or accounting advice. See <a href="terms-of-use.html">Terms &amp; Disclaimer</a>.</p>
+</footer>
+<script src="units.js"></script>
+<script src="recentTools.js"></script>
+<script src="shareState.js"></script>
+<script>if (window.RecentTools) window.RecentTools.recordVisit("mpg-to-l-100km-converter.html", "mpg to L/100km Converter");</script>
+<script>
+(function(){
+  var U = window.UnitTools;
+  if (!U) { document.getElementById('fallbackBanner').style.display='block'; return; }
+  function el(id){ return document.getElementById(id); }
+  function num(s){ s=String(s).trim().replace(/,/g,''); if(!/^-?\d*\.?\d+$/.test(s)) return NaN; return parseFloat(s); }
+  function fmt(n){ return U.smartRound(n, 6).toLocaleString(undefined, {maximumFractionDigits:6}); }
+  var last=null;
+  function compute(){
+    var out=el('cvOutput'), lab=el('cvLabel');
+    try{
+      var v=num(el('cvValue').value); if(isNaN(v)||v<=0) throw new Error('bad');
+      var rev=el('cvDir').value==='rev', sys=el('cvSystem').value;
+      var r = rev ? U.l100kmToMpg(v,sys) : U.mpgToL100km(v,sys);
+      var name = sys==='uk' ? 'mpg (UK)' : 'mpg (US)';
+      lab.textContent = fmt(v)+' '+(rev?'L/100km':name)+' equals';
+      out.textContent = fmt(r)+' '+(rev?name:'L/100km');
+      out.classList.remove('error');
+      last = fmt(v)+' '+(rev?'L/100km':name)+' = '+fmt(r)+' '+(rev?name:'L/100km');
+    }catch(e){ out.textContent='Check your number'; out.classList.add('error'); lab.textContent='Result'; last=null; }
+  }
+  ['cvValue','cvDir','cvSystem'].forEach(function(id){ el(id).addEventListener('input',compute); el(id).addEventListener('change',compute); });
+  el('cvSwap').addEventListener('click', function(){ var d=el('cvDir'); d.value=d.value==='fwd'?'rev':'fwd'; compute(); });
+
+  el('cvCopyBtn').addEventListener('click', function(){
+    if(!last) return; var b=this,o=b.textContent;
+    navigator.clipboard.writeText(last).then(function(){b.textContent='Copied!';}).catch(function(){b.textContent='Copy failed';});
+    setTimeout(function(){b.textContent=o;},1600);
+  });
+  compute();
+})();
+</script>
+<script>
+if (window.ShareState) ShareState.init({ buttonId: 'cvShareBtn', fields: {"v": "cvValue", "dir": "cvDir", "sys": "cvSystem"} });
+</script>
+</body>
+</html>

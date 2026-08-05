@@ -90,6 +90,14 @@
         <a href="words-to-numbers.html">Words to Numbers</a>
         <a href="currency-to-words.html">Currency to Words</a>
       </div>
+      <div class="nav-group"><span class="nav-group-title">Unit converters</span>
+        <a href="unit-converters.html">All Unit Converters</a>
+        <a href="kg-to-lbs-converter.html">kg to lbs</a>
+        <a href="cm-to-inches-converter.html">cm to Inches</a>
+        <a href="celsius-to-fahrenheit-converter.html">Celsius to Fahrenheit</a>
+        <a href="miles-to-km-converter.html">Miles to km</a>
+        <a href="liters-to-gallons-converter.html">Liters to Gallons</a>
+      </div>
       <div class="nav-group"><span class="nav-group-title">Reference</span>
         <a href="blog.html">Blog</a>
         <a href="glossary.html">Glossary</a>
@@ -180,6 +188,12 @@
 <h3>Sales tax, inflation, interest rate, amortization, investment and retirement</h3>
 <p>The sales tax tool applies a rate you supply rather than a stored table, because combined US rates vary by exact address within a state and a state-level table would be wrong for most transactions. The inflation tool is rate-based for the same reason: a published price index embeds a choice of index, basket and base year, and the assumption belongs to the reader. The interest rate tool solves the amortization formula numerically by bisection, since that formula cannot be rearranged to isolate the rate; precision is limited by the fact that the payment you enter is rounded to cents.</p>
 <p>The amortization schedule computes each month&rsquo;s interest as the outstanding balance times the monthly rate, rounded to whole cents, with the final payment trimmed to clear the balance exactly &mdash; the method a servicer uses. This differs from the closed-form total (payment times term, less principal) by roughly $4.71 over a 30-year loan, under a cent per payment. Both figures are returned so the difference is visible rather than surprising. The investment tool reports nominal and inflation-adjusted balances together, and the retirement tool inflates spending to the retirement date before drawing down. Neither models variable returns, and the retirement tool excludes Social Security, pensions, and tax on withdrawals, all disclosed on the page itself.</p>
+
+<h2 class="category-heading">Unit conversion</h2>
+<h3>Where the factors come from</h3>
+<p>Conversion factors are held in a separate module from the financial logic, so a fault in one cannot disable the other. Almost every factor used is a definition rather than a measurement, and therefore exact: the 1959 International Yard and Pound Agreement fixed the inch at exactly 2.54 cm and the pound at exactly 0.45359237 kg, and every other imperial length and weight follows from those two. The US gallon is exactly 3.785411784 litres by its definition as 231 cubic inches; the Imperial gallon is exactly 4.54609 litres under the UK Weights and Measures Act 1985. A nautical mile is exactly 1,852 metres, a hectare exactly 10,000 square metres, a bar exactly 100,000 pascals, and the thermochemical calorie exactly 4.184 joules.</p>
+<p>Two conversions are not simple multiplications and are handled separately. Temperature requires an offset as well as a scale factor, since the two scales have different zero points. Fuel economy is an inverse relationship, because miles per gallon measures distance per volume while litres per 100 km measures volume per distance &mdash; doubling one halves the other.</p>
+<p>Two are genuinely approximate, and say so on the page. Cups to grams depends on the density of the specific ingredient, and even then varies with how the ingredient is packed: flour measured by scooping can weigh twenty percent more than flour spooned into the cup. Digital storage has two competing definitions in active use, decimal and binary, and the tool asks which you mean rather than picking one silently.</p>
 
 <h2 class="category-heading">Editorial standards</h2>
 <p>Four rules govern every number on this site.</p>
