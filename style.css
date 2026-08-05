@@ -255,3 +255,35 @@ footer.site-footer a:hover{color:var(--accent);}
 .cat-all:hover{text-decoration:underline;}
 .cat-blurb{font-size:13.5px; color:var(--ink-soft); margin:0 0 4px; line-height:1.6; max-width:64ch;}
 .cat-block .tool-grid{margin:16px 0 30px;}
+
+
+/* ---- Homepage directory index -----------------------------------------
+   Category columns of plain links. Once a site passes roughly thirty tools a
+   card grid becomes a wall of scrolling; a scannable list lets someone find a
+   named tool in one glance, which is what people arriving from a search for
+   "mortgage calculator" actually want. */
+.idx-columns{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));
+  gap:26px 30px; margin:22px 0 34px; align-items:start;
+}
+.idx-col{min-width:0;}
+.idx-title{
+  font-family:var(--font-display); font-size:17.5px; font-weight:700; margin:0 0 12px;
+  padding-bottom:9px; border-bottom:2px solid var(--brass-soft);
+}
+.idx-title a{color:var(--accent); text-decoration:none;}
+.idx-title a:hover{text-decoration:underline;}
+.idx-list{list-style:none; margin:0; padding:0;}
+.idx-list li{margin:0 0 2px;}
+.idx-list a{
+  display:block; padding:6px 8px; margin-left:-8px; border-radius:5px;
+  color:var(--ink); text-decoration:none; font-size:14.5px; line-height:1.45;
+  border-left:2px solid transparent; transition:background 0.12s ease, border-color 0.12s ease;
+}
+.idx-list a:hover, .idx-list a:focus-visible{
+  background:var(--accent-soft); border-left-color:var(--accent); color:var(--accent);
+}
+@media (max-width:520px){
+  .idx-columns{grid-template-columns:1fr; gap:20px;}
+  .idx-list a{padding:9px 8px; font-size:15px;}   /* larger tap targets */
+}
