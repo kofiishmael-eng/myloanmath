@@ -88,3 +88,19 @@
   from = "/*"
   to = "/404.html"
   status = 404
+
+# ---- Embeddable calculators ------------------------------------------------
+# Every other path sends X-Frame-Options SAMEORIGIN and frame-ancestors 'self',
+# which blocks third-party framing entirely. Only /embed/* relaxes that, so the
+# rest of the site keeps its clickjacking protection. These headers are declared
+# AFTER the site-wide block so they win for this path.
+#
+# X-Frame-Options has no "allow any origin" value, so it is unset here and
+# frame-ancestors * carries the policy — modern browsers prefer CSP anyway.
+[[headers]]
+  for = "/embed/*"
+  [headers.values]
+    X-Frame-Options = ""
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; object-src 'none'; base-uri 'self'; frame-ancestors *"
+    X-Robots-Tag = "noindex, follow"
+    Cache-Control = "public, max-age=3600, must-revalidate"
