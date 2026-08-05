@@ -12,6 +12,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1F5C43">
 <title>Corrections &amp; Changes | MyLoanMath</title>
 <meta name="description" content="A dated, public record of every correction and change made to MyLoanMath's calculators — including what was wrong, by how much, and when it was fixed.">
 <link rel="canonical" href="https://myloanmath.com/changelog.html">
@@ -118,11 +119,23 @@
         <a href="which-calculator-do-i-need.html">Which Calculator?</a>
         <a href="methodology.html">Methodology</a>
         <a href="changelog.html">Corrections</a>
+        <a href="all-calculators.html">All Calculators A&ndash;Z</a>
+        <a href="contact.html">Contact</a>
       </div>
     </div>
   </details>
+  <form class="nav-search" action="index.html" method="get" role="search">
+    <label class="visually-hidden" for="navSearch">Search calculators</label>
+    <input type="search" id="navSearch" name="q" placeholder="Search calculators..." autocomplete="off">
+    <button type="submit" aria-label="Search">Go</button>
+  </form>
 </nav>
 <div class="wrap">
+<nav class="crumbs" aria-label="Breadcrumb">
+  <a href="index.html">Home</a>
+  <span class="crumb-sep" aria-hidden="true">&rsaquo;</span>
+  <span aria-current="page">Corrections &amp; Changes</span>
+</nav>
 <header class="page-head">
   <div class="eyebrow">// myloanmath accountability</div>
   <h1 id="main-heading">Corrections &amp; Changes</h1>
@@ -139,6 +152,12 @@
   </p>
 
 <div class="log-date">2026-08-02 <span class="log-count">5 corrections</span></div>
+<div class="log-item log-change">
+  <span class="log-tag tag-change">Change</span>
+  <div class="log-title">Breadcrumbs, sitewide search, contact page and an A&ndash;Z index</div>
+  <p class="log-detail">Breadcrumb structured data had been present on 74 pages but was invisible to visitors; the trail is now shown on the page, generated from the same data as the schema so the two cannot disagree. Sixty-four pages that previously declared a flat trail are now correctly nested under their category hub. Search was only on the home page and is now in the header of every page, as a plain form that works without JavaScript. A contact page replaces the bare email link, covering corrections, calculator requests, and what the address cannot help with. A new A&ndash;Z index lists all forty-six tools alphabetically with a one-line description of each, generated from the pages themselves so it cannot fall out of date.</p>
+</div>
+
 <div class="log-item log-change">
   <span class="log-tag tag-change">Change</span>
   <div class="log-title">Ten guides substantially expanded</div>
@@ -296,6 +315,7 @@
     <a href="about.html">About</a>
   </div>
   <div style="margin-top:10px;">
+    <a href="contact.html">Contact</a>
     <a href="privacy-policy.html">Privacy Policy</a>
     <a href="terms-of-use.html">Terms &amp; Disclaimer</a>
   </div>
