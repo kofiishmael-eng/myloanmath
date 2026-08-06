@@ -218,6 +218,10 @@
 <p>Every chart on the site is inline SVG generated in the browser from the same engine that produces the numbers beside it, so a chart can never disagree with the figure it illustrates. No charting library is used: the whole module is about six kilobytes, it prints without a separate stylesheet, and it inherits the site&rsquo;s colours rather than hard-coding them.</p>
 <p>Each chart carries a text description of what it shows, because a chart that conveys nothing to a screen reader takes up space without adding meaning. Where a visual would be decorative rather than informative &mdash; the number-to-words converters, for instance, where there is no quantity to compare &mdash; none is drawn.</p>
 
+<h3>CSV export</h3>
+<p>Ten calculators export their schedule as a spreadsheet file. Rows are rebuilt from the calculation engine at the moment the button is pressed rather than read from the table on screen, so the exported figures carry full precision and always match the current inputs rather than whatever was displayed when the page loaded. Each file opens with a short header recording the inputs it was generated from, so a schedule handed to a lender or an accountant carries its own assumptions with it.</p>
+<p>The file is assembled entirely in your browser and never sent anywhere. A byte-order mark is written at the start so spreadsheet software reads it as UTF-8 rather than mangling currency symbols, and any field containing a comma, quote or line break is quoted with internal quotes doubled.</p>
+
 <h2 class="category-heading">Editorial standards</h2>
 <p>Four rules govern every number on this site.</p>
 <p><strong>Primary sources only.</strong> Figures come from the body that sets them &mdash; IRS publications and Revenue Procedures, CRA guidance, and each state or province's own revenue authority or statute. Where only secondary sources exist, they are cross-checked against one another and the limitation is disclosed in the calculator's own result rather than buried here.</p>

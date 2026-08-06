@@ -129,7 +129,7 @@
   </div>
   <div id="toolChart"></div>
 
-  <div class="actions"><button class="action" id="ivCopyBtn" type="button">Copy result</button><button class="action" id="ivShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button></div>
+  <div class="actions"><button class="action" id="ivCopyBtn" type="button">Copy result</button><button class="action" id="ivShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button><button class="action" id="csvBtn" type="button">Download CSV</button></div>
   <p class="note">A projection at a constant rate, not a forecast. Real returns arrive unevenly, and the order in which good and bad years fall changes the outcome — especially once you start withdrawing.</p>
 </div>
 
@@ -187,6 +187,7 @@
 </footer>
 <script src="numberToWords.js"></script>
 <script src="finance.js"></script>
+<script src="export.js"></script>
 <script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
@@ -265,6 +266,30 @@ document.addEventListener('click', function(e){
     e.addEventListener('input',draw); e.addEventListener('change',draw);
   });
   draw();
+})();
+</script>
+<script>
+// CSV export. Rows are built from the engine at click time so the file always
+// matches the current inputs, and carries full precision rather than the
+// rounded strings shown on screen.
+(function(){
+  var F=window.FinanceTools, X=window.CsvExport;
+  if(!F||!X) return;
+  function n(id){var e=document.getElementById(id); if(!e) return NaN;
+    var s=String(e.value).trim().replace(/,/g,''); if(!/^-?\d*\.?\d+$/.test(s)) return NaN; return parseFloat(s);}
+  function v(id){var e=document.getElementById(id); return e?e.value:'';}
+  X.attach('csvBtn', 'investment-projection', function(){
+    var i=n('ivInitial'), m=n('ivMonthly'), r=n('ivReturn'), y=n('ivYears'), inf=n('ivInflation');
+    if([i,m,r,y,inf].some(isNaN)) throw new Error('bad input');
+    var res=F.investmentProjection({initialAmount:i,monthlyContribution:m,annualReturnPercent:r,
+      years:y,inflationPercent:inf});
+    var rows=[['Year','Total contributed','Growth','Balance']];
+    res.yearRows.forEach(function(x){ rows.push([x.year,x.contributed,x.growth,x.balance]); });
+    return { rows: rows, meta: ['Investment projection - myloanmath.com','Starting amount: '+i,
+      'Monthly contribution: '+m,'Assumed return: '+r+'%','Assumed inflation: '+inf+'%',
+      'Final balance: '+res.finalBalance,"In today's money: "+res.realFinalBalance,
+      'Projection at a constant rate - not a forecast']};
+  });
 })();
 </script>
 </body>

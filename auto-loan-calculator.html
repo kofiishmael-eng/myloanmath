@@ -142,7 +142,7 @@
     <div class="result-text" id="autoOutput">-</div>
     <div class="stat-grid" id="autoStats"></div>
   </div>
-  <div class="actions"><button class="action" id="autoScheduleBtn" type="button">Show yearly breakdown</button><button class="action" id="autoCopyBtn" type="button">Copy result</button><button class="action" id="autoShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button></div>
+  <div class="actions"><button class="action" id="autoScheduleBtn" type="button">Show yearly breakdown</button><button class="action" id="autoCopyBtn" type="button">Copy result</button><button class="action" id="autoShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button><button class="action" id="csvBtn" type="button">Download CSV</button></div>
   <div id="autoScheduleChart" style="display:none; margin-bottom:16px;"></div>
   <div class="schedule-wrap" id="autoScheduleWrap" style="display:none;"><table class="schedule-table" id="autoScheduleTable"></table></div>
   <p class="note">Uses the same standard amortization formula as our <a href="loan-calculator.html">general loan calculator</a>. Sales tax, if entered, is added to the amount financed — most buyers roll vehicle tax into the loan rather than paying it separately. Trade-in value reduces the amount financed directly.</p>
@@ -206,6 +206,7 @@
 </footer>
 <script src="numberToWords.js"></script>
 <script src="finance.js"></script>
+<script src="export.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
 <script src="tooltips.js"></script>
@@ -340,6 +341,31 @@ if (window.ShareState) ShareState.init({
 document.addEventListener('click', function(e){
   if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
+</script>
+<script>
+// CSV export. Rows are built from the engine at click time so the file always
+// matches the current inputs, and carries full precision rather than the
+// rounded strings shown on screen.
+(function(){
+  var F=window.FinanceTools, X=window.CsvExport;
+  if(!F||!X) return;
+  function n(id){var e=document.getElementById(id); if(!e) return NaN;
+    var s=String(e.value).trim().replace(/,/g,''); if(!/^-?\d*\.?\d+$/.test(s)) return NaN; return parseFloat(s);}
+  function v(id){var e=document.getElementById(id); return e?e.value:'';}
+  X.attach('csvBtn', 'auto-loan-schedule', function(){
+    var price=n('autoPrice'), down=n('autoDownPayment'), trade=n('autoTradeIn'),
+        stax=n('autoSalesTax'), rate=n('autoRate'), months=n('autoTermMonths');
+    if([price,down,trade,stax,rate,months].some(isNaN)) throw new Error('bad input');
+    var taxable=Math.max(0, price-trade);
+    var financed=Math.max(0, price + taxable*stax/100 - down - trade);
+    var s=F.amortizationScheduleMonthly({principal:financed, annualRatePercent:rate, termMonths:Math.round(months)});
+    var rows=[['Payment','Payment amount','Interest','Principal','Remaining balance']];
+    s.rows.forEach(function(x){ rows.push([x.month,x.payment,x.interestPortion,x.principalPortion,x.remainingBalance]); });
+    return { rows: rows, meta: ['Auto loan schedule - myloanmath.com','Vehicle price: '+price,
+      'Amount financed: '+financed,'Rate: '+rate+'%','Monthly payment: '+s.monthlyPayment,
+      'Total interest: '+s.totalInterest]};
+  });
+})();
 </script>
 </body>
 </html>

@@ -146,7 +146,7 @@
   </div>
   <div id="toolChart"></div>
 
-  <div class="actions"><button class="action" id="xpCopyBtn" type="button">Copy result</button><button class="action" id="xpShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button></div>
+  <div class="actions"><button class="action" id="xpCopyBtn" type="button">Copy result</button><button class="action" id="xpShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button><button class="action" id="csvBtn" type="button">Download CSV</button></div>
   <p class="note">Assumes every extra payment is applied to principal on schedule and the interest rate is fixed. The required monthly payment does not change &mdash; extra money shortens the loan rather than shrinking the bill.</p>
 </div>
 
@@ -206,6 +206,7 @@
 </footer>
 <script src="numberToWords.js"></script>
 <script src="finance.js"></script>
+<script src="export.js"></script>
 <script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
@@ -346,6 +347,30 @@ document.addEventListener('click', function(e){
     e.addEventListener('input',draw); e.addEventListener('change',draw);
   });
   draw();
+})();
+</script>
+<script>
+// CSV export. Rows are built from the engine at click time so the file always
+// matches the current inputs, and carries full precision rather than the
+// rounded strings shown on screen.
+(function(){
+  var F=window.FinanceTools, X=window.CsvExport;
+  if(!F||!X) return;
+  function n(id){var e=document.getElementById(id); if(!e) return NaN;
+    var s=String(e.value).trim().replace(/,/g,''); if(!/^-?\d*\.?\d+$/.test(s)) return NaN; return parseFloat(s);}
+  function v(id){var e=document.getElementById(id); return e?e.value:'';}
+  X.attach('csvBtn', 'extra-payment-schedule', function(){
+    var p=n('xpPrincipal'), r=n('xpRate'), t=n('xpTermValue'),
+        em=n('xpExtraMonthly'), eo=n('xpExtraOneTime'), om=n('xpOneTimeMonth');
+    if([p,r,t,em,eo,om].some(isNaN)) throw new Error('bad input');
+    var months = v('xpTermUnit')==='years' ? Math.round(t*12) : Math.round(t);
+    var res=F.calculateExtraPayment({principal:p,annualRatePercent:r,termMonths:months,
+      extraMonthly:em,extraOneTime:eo,oneTimeMonth:om});
+    var rows=[['Year','Interest paid this year','Remaining balance']];
+    res.yearRows.forEach(function(x){ rows.push([x.year, x.interestThisYear, x.remainingBalance]); });
+    return { rows: rows, meta: ['Extra payment schedule - myloanmath.com','Balance: '+p,'Rate: '+r+'%',
+      'Extra per month: '+em,'Months saved: '+res.monthsSaved,'Interest saved: '+res.interestSaved]};
+  });
 })();
 </script>
 </body>

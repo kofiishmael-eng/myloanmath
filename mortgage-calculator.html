@@ -171,7 +171,7 @@
     <div class="stat-grid" id="mortgageStats"></div>
   </div>
 
-  <div class="actions"><button class="action" id="mortgageScheduleBtn" type="button">Show yearly breakdown</button><button class="action" id="mortgageCopyBtn" type="button">Copy result</button><button class="action" id="mortgageShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" id="mortgagePrintBtn" type="button">Print</button></div>
+  <div class="actions"><button class="action" id="mortgageScheduleBtn" type="button">Show yearly breakdown</button><button class="action" id="mortgageCopyBtn" type="button">Copy result</button><button class="action" id="mortgageShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" id="mortgagePrintBtn" type="button">Print</button><button class="action" id="csvBtn" type="button">Download CSV</button></div>
   <div id="mortgageScheduleChart" style="display:none; margin:16px 0;"></div>
   <div class="schedule-wrap" id="mortgageScheduleWrap" style="display:none;"><table class="schedule-table" id="mortgageScheduleTable"></table></div>
   <p class="note" id="mortgageNote"></p>
@@ -255,6 +255,7 @@
 </footer>
 <script src="numberToWords.js"></script>
 <script src="finance.js"></script>
+<script src="export.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
 <script src="tooltips.js"></script>
@@ -465,6 +466,45 @@ if (window.ShareState) ShareState.init({
     'extrao': 'extraOneTime', 'taxup': 'taxIncrease', 'insup': 'insIncrease'
   }
 });
+</script>
+<script>
+// CSV export. Rows are built from the engine at click time so the file always
+// matches the current inputs, and carries full precision rather than the
+// rounded strings shown on screen.
+(function(){
+  var F=window.FinanceTools, X=window.CsvExport;
+  if(!F||!X) return;
+  function n(id){var e=document.getElementById(id); if(!e) return NaN;
+    var s=String(e.value).trim().replace(/,/g,''); if(!/^-?\d*\.?\d+$/.test(s)) return NaN; return parseFloat(s);}
+  function v(id){var e=document.getElementById(id); return e?e.value:'';}
+  X.attach('csvBtn', 'mortgage-schedule', function(){
+    var price=n('homePrice'), rate=n('mortgageRate'), term=n('mortgageTerm'),
+        ins=n('homeInsurance'), hoa=n('hoaFee'), other=n('otherCost'),
+        exM=n('extraMonthly'), exA=n('extraAnnual'), exO=n('extraOneTime'), exOM=n('extraOneTimeMonth'),
+        taxUp=n('taxIncrease'), insUp=n('insIncrease'), sYear=n('startYear');
+    var dp=n('downPayment'), tax=n('propertyTax');
+    if([price,rate,term,ins,hoa,other,dp,tax].some(isNaN)) throw new Error('bad input');
+    var dpPct = dp, taxPct = tax;
+    var res=F.calculateMortgageDetailed({homePrice:price, downPayment:price*dpPct/100,
+      annualRatePercent:rate, termYears:term, propertyTaxAnnualPercent:taxPct,
+      homeInsuranceAnnual:ins, hoaMonthly:hoa, otherMonthly:other,
+      taxIncreasePercent:isNaN(taxUp)?0:taxUp, insuranceIncreasePercent:isNaN(insUp)?0:insUp,
+      extraMonthly:isNaN(exM)?0:exM, extraAnnual:isNaN(exA)?0:exA,
+      extraOneTime:isNaN(exO)?0:exO, extraOneTimeMonth:isNaN(exOM)?1:exOM,
+      startMonth:parseInt(v('startMonth')||'1',10), startYear:isNaN(sYear)?2026:Math.round(sYear)});
+    var rows=[['Payment','Date','Interest','Principal','Extra','PMI','Remaining balance']];
+    res.rows.forEach(function(x){
+      rows.push([x.month, x.label, x.interest, x.principal, x.extra, x.pmi, x.balance]);
+    });
+    return { rows: rows, meta: [
+      'Mortgage schedule - myloanmath.com',
+      'Home price: '+price, 'Loan amount: '+res.loanPrincipal, 'Rate: '+rate+'%',
+      'Monthly principal and interest: '+res.principalAndInterest,
+      'First payment: '+res.firstPaymentLabel, 'Final payment: '+res.payoffLabel,
+      'Total interest: '+res.totalInterest
+    ]};
+  });
+})();
 </script>
 </body>
 </html>
