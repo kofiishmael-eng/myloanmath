@@ -126,11 +126,11 @@
 
 <div class="card">
   <div class="row">
-    <div class="field"><label for="tipBill">Bill amount</label><input type="text" id="tipBill" value="85.50" inputmode="decimal"></div>
-    <div class="field"><label for="tipPercent">Tip percentage</label><input type="text" id="tipPercent" value="20" inputmode="decimal"></div>
+    <div class="field"><label for="tipBill" data-help="The bill amount. Traditionally the pre-tax subtotal, though most people use the total.">Bill amount</label><input type="text" id="tipBill" value="85.50" inputmode="decimal"></div>
+    <div class="field"><label for="tipPercent" data-help="The tip percentage. In the US, 15% is the floor for adequate table service and 18 to 20% is standard.">Tip percentage</label><input type="text" id="tipPercent" value="20" inputmode="decimal"></div>
   </div>
   <div class="row">
-    <div class="field"><label for="tipPeople">Split between how many people</label><input type="text" id="tipPeople" value="1" inputmode="decimal"></div>
+    <div class="field"><label for="tipPeople" data-help="How many ways to split the bill. Splitting evenly works well when everyone ordered comparably.">Split between how many people</label><input type="text" id="tipPeople" value="1" inputmode="decimal"></div>
   </div>
   <div class="result" aria-live="polite" aria-atomic="true">
     <div class="result-label">Tip amount</div>
@@ -212,6 +212,7 @@
 <script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("tip-calculator.html", "Tip Calculator");</script>
 <script>
 (function(){

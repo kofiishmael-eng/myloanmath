@@ -124,8 +124,8 @@
 </header>
 
 <div class="card">
-  <div class="row"><div class="field"><label for="amPrincipal">Loan amount</label><input type="text" id="amPrincipal" value="300000" inputmode="decimal"></div><div class="field"><label for="amRate">Annual interest rate (%)</label><input type="text" id="amRate" value="6.5" inputmode="decimal"></div></div>
-  <div class="row"><div class="field"><label for="amTermValue">Loan term</label><input type="text" id="amTermValue" value="30" inputmode="decimal"></div><div class="field"><label for="amTermUnit">Term unit</label><select id="amTermUnit"><option value="years" selected>Years</option><option value="months">Months</option></select></div></div>
+  <div class="row"><div class="field"><label for="amPrincipal" data-help="The amount borrowed. For an existing loan, use the current balance rather than the original amount.">Loan amount</label><input type="text" id="amPrincipal" value="300000" inputmode="decimal"></div><div class="field"><label for="amRate" data-help="The annual interest rate on the loan, not the APR. APR also includes fees charged at closing.">Annual interest rate (%)</label><input type="text" id="amRate" value="6.5" inputmode="decimal"></div></div>
+  <div class="row"><div class="field"><label for="amTermValue" data-help="How long the loan runs from this point.">Loan term</label><input type="text" id="amTermValue" value="30" inputmode="decimal"></div><div class="field"><label for="amTermUnit" data-help="Whether the term is in years or months.">Term unit</label><select id="amTermUnit"><option value="years" selected>Years</option><option value="months">Months</option></select></div></div>
 
   <div class="result" aria-live="polite" aria-atomic="true">
     <div class="result-label">Monthly payment</div>
@@ -200,6 +200,7 @@
 <script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("amortization-calculator.html", "Amortization Schedule Calculator");</script>
 <script>
 (function(){

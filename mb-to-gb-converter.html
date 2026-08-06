@@ -136,8 +136,8 @@
 </header>
 
 <div class="card">
-  <div class="row"><div class="field"><label for="cvValue">Amount</label><input type="text" id="cvValue" value="1" inputmode="decimal"></div><div class="field"><label for="cvFrom">From</label><select id="cvFrom"><option value="B">Bytes</option><option value="KB">KB</option><option value="MB">MB</option><option value="GB" selected>GB</option><option value="TB">TB</option></select></div></div>
-  <div class="row"><div class="field"><label for="cvTo">To</label><select id="cvTo"><option value="B">Bytes</option><option value="KB">KB</option><option value="MB" selected>MB</option><option value="GB">GB</option><option value="TB">TB</option></select></div><div class="field"><label for="cvBase">Definition</label><select id="cvBase"><option value="dec">Decimal (1 GB = 1000 MB)</option><option value="bin">Binary (1 GB = 1024 MB)</option></select></div></div>
+  <div class="row"><div class="field"><label for="cvValue" data-help="The number you want to convert. Which unit it is in depends on the direction selected beside it.">Amount</label><input type="text" id="cvValue" value="1" inputmode="decimal"></div><div class="field"><label for="cvFrom" data-help="The unit your figure is currently in.">From</label><select id="cvFrom"><option value="B">Bytes</option><option value="KB">KB</option><option value="MB">MB</option><option value="GB" selected>GB</option><option value="TB">TB</option></select></div></div>
+  <div class="row"><div class="field"><label for="cvTo" data-help="The unit you want the answer in.">To</label><select id="cvTo"><option value="B">Bytes</option><option value="KB">KB</option><option value="MB" selected>MB</option><option value="GB">GB</option><option value="TB">TB</option></select></div><div class="field"><label for="cvBase" data-help="Decimal is what drive manufacturers and SI mean; binary is what most operating systems report while still writing GB. This is why a 1 TB drive shows as 931 GB.">Definition</label><select id="cvBase"><option value="dec">Decimal (1 GB = 1000 MB)</option><option value="bin">Binary (1 GB = 1024 MB)</option></select></div></div>
 
   <div class="result" aria-live="polite" aria-atomic="true">
     <div class="result-label" id="cvLabel">Result</div>
@@ -216,6 +216,7 @@
 <script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("mb-to-gb-converter.html", "MB to GB Converter");</script>
 <script>
 (function(){

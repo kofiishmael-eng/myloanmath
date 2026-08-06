@@ -136,7 +136,7 @@
 </header>
 
 <div class="card">
-  <div class="row"><div class="field"><label for="cvValue">Value</label><input type="text" id="cvValue" value="32" inputmode="decimal"></div><div class="field"><label for="cvDir">Convert</label><select id="cvDir"><option value="fwd">psi to bar</option><option value="rev">bar to psi</option></select></div></div>
+  <div class="row"><div class="field"><label for="cvValue" data-help="The number you want to convert. Which unit it is in depends on the direction selected beside it.">Value</label><input type="text" id="cvValue" value="32" inputmode="decimal"></div><div class="field"><label for="cvDir" data-help="Which way round to convert. The swap button below does the same thing in one click.">Convert</label><select id="cvDir"><option value="fwd">psi to bar</option><option value="rev">bar to psi</option></select></div></div>
   <div class="conv-swap"><button type="button" id="cvSwap">Swap direction</button></div>
 
   <div class="result" aria-live="polite" aria-atomic="true">
@@ -215,6 +215,7 @@
 <script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("psi-to-bar-converter.html", "psi to bar Converter");</script>
 <script>
 (function(){

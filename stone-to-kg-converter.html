@@ -136,8 +136,8 @@
 </header>
 
 <div class="card">
-  <div class="row"><div class="field"><label for="cvValue">Stone</label><input type="text" id="cvValue" value="11" inputmode="decimal"></div><div class="field"><label for="cvPounds">Pounds (optional)</label><input type="text" id="cvPounds" value="4" inputmode="decimal"></div></div>
-  <div class="row"><div class="field"><label for="cvDir">Convert</label><select id="cvDir"><option value="fwd">Stone and pounds to kg</option><option value="rev">kg to stone and pounds</option></select></div></div>
+  <div class="row"><div class="field"><label for="cvValue" data-help="The number you want to convert. Which unit it is in depends on the direction selected beside it.">Stone</label><input type="text" id="cvValue" value="11" inputmode="decimal"></div><div class="field"><label for="cvPounds" data-help="The pounds part of a stone-and-pounds weight. 11 stone 4 means 11 here and 4 in this box — it is not 11.4 stone.">Pounds (optional)</label><input type="text" id="cvPounds" value="4" inputmode="decimal"></div></div>
+  <div class="row"><div class="field"><label for="cvDir" data-help="Which way round to convert. The swap button below does the same thing in one click.">Convert</label><select id="cvDir"><option value="fwd">Stone and pounds to kg</option><option value="rev">kg to stone and pounds</option></select></div></div>
 
   <div class="result" aria-live="polite" aria-atomic="true">
     <div class="result-label" id="cvLabel">Result</div>
@@ -215,6 +215,7 @@
 <script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("stone-to-kg-converter.html", "Stone to kg Converter");</script>
 <script>
 (function(){

@@ -129,11 +129,11 @@
 <div class="card">
   <div class="row">
     <div class="field">
-      <label for="amount">Amount</label>
+      <label for="amount" data-help="The figure to write out in words. Used for cheques, contracts and any document where the written amount is the legally operative one.">Amount</label>
       <input type="text" id="amount" value="1234.50" inputmode="decimal">
     </div>
     <div class="field" style="max-width:220px;">
-      <label for="currency">Currency</label>
+      <label for="currency" data-help="Which currency the amount is in. This changes the unit and subunit names — dollars and cents, pounds and pence.">Currency</label>
       <select id="currency"></select>
     </div>
   </div>
@@ -220,6 +220,7 @@
 </footer>
 <script src="numberToWords.js"></script>
 <script src="finance.js"></script>
+<script src="tooltips.js"></script>
 <script src="recentTools.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("currency-to-words.html", "Currency to Words");</script>
 

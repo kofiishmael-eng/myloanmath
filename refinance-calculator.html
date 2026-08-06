@@ -126,21 +126,21 @@
 <div class="card">
   <div class="result-label" style="color:var(--accent);">Your current loan</div>
   <div class="row">
-    <div class="field"><label for="rfBalance">Current balance</label><input type="text" id="rfBalance" value="280000" inputmode="decimal"></div>
-    <div class="field"><label for="rfCurrentRate">Current interest rate (%)</label><input type="text" id="rfCurrentRate" value="7.5" inputmode="decimal"></div>
+    <div class="field"><label for="rfBalance" data-help="What you currently owe, not the original loan amount.">Current balance</label><input type="text" id="rfBalance" value="280000" inputmode="decimal"></div>
+    <div class="field"><label for="rfCurrentRate" data-help="The rate on your existing loan.">Current interest rate (%)</label><input type="text" id="rfCurrentRate" value="7.5" inputmode="decimal"></div>
   </div>
   <div class="row">
-    <div class="field"><label for="rfRemainingValue">Years remaining</label><input type="text" id="rfRemainingValue" value="24" inputmode="decimal"></div>
+    <div class="field"><label for="rfRemainingValue" data-help="Years left on the current loan. This matters as much as the rate — refinancing back to a full term is what makes a cheaper-looking loan cost more.">Years remaining</label><input type="text" id="rfRemainingValue" value="24" inputmode="decimal"></div>
   </div>
 
   <div class="result-label" style="color:var(--accent); margin-top:22px;">The refinance you're considering</div>
   <div class="row">
-    <div class="field"><label for="rfNewRate">New interest rate (%)</label><input type="text" id="rfNewRate" value="6" inputmode="decimal"></div>
-    <div class="field"><label for="rfNewTerm">New loan term (years)</label><input type="text" id="rfNewTerm" value="30" inputmode="decimal"></div>
+    <div class="field"><label for="rfNewRate" data-help="The rate being offered on the new loan.">New interest rate (%)</label><input type="text" id="rfNewRate" value="6" inputmode="decimal"></div>
+    <div class="field"><label for="rfNewTerm" data-help="The term of the new loan. Resetting a part-paid loan to a fresh full term lowers the payment while raising the total.">New loan term (years)</label><input type="text" id="rfNewTerm" value="30" inputmode="decimal"></div>
   </div>
   <div class="row">
-    <div class="field"><label for="rfClosingCosts">Closing costs</label><input type="text" id="rfClosingCosts" value="6000" inputmode="decimal"></div>
-    <div class="field"><label for="rfRollIn">Pay closing costs</label><select id="rfRollIn"><option value="0" selected>Upfront, in cash</option><option value="1">Roll into the new loan</option></select></div>
+    <div class="field"><label for="rfClosingCosts" data-help="Fees charged to complete the refinance. Dividing these by the monthly saving gives the break-even month.">Closing costs</label><input type="text" id="rfClosingCosts" value="6000" inputmode="decimal"></div>
+    <div class="field"><label for="rfRollIn" data-help="Rolling costs into the loan avoids paying cash upfront, but you then borrow and pay interest on them for the whole term.">Pay closing costs</label><select id="rfRollIn"><option value="0" selected>Upfront, in cash</option><option value="1">Roll into the new loan</option></select></div>
   </div>
 
   <div class="result" aria-live="polite" aria-atomic="true">
@@ -213,6 +213,7 @@
 <script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("refinance-calculator.html", "Refinance Break-Even Calculator");</script>
 <script>
 (function(){

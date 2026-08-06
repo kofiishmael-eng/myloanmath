@@ -124,8 +124,8 @@
 </header>
 
 <div class="card">
-  <div class="row"><div class="field"><label for="stAmount">Amount</label><input type="text" id="stAmount" value="249.99" inputmode="decimal"></div><div class="field"><label for="stRate">Sales tax rate (%)</label><input type="text" id="stRate" value="8.25" inputmode="decimal"></div></div>
-  <div class="row"><div class="field"><label for="stMode">Direction</label><select id="stMode"><option value="add" selected>Add tax to this price</option><option value="extract">Remove tax from this total</option></select></div></div>
+  <div class="row"><div class="field"><label for="stAmount" data-help="The figure you are starting from — either a pre-tax price or a tax-inclusive total, depending on the direction.">Amount</label><input type="text" id="stAmount" value="249.99" inputmode="decimal"></div><div class="field"><label for="stRate" data-help="Your combined sales tax rate. In most US states this is a state rate plus county and city rates, which is why receipts rarely match the state figure.">Sales tax rate (%)</label><input type="text" id="stRate" value="8.25" inputmode="decimal"></div></div>
+  <div class="row"><div class="field"><label for="stMode" data-help="Adding tax multiplies; removing it divides. Subtracting the percentage from a total is the common mistake and gives the wrong answer.">Direction</label><select id="stMode"><option value="add" selected>Add tax to this price</option><option value="extract">Remove tax from this total</option></select></div></div>
 
   <div class="result" aria-live="polite" aria-atomic="true">
     <div class="result-label">Total including tax</div>
@@ -195,6 +195,7 @@
 <script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("sales-tax-calculator.html", "Sales Tax Calculator");</script>
 <script>
 (function(){

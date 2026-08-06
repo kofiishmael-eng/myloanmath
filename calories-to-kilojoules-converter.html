@@ -136,7 +136,7 @@
 </header>
 
 <div class="card">
-  <div class="row"><div class="field"><label for="cvValue">Value</label><input type="text" id="cvValue" value="2000" inputmode="decimal"></div><div class="field"><label for="cvDir">Convert</label><select id="cvDir"><option value="fwd">kcal to kJ</option><option value="rev">kJ to kcal</option></select></div></div>
+  <div class="row"><div class="field"><label for="cvValue" data-help="The number you want to convert. Which unit it is in depends on the direction selected beside it.">Value</label><input type="text" id="cvValue" value="2000" inputmode="decimal"></div><div class="field"><label for="cvDir" data-help="Which way round to convert. The swap button below does the same thing in one click.">Convert</label><select id="cvDir"><option value="fwd">kcal to kJ</option><option value="rev">kJ to kcal</option></select></div></div>
   <div class="conv-swap"><button type="button" id="cvSwap">Swap direction</button></div>
 
   <div class="result" aria-live="polite" aria-atomic="true">
@@ -217,6 +217,7 @@
 <script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("calories-to-kilojoules-converter.html", "Calories to Kilojoules Converter");</script>
 <script>
 (function(){

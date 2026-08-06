@@ -152,7 +152,7 @@
     </div>
     <div class="row">
       <div class="field"><label for="extraOneTime" data-help="A single lump sum. The earlier it lands, the more interest it removes, because it stops accruing from that moment.">One-time extra payment ($)</label><input type="text" id="extraOneTime" value="0" inputmode="decimal"></div>
-      <div class="field"><label for="extraOneTimeMonth">Paid at payment number</label><input type="text" id="extraOneTimeMonth" value="12" inputmode="numeric"></div>
+      <div class="field"><label for="extraOneTimeMonth" data-help="Which payment number the lump sum lands on. Earlier is worth substantially more.">Paid at payment number</label><input type="text" id="extraOneTimeMonth" value="12" inputmode="numeric"></div>
     </div>
     <div class="row">
       <div class="field"><label for="taxIncrease" data-help="How fast you expect property tax to rise each year. Assessments generally track home values, so leaving this at zero understates a 30-year total considerably.">Property tax increase (% / year)</label><input type="text" id="taxIncrease" value="0" inputmode="decimal"></div>
@@ -160,7 +160,7 @@
     </div>
     <div class="row">
       <div class="field"><label for="startMonth" data-help="When the first payment is due. Used to turn payment numbers into real calendar dates and to give you a payoff date.">First payment month</label><select id="startMonth"></select></div>
-      <div class="field"><label for="startYear">First payment year</label><input type="text" id="startYear" value="2026" inputmode="numeric"></div>
+      <div class="field"><label for="startYear" data-help="The year of your first payment. Used to turn payment numbers into real calendar dates.">First payment year</label><input type="text" id="startYear" value="2026" inputmode="numeric"></div>
     </div>
   </details>
 

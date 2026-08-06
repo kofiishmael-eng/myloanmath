@@ -136,8 +136,8 @@
 </header>
 
 <div class="card">
-  <div class="row"><div class="field"><label for="cvValue">Amount</label><input type="text" id="cvValue" value="1" inputmode="decimal"></div><div class="field"><label for="cvIngredient">Ingredient</label><select id="cvIngredient"><option value="water">water</option><option value="flour (all-purpose, spooned)">flour (all-purpose, spooned)</option><option value="flour (bread)">flour (bread)</option><option value="sugar (granulated)">sugar (granulated)</option><option value="sugar (brown, packed)">sugar (brown, packed)</option><option value="sugar (powdered)">sugar (powdered)</option><option value="butter">butter</option><option value="milk">milk</option><option value="honey">honey</option><option value="rice (uncooked, long grain)">rice (uncooked, long grain)</option><option value="rolled oats">rolled oats</option><option value="cocoa powder">cocoa powder</option></select></div></div>
-  <div class="row"><div class="field"><label for="cvDir">Convert</label><select id="cvDir"><option value="fwd">Cups to grams</option><option value="rev">Grams to cups</option></select></div></div>
+  <div class="row"><div class="field"><label for="cvValue" data-help="The number you want to convert. Which unit it is in depends on the direction selected beside it.">Amount</label><input type="text" id="cvValue" value="1" inputmode="decimal"></div><div class="field"><label for="cvIngredient" data-help="Cups measure volume and grams measure mass, so the answer depends entirely on what is in the cup. A cup of flour and a cup of honey differ by nearly three times.">Ingredient</label><select id="cvIngredient"><option value="water">water</option><option value="flour (all-purpose, spooned)">flour (all-purpose, spooned)</option><option value="flour (bread)">flour (bread)</option><option value="sugar (granulated)">sugar (granulated)</option><option value="sugar (brown, packed)">sugar (brown, packed)</option><option value="sugar (powdered)">sugar (powdered)</option><option value="butter">butter</option><option value="milk">milk</option><option value="honey">honey</option><option value="rice (uncooked, long grain)">rice (uncooked, long grain)</option><option value="rolled oats">rolled oats</option><option value="cocoa powder">cocoa powder</option></select></div></div>
+  <div class="row"><div class="field"><label for="cvDir" data-help="Which way round to convert. The swap button below does the same thing in one click.">Convert</label><select id="cvDir"><option value="fwd">Cups to grams</option><option value="rev">Grams to cups</option></select></div></div>
 
   <div class="result" aria-live="polite" aria-atomic="true">
     <div class="result-label" id="cvLabel">Result</div>
@@ -214,6 +214,7 @@
 <script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("cups-to-grams-converter.html", "Cups to Grams Converter");</script>
 <script>
 (function(){

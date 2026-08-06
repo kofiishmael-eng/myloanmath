@@ -155,6 +155,12 @@
 <div class="log-date">2026-08-02 <span class="log-count">5 corrections</span></div>
 <div class="log-item log-change">
   <span class="log-tag tag-change">Change</span>
+  <div class="log-title">Inline help on every calculator input</div>
+  <p class="log-detail">All 190 inputs across the site now carry an explanation, up from a handful on the mortgage page. Each one says what the field is and, where there is one, the mistake people make with it &mdash; that two stacked discounts of 20% and 10% come to 28% rather than 30%, that 11 stone 4 is not 11.4 stone, that resetting a part-paid loan to a fresh full term lowers the payment while raising the total. Help is delivered as a real button with aria-expanded and a linked panel rather than a title attribute, because title text cannot be reached by keyboard, does not appear on touch devices, and is announced unreliably by screen readers.</p>
+</div>
+
+<div class="log-item log-change">
+  <span class="log-tag tag-change">Change</span>
   <div class="log-title">Charts added to 37 more calculators</div>
   <p class="log-detail">Only six of the forty-six tools had any visual; forty-three do now. Chart type follows what the tool computes rather than being applied uniformly: loans get a falling balance, growth tools stack contributions against the growth they generate, tax tools break income into each deduction and the remainder, and each converter shows how big one unit is against the other. The three number-to-words converters were deliberately left alone, because a chart there would be decoration rather than information. Charts are inline SVG with no library, so they add about six kilobytes in total, print correctly, and carry an aria-label describing what they show rather than being invisible to a screen reader.</p>
 </div>

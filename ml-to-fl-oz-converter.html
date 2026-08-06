@@ -136,8 +136,8 @@
 </header>
 
 <div class="card">
-  <div class="row"><div class="field"><label for="cvValue">Value</label><input type="text" id="cvValue" value="250" inputmode="decimal"></div><div class="field"><label for="cvDir">Convert</label><select id="cvDir"><option value="fwd">ml to fluid ounces</option><option value="rev">Fluid ounces to ml</option></select></div></div>
-  <div class="row"><div class="field"><label for="cvSystem">Fluid ounce type</label><select id="cvSystem"><option value="us">US fluid ounce (29.5735 ml)</option><option value="uk">Imperial fluid ounce (28.4131 ml)</option></select></div></div>
+  <div class="row"><div class="field"><label for="cvValue" data-help="The number you want to convert. Which unit it is in depends on the direction selected beside it.">Value</label><input type="text" id="cvValue" value="250" inputmode="decimal"></div><div class="field"><label for="cvDir" data-help="Which way round to convert. The swap button below does the same thing in one click.">Convert</label><select id="cvDir"><option value="fwd">ml to fluid ounces</option><option value="rev">Fluid ounces to ml</option></select></div></div>
+  <div class="row"><div class="field"><label for="cvSystem" data-help="US and Imperial units share names but are different sizes. Pick whichever system your figure came from — getting this wrong is the most common error in volume conversion.">Fluid ounce type</label><select id="cvSystem"><option value="us">US fluid ounce (29.5735 ml)</option><option value="uk">Imperial fluid ounce (28.4131 ml)</option></select></div></div>
   <div class="conv-swap"><button type="button" id="cvSwap">Swap direction</button></div>
 
   <div class="result" aria-live="polite" aria-atomic="true">
@@ -216,6 +216,7 @@
 <script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("ml-to-fl-oz-converter.html", "ml to fl oz Converter");</script>
 <script>
 (function(){

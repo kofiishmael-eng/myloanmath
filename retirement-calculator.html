@@ -118,11 +118,11 @@
 </header>
 
 <div class="card">
-  <div class="row"><div class="field"><label for="rtAge">Current age</label><input type="text" id="rtAge" value="40" inputmode="decimal"></div><div class="field"><label for="rtRetire">Retirement age</label><input type="text" id="rtRetire" value="65" inputmode="decimal"></div></div>
-  <div class="row"><div class="field"><label for="rtSavings">Current savings</label><input type="text" id="rtSavings" value="150000" inputmode="decimal"></div><div class="field"><label for="rtMonthly">Monthly contribution</label><input type="text" id="rtMonthly" value="1200" inputmode="decimal"></div></div>
-  <div class="row"><div class="field"><label for="rtReturn">Return while saving (%)</label><input type="text" id="rtReturn" value="7" inputmode="decimal"></div><div class="field"><label for="rtReturnRet">Return in retirement (%)</label><input type="text" id="rtReturnRet" value="5" inputmode="decimal"></div></div>
-  <div class="row"><div class="field"><label for="rtSpend">Annual spending in retirement (today's money)</label><input type="text" id="rtSpend" value="60000" inputmode="decimal"></div><div class="field"><label for="rtInflation">Inflation rate (%)</label><input type="text" id="rtInflation" value="2.5" inputmode="decimal"></div></div>
-  <div class="row"><div class="field"><label for="rtLife">Plan until age</label><input type="text" id="rtLife" value="95" inputmode="decimal"></div></div>
+  <div class="row"><div class="field"><label for="rtAge" data-help="Your age now.">Current age</label><input type="text" id="rtAge" value="40" inputmode="decimal"></div><div class="field"><label for="rtRetire" data-help="The age you plan to stop working and start drawing on the savings.">Retirement age</label><input type="text" id="rtRetire" value="65" inputmode="decimal"></div></div>
+  <div class="row"><div class="field"><label for="rtSavings" data-help="What you have already saved for retirement across all accounts.">Current savings</label><input type="text" id="rtSavings" value="150000" inputmode="decimal"></div><div class="field"><label for="rtMonthly" data-help="What you add each month between now and retirement.">Monthly contribution</label><input type="text" id="rtMonthly" value="1200" inputmode="decimal"></div></div>
+  <div class="row"><div class="field"><label for="rtReturn" data-help="Expected annual return while you are still contributing.">Return while saving (%)</label><input type="text" id="rtReturn" value="7" inputmode="decimal"></div><div class="field"><label for="rtReturnRet" data-help="Expected return once you are drawing down. Usually lower, since most people shift toward less volatile holdings as the horizon shortens.">Return in retirement (%)</label><input type="text" id="rtReturnRet" value="5" inputmode="decimal"></div></div>
+  <div class="row"><div class="field"><label for="rtSpend" data-help="What your lifestyle costs per year in today’s money. The tool inflates this to your retirement date automatically.">Annual spending in retirement (today's money)</label><input type="text" id="rtSpend" value="60000" inputmode="decimal"></div><div class="field"><label for="rtInflation" data-help="How fast you expect prices to rise. This is what turns a comfortable-looking pot into one that runs out.">Inflation rate (%)</label><input type="text" id="rtInflation" value="2.5" inputmode="decimal"></div></div>
+  <div class="row"><div class="field"><label for="rtLife" data-help="The age to plan until. Planning to a realistic age rather than an average one is the safer approach.">Plan until age</label><input type="text" id="rtLife" value="95" inputmode="decimal"></div></div>
 
   <div class="result" aria-live="polite" aria-atomic="true">
     <div class="result-label">Balance at retirement</div>
@@ -197,6 +197,7 @@
 <script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("retirement-calculator.html", "Retirement Calculator");</script>
 <script>
 (function(){

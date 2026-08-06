@@ -118,9 +118,9 @@
 </header>
 
 <div class="card">
-  <div class="row"><div class="field"><label for="ivInitial">Starting amount</label><input type="text" id="ivInitial" value="10000" inputmode="decimal"></div><div class="field"><label for="ivMonthly">Monthly contribution</label><input type="text" id="ivMonthly" value="500" inputmode="decimal"></div></div>
-  <div class="row"><div class="field"><label for="ivReturn">Annual return (%)</label><input type="text" id="ivReturn" value="7" inputmode="decimal"></div><div class="field"><label for="ivYears">Years invested</label><input type="text" id="ivYears" value="20" inputmode="decimal"></div></div>
-  <div class="row"><div class="field"><label for="ivInflation">Inflation rate (%)</label><input type="text" id="ivInflation" value="2.5" inputmode="decimal"></div></div>
+  <div class="row"><div class="field"><label for="ivInitial" data-help="What you are starting with, before any monthly contributions.">Starting amount</label><input type="text" id="ivInitial" value="10000" inputmode="decimal"></div><div class="field"><label for="ivMonthly" data-help="What you add each month. Over shorter horizons this matters more than the return does.">Monthly contribution</label><input type="text" id="ivMonthly" value="500" inputmode="decimal"></div></div>
+  <div class="row"><div class="field"><label for="ivReturn" data-help="Expected annual return. This is an assumption, not a fact — try it two points either side and see how far the answer moves.">Annual return (%)</label><input type="text" id="ivReturn" value="7" inputmode="decimal"></div><div class="field"><label for="ivYears" data-help="How long the money stays invested.">Years invested</label><input type="text" id="ivYears" value="20" inputmode="decimal"></div></div>
+  <div class="row"><div class="field"><label for="ivInflation" data-help="Used to show what the final balance is worth in today’s money. A large nominal figure decades out buys considerably less than it appears to.">Inflation rate (%)</label><input type="text" id="ivInflation" value="2.5" inputmode="decimal"></div></div>
 
   <div class="result" aria-live="polite" aria-atomic="true">
     <div class="result-label">Value at the end</div>
@@ -190,6 +190,7 @@
 <script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("investment-calculator.html", "Investment Calculator");</script>
 <script>
 (function(){

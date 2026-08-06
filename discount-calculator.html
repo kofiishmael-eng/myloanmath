@@ -126,11 +126,11 @@
 
 <div class="card">
   <div class="row">
-    <div class="field"><label for="discPrice">Original price</label><input type="text" id="discPrice" value="100" inputmode="decimal"></div>
-    <div class="field"><label for="discPercent">Discount (%)</label><input type="text" id="discPercent" value="20" inputmode="decimal"></div>
+    <div class="field"><label for="discPrice" data-help="The original price before any discount.">Original price</label><input type="text" id="discPrice" value="100" inputmode="decimal"></div>
+    <div class="field"><label for="discPercent" data-help="The advertised discount percentage.">Discount (%)</label><input type="text" id="discPercent" value="20" inputmode="decimal"></div>
   </div>
   <div class="row">
-    <div class="field"><label for="discSecondPercent">Additional discount, stacked (%, optional)</label><input type="text" id="discSecondPercent" value="0" inputmode="decimal"></div>
+    <div class="field"><label for="discSecondPercent" data-help="A second discount applied after the first. Two discounts do not add — 20% then 10% is an effective 28%, not 30%.">Additional discount, stacked (%, optional)</label><input type="text" id="discSecondPercent" value="0" inputmode="decimal"></div>
   </div>
   <div class="result" aria-live="polite" aria-atomic="true">
     <div class="result-label">Sale price</div>
@@ -145,8 +145,8 @@
 <div class="card">
   <h2 style="font-family:var(--font-display);font-size:18px;margin:0 0 14px;">Or work backward: find the discount</h2>
   <div class="row">
-    <div class="field"><label for="revOriginal">Original price</label><input type="text" id="revOriginal" value="80" inputmode="decimal"></div>
-    <div class="field"><label for="revSale">Sale price</label><input type="text" id="revSale" value="60" inputmode="decimal"></div>
+    <div class="field"><label for="revOriginal" data-help="The price before the sale, when you want to work out what percentage off it actually was.">Original price</label><input type="text" id="revOriginal" value="80" inputmode="decimal"></div>
+    <div class="field"><label for="revSale" data-help="The price you actually paid or were quoted.">Sale price</label><input type="text" id="revSale" value="60" inputmode="decimal"></div>
   </div>
   <div class="result" aria-live="polite" aria-atomic="true">
     <div class="result-label">Discount</div>
@@ -214,6 +214,7 @@
 <script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("discount-calculator.html", "Discount Calculator");</script>
 <script>
 (function(){

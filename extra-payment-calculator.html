@@ -125,19 +125,19 @@
 
 <div class="card">
   <div class="row">
-    <div class="field"><label for="xpPrincipal">Loan amount / current balance</label><input type="text" id="xpPrincipal" value="300000" inputmode="decimal"></div>
-    <div class="field"><label for="xpRate">Annual interest rate (%)</label><input type="text" id="xpRate" value="6.5" inputmode="decimal"></div>
+    <div class="field"><label for="xpPrincipal" data-help="The amount still owed. Using the current balance rather than the original loan amount gives an accurate answer from today.">Loan amount / current balance</label><input type="text" id="xpPrincipal" value="300000" inputmode="decimal"></div>
+    <div class="field"><label for="xpRate" data-help="The annual rate on the loan. A higher rate makes extra payments worth considerably more.">Annual interest rate (%)</label><input type="text" id="xpRate" value="6.5" inputmode="decimal"></div>
   </div>
   <div class="row">
-    <div class="field"><label for="xpTermValue">Remaining term</label><input type="text" id="xpTermValue" value="30" inputmode="decimal"></div>
-    <div class="field"><label for="xpTermUnit">Term unit</label><select id="xpTermUnit"><option value="years" selected>Years</option><option value="months">Months</option></select></div>
+    <div class="field"><label for="xpTermValue" data-help="How much time is left on the loan as scheduled.">Remaining term</label><input type="text" id="xpTermValue" value="30" inputmode="decimal"></div>
+    <div class="field"><label for="xpTermUnit" data-help="Whether the remaining term is in years or months.">Term unit</label><select id="xpTermUnit"><option value="years" selected>Years</option><option value="months">Months</option></select></div>
   </div>
   <div class="row">
-    <div class="field"><label for="xpExtraMonthly">Extra payment each month</label><input type="text" id="xpExtraMonthly" value="200" inputmode="decimal"></div>
-    <div class="field"><label for="xpExtraOneTime">One-time lump sum (optional)</label><input type="text" id="xpExtraOneTime" value="0" inputmode="decimal"></div>
+    <div class="field"><label for="xpExtraMonthly" data-help="Added to every payment and applied to principal. It does not lower your required payment — it shortens the loan.">Extra payment each month</label><input type="text" id="xpExtraMonthly" value="200" inputmode="decimal"></div>
+    <div class="field"><label for="xpExtraOneTime" data-help="A single lump sum. Timing matters: the same amount paid early removes far more interest than paid late.">One-time lump sum (optional)</label><input type="text" id="xpExtraOneTime" value="0" inputmode="decimal"></div>
   </div>
   <div class="row">
-    <div class="field"><label for="xpOneTimeMonth">Lump sum paid in month #</label><input type="text" id="xpOneTimeMonth" value="1" inputmode="decimal"></div>
+    <div class="field"><label for="xpOneTimeMonth" data-help="Which payment number the lump sum lands on. Payment 1 is the earliest and saves the most.">Lump sum paid in month #</label><input type="text" id="xpOneTimeMonth" value="1" inputmode="decimal"></div>
   </div>
   <div class="result" aria-live="polite" aria-atomic="true">
     <div class="result-label">You would be debt-free</div>
@@ -209,6 +209,7 @@
 <script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("extra-payment-calculator.html", "Extra Payment Calculator");</script>
 <script>
 (function(){

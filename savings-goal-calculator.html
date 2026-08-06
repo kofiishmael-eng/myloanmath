@@ -130,8 +130,8 @@
     <div class="field"><label for="goalCurrent" data-help="What you have saved toward it already.">Amount already saved</label><input type="text" id="goalCurrent" value="2000" inputmode="decimal"></div>
   </div>
   <div class="row">
-    <div class="field"><label for="goalRate">Expected annual interest rate (%)</label><input type="text" id="goalRate" value="4.5" inputmode="decimal"></div>
-    <div class="field"><label for="goalYears">Time to reach goal (years)</label><input type="text" id="goalYears" value="5" inputmode="decimal"></div>
+    <div class="field"><label for="goalRate" data-help="Expected annual return on the savings while you build toward the goal.">Expected annual interest rate (%)</label><input type="text" id="goalRate" value="4.5" inputmode="decimal"></div>
+    <div class="field"><label for="goalYears" data-help="How long you have to reach the target. Halving the time roughly doubles the monthly amount needed.">Time to reach goal (years)</label><input type="text" id="goalYears" value="5" inputmode="decimal"></div>
   </div>
   <div class="result" aria-live="polite" aria-atomic="true">
     <div class="result-label">Monthly savings needed</div>
@@ -153,7 +153,7 @@
   <div id="trackingActive" style="display:none;">
     <div class="stat-grid" id="trackingStats" style="margin-bottom:14px;"></div>
     <div class="row">
-      <div class="field"><label for="actualSaved">Your actual amount saved so far</label><input type="text" id="actualSaved" inputmode="decimal" placeholder="Enter what you've saved today"></div>
+      <div class="field"><label for="actualSaved" data-help="What you have actually put aside so far, if you want to check progress against the plan.">Your actual amount saved so far</label><input type="text" id="actualSaved" inputmode="decimal" placeholder="Enter what you've saved today"></div>
     </div>
     <p class="note" id="trackingResult" style="margin-top:8px;"></p>
     <div class="actions" style="margin-top:10px;">

@@ -147,16 +147,16 @@
 <div class="card">
   <div class="result-label" style="color:var(--accent);">Your situation</div>
   <div class="row">
-    <div class="field"><label for="rbPrice">Home price</label><input type="text" id="rbPrice" value="450000" inputmode="decimal"></div>
-    <div class="field"><label for="rbRent">Comparable monthly rent</label><input type="text" id="rbRent" value="2400" inputmode="decimal"></div>
+    <div class="field"><label for="rbPrice" data-help="The purchase price of the home you are considering.">Home price</label><input type="text" id="rbPrice" value="450000" inputmode="decimal"></div>
+    <div class="field"><label for="rbRent" data-help="What renting a comparable place would cost each month.">Comparable monthly rent</label><input type="text" id="rbRent" value="2400" inputmode="decimal"></div>
   </div>
   <div class="row">
-    <div class="field"><label for="rbDown">Down payment (%)</label><input type="text" id="rbDown" value="20" inputmode="decimal"></div>
-    <div class="field"><label for="rbRate">Mortgage rate (%)</label><input type="text" id="rbRate" value="6.5" inputmode="decimal"></div>
+    <div class="field"><label for="rbDown" data-help="Percentage paid upfront. Below 20% adds PMI, which the model charges until the loan reaches 80% of the price.">Down payment (%)</label><input type="text" id="rbDown" value="20" inputmode="decimal"></div>
+    <div class="field"><label for="rbRate" data-help="The mortgage rate you would get.">Mortgage rate (%)</label><input type="text" id="rbRate" value="6.5" inputmode="decimal"></div>
   </div>
   <div class="row">
-    <div class="field"><label for="rbTerm">Mortgage term (years)</label><input type="text" id="rbTerm" value="30" inputmode="decimal"></div>
-    <div class="field"><label for="rbYears">Years you expect to stay</label><input type="text" id="rbYears" value="7" inputmode="decimal"></div>
+    <div class="field"><label for="rbTerm" data-help="Length of the mortgage in years.">Mortgage term (years)</label><input type="text" id="rbTerm" value="30" inputmode="decimal"></div>
+    <div class="field"><label for="rbYears" data-help="How long you expect to stay. This matters enormously — buying costs roughly 8% in round-trip transaction fees, spread over however long you own.">Years you expect to stay</label><input type="text" id="rbYears" value="7" inputmode="decimal"></div>
   </div>
 
   <div class="verdict" id="rbVerdict" aria-live="polite" aria-atomic="true">
@@ -179,24 +179,24 @@
   <div class="result-label" style="color:var(--accent);">Assumptions</div>
   <p class="assump-note">These are not facts &mdash; they are guesses about the future, and they decide the answer above. The defaults are ordinary long-run figures, not predictions for your market. Change them and watch the verdict move.</p>
   <div class="row">
-    <div class="field"><label for="rbAppreciation">Home appreciation (% / year)</label><input type="text" id="rbAppreciation" value="3" inputmode="decimal"></div>
-    <div class="field"><label for="rbReturn">Investment return (% / year)</label><input type="text" id="rbReturn" value="7" inputmode="decimal"></div>
+    <div class="field"><label for="rbAppreciation" data-help="How fast you expect the home to gain value. This single assumption decides the answer more than any other, which is why the tool reports the rate at which the two options come out level.">Home appreciation (% / year)</label><input type="text" id="rbAppreciation" value="3" inputmode="decimal"></div>
+    <div class="field"><label for="rbReturn" data-help="What the money would earn if invested instead of used as a deposit. The genuine opportunity cost of buying.">Investment return (% / year)</label><input type="text" id="rbReturn" value="7" inputmode="decimal"></div>
   </div>
   <div class="row">
-    <div class="field"><label for="rbRentGrowth">Rent growth (% / year)</label><input type="text" id="rbRentGrowth" value="3" inputmode="decimal"></div>
-    <div class="field"><label for="rbPropertyTax">Property tax (% of value / year)</label><input type="text" id="rbPropertyTax" value="1.1" inputmode="decimal"></div>
+    <div class="field"><label for="rbRentGrowth" data-help="How fast rents rise each year in your area.">Rent growth (% / year)</label><input type="text" id="rbRentGrowth" value="3" inputmode="decimal"></div>
+    <div class="field"><label for="rbPropertyTax" data-help="Annual property tax as a share of the home value. Charged against the current value, so it rises as the home appreciates.">Property tax (% of value / year)</label><input type="text" id="rbPropertyTax" value="1.1" inputmode="decimal"></div>
   </div>
   <div class="row">
-    <div class="field"><label for="rbMaintenance">Maintenance (% of value / year)</label><input type="text" id="rbMaintenance" value="1" inputmode="decimal"></div>
-    <div class="field"><label for="rbInsurance">Home insurance (per year)</label><input type="text" id="rbInsurance" value="1800" inputmode="decimal"></div>
+    <div class="field"><label for="rbMaintenance" data-help="Annual upkeep as a share of value. Around 1% is a common planning figure. It arrives unevenly — nothing for years, then a roof.">Maintenance (% of value / year)</label><input type="text" id="rbMaintenance" value="1" inputmode="decimal"></div>
+    <div class="field"><label for="rbInsurance" data-help="Annual homeowners insurance premium.">Home insurance (per year)</label><input type="text" id="rbInsurance" value="1800" inputmode="decimal"></div>
   </div>
   <div class="row">
-    <div class="field"><label for="rbHoa">HOA / condo fee (per month)</label><input type="text" id="rbHoa" value="0" inputmode="decimal"></div>
-    <div class="field"><label for="rbPmi">PMI (% of loan / year, if under 20% down)</label><input type="text" id="rbPmi" value="0.5" inputmode="decimal"></div>
+    <div class="field"><label for="rbHoa" data-help="Monthly HOA or condo fee, if the property has one.">HOA / condo fee (per month)</label><input type="text" id="rbHoa" value="0" inputmode="decimal"></div>
+    <div class="field"><label for="rbPmi" data-help="Annual PMI as a share of the loan, charged while the balance exceeds 80% of the purchase price.">PMI (% of loan / year, if under 20% down)</label><input type="text" id="rbPmi" value="0.5" inputmode="decimal"></div>
   </div>
   <div class="row">
-    <div class="field"><label for="rbBuyCosts">Costs to buy (% of price)</label><input type="text" id="rbBuyCosts" value="2" inputmode="decimal"></div>
-    <div class="field"><label for="rbSellCosts">Costs to sell (% of price)</label><input type="text" id="rbSellCosts" value="6" inputmode="decimal"></div>
+    <div class="field"><label for="rbBuyCosts" data-help="Purchase costs as a share of price — lender fees, appraisal, title work, typically 2 to 5%.">Costs to buy (% of price)</label><input type="text" id="rbBuyCosts" value="2" inputmode="decimal"></div>
+    <div class="field"><label for="rbSellCosts" data-help="Selling costs as a share of price, typically around 6% including agent commission. Combined with buying costs this is the round trip a short stay has to overcome.">Costs to sell (% of price)</label><input type="text" id="rbSellCosts" value="6" inputmode="decimal"></div>
   </div>
 </div>
 
@@ -264,6 +264,7 @@
 <script src="finance.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("rent-vs-buy-calculator.html", "Rent vs. Buy Calculator");</script>
 <script>
 (function(){

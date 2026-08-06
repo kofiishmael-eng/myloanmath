@@ -118,8 +118,8 @@
 </header>
 
 <div class="card">
-  <div class="row"><div class="field"><label for="infAmount">Amount</label><input type="text" id="infAmount" value="10000" inputmode="decimal"></div><div class="field"><label for="infRate">Inflation rate (% per year)</label><input type="text" id="infRate" value="3" inputmode="decimal"></div></div>
-  <div class="row"><div class="field"><label for="infYears">Number of years</label><input type="text" id="infYears" value="20" inputmode="decimal"></div><div class="field"><label for="infDirection">Direction</label><select id="infDirection"><option value="future" selected>What it will be worth in future</option><option value="past">What a past amount is worth today</option></select></div></div>
+  <div class="row"><div class="field"><label for="infAmount" data-help="The sum of money you want to test.">Amount</label><input type="text" id="infAmount" value="10000" inputmode="decimal"></div><div class="field"><label for="infRate" data-help="The annual inflation rate to apply. Your own rate depends on what you actually spend money on, which can differ sharply from the published figure.">Inflation rate (% per year)</label><input type="text" id="infRate" value="3" inputmode="decimal"></div></div>
+  <div class="row"><div class="field"><label for="infYears" data-help="How many years to apply it over.">Number of years</label><input type="text" id="infYears" value="20" inputmode="decimal"></div><div class="field"><label for="infDirection" data-help="Whether you want what a sum will be worth later, or what an older amount is worth in today’s money.">Direction</label><select id="infDirection"><option value="future" selected>What it will be worth in future</option><option value="past">What a past amount is worth today</option></select></div></div>
 
   <div class="result" aria-live="polite" aria-atomic="true">
     <div class="result-label">Real value after inflation</div>
@@ -189,6 +189,7 @@
 <script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("inflation-calculator.html", "Inflation Calculator");</script>
 <script>
 (function(){

@@ -124,8 +124,8 @@
 </header>
 
 <div class="card">
-  <div class="row"><div class="field"><label for="irPrincipal">Amount borrowed</label><input type="text" id="irPrincipal" value="25000" inputmode="decimal"></div><div class="field"><label for="irPayment">Monthly payment</label><input type="text" id="irPayment" value="489.15" inputmode="decimal"></div></div>
-  <div class="row"><div class="field"><label for="irTermValue">Loan term</label><input type="text" id="irTermValue" value="5" inputmode="decimal"></div><div class="field"><label for="irTermUnit">Term unit</label><select id="irTermUnit"><option value="years" selected>Years</option><option value="months">Months</option></select></div></div>
+  <div class="row"><div class="field"><label for="irPrincipal" data-help="The amount borrowed. Useful when an offer quotes only a monthly payment and never states a rate.">Amount borrowed</label><input type="text" id="irPrincipal" value="25000" inputmode="decimal"></div><div class="field"><label for="irPayment" data-help="The monthly payment the lender quoted. This is what the calculator solves the rate from.">Monthly payment</label><input type="text" id="irPayment" value="489.15" inputmode="decimal"></div></div>
+  <div class="row"><div class="field"><label for="irTermValue" data-help="How long the loan runs.">Loan term</label><input type="text" id="irTermValue" value="5" inputmode="decimal"></div><div class="field"><label for="irTermUnit" data-help="Whether the term is in years or months.">Term unit</label><select id="irTermUnit"><option value="years" selected>Years</option><option value="months">Months</option></select></div></div>
 
   <div class="result" aria-live="polite" aria-atomic="true">
     <div class="result-label">Implied annual interest rate</div>
@@ -195,6 +195,7 @@
 <script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("interest-rate-calculator.html", "Interest Rate Calculator");</script>
 <script>
 (function(){

@@ -127,7 +127,7 @@
 <div class="card">
   <div class="row">
     <div class="field"><label for="salAnnual" data-help="Your gross annual salary, before tax and deductions.">Annual salary</label><input type="text" id="salAnnual" value="65000" inputmode="decimal"></div>
-    <div class="field" style="max-width:200px;"><label for="salFrequency">Paid</label>
+    <div class="field" style="max-width:200px;"><label for="salFrequency" data-help="How often you are paid. Divides the annual figures into per-period amounts.">Paid</label>
       <select id="salFrequency">
         <option value="52">Weekly</option>
         <option value="26" selected>Biweekly</option>
@@ -137,7 +137,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="field" style="max-width:220px;"><label for="salFilingStatus">Filing status</label>
+    <div class="field" style="max-width:220px;"><label for="salFilingStatus" data-help="Filing status sets your bracket thresholds and standard deduction.">Filing status</label>
       <select id="salFilingStatus">
         <option value="single">Single</option>
         <option value="marriedJointly">Married Filing Jointly</option>
@@ -145,7 +145,7 @@
         <option value="marriedSeparately">Married Filing Separately</option>
       </select>
     </div>
-    <div class="field" style="max-width:240px;"><label for="salState">State</label>
+    <div class="field" style="max-width:240px;"><label for="salState" data-help="State of residence, which determines whether state income tax applies at all.">State</label>
       <select id="salState">
         <option value="">— Federal + FICA only —</option>
       </select>
