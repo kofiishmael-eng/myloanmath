@@ -131,15 +131,15 @@
   </div>
   <div class="row">
     <div class="field"><label for="k401Balance">Current 401(k) balance</label><input type="text" id="k401Balance" value="15000" inputmode="decimal"></div>
-    <div class="field"><label for="k401Salary">Annual salary</label><input type="text" id="k401Salary" value="75000" inputmode="decimal"></div>
+    <div class="field"><label for="k401Salary" data-help="Your gross annual salary, before tax. Contributions are usually a percentage of this.">Annual salary</label><input type="text" id="k401Salary" value="75000" inputmode="decimal"></div>
   </div>
   <div class="row">
-    <div class="field"><label for="k401Contribution">Your contribution (% of salary)</label><input type="text" id="k401Contribution" value="6" inputmode="decimal"></div>
-    <div class="field"><label for="k401Return">Expected annual return (%)</label><input type="text" id="k401Return" value="7" inputmode="decimal"></div>
+    <div class="field"><label for="k401Contribution" data-help="The percentage of salary you contribute each pay period.">Your contribution (% of salary)</label><input type="text" id="k401Contribution" value="6" inputmode="decimal"></div>
+    <div class="field"><label for="k401Return" data-help="Expected annual return on the balance. An assumption, not a forecast.">Expected annual return (%)</label><input type="text" id="k401Return" value="7" inputmode="decimal"></div>
   </div>
   <div class="row">
-    <div class="field"><label for="k401MatchPercent">Employer match (% of your contribution)</label><input type="text" id="k401MatchPercent" value="100" inputmode="decimal"></div>
-    <div class="field"><label for="k401MatchLimit">Match applies up to (% of salary)</label><input type="text" id="k401MatchLimit" value="6" inputmode="decimal"></div>
+    <div class="field"><label for="k401MatchPercent" data-help="How much of your contribution your employer matches. 50% means they add 50 cents per dollar you put in.">Employer match (% of your contribution)</label><input type="text" id="k401MatchPercent" value="100" inputmode="decimal"></div>
+    <div class="field"><label for="k401MatchLimit" data-help="The share of your salary the match applies up to. Contributing less than this leaves part of your pay unclaimed.">Match applies up to (% of salary)</label><input type="text" id="k401MatchLimit" value="6" inputmode="decimal"></div>
   </div>
   <div class="result" aria-live="polite" aria-atomic="true">
     <div class="result-label">Projected balance at retirement</div>
@@ -147,7 +147,7 @@
     <div class="stat-grid" id="k401Stats"></div>
   </div>
   <div id="k401Chart" style="display:none; margin:16px 0;"></div>
-  <div class="actions"><button class="action" id="k401CopyBtn" type="button">Copy result</button><button class="action" id="k401ShareBtn" type="button">Copy link to this scenario</button></div>
+  <div class="actions"><button class="action" id="k401CopyBtn" type="button">Copy result</button><button class="action" id="k401ShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button></div>
   <p class="note">Salary is held flat for the full projection (no assumed raises) and contributions compound annually rather than per-paycheck — both are simplifying assumptions. Your contribution is automatically capped at the correct IRS limit for your age each year.</p>
 </div>
 
@@ -190,6 +190,10 @@
   </div>
 </div>
 
+<div class="calc-strip">
+  <p class="label"><a href="financial-calculators.html" style="color:inherit;">Financial calculators</a></p>
+  <div class="calc-strip-links"><a href="mortgage-calculator.html">Mortgage</a><a href="loan-calculator.html">Loan</a><a href="auto-loan-calculator.html">Auto Loan</a><a href="amortization-calculator.html">Amortization</a><a href="refinance-calculator.html">Refinance</a><a href="extra-payment-calculator.html">Extra Payment</a><a href="loan-comparison-calculator.html">Loan Comparison</a><a href="interest-rate-calculator.html">Interest Rate</a><a href="debt-payoff-calculator.html">Debt Payoff</a><a href="rent-vs-buy-calculator.html">Rent vs. Buy</a><a href="retirement-calculator.html">Retirement</a><a href="401k-calculator.html" aria-current="page">401(k)</a><a href="investment-calculator.html">Investment</a><a href="compound-interest-calculator.html">Compound Interest</a><a href="savings-goal-calculator.html">Savings Goal</a><a href="inflation-calculator.html">Inflation</a><a href="salary-calculator.html">Salary</a><a href="tax-calculator.html">Income Tax (US)</a><a href="canada-tax-calculator.html">Income Tax (Canada)</a></div>
+</div>
 </div>
 <footer class="site-footer">
   <div>
@@ -209,6 +213,7 @@
 <script src="finance.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("401k-calculator.html", "401(k) Calculator");</script>
 <script>
 (function(){
@@ -319,6 +324,12 @@ if (window.ShareState) ShareState.init({
     'match': 'k401MatchPercent',
     'matchcap': 'k401MatchLimit'
   }
+});
+</script>
+<script>
+// Print buttons: one delegated handler for the whole site.
+document.addEventListener('click', function(e){
+  if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
 </script>
 </body>

@@ -126,11 +126,11 @@
 
 <div class="card">
   <div class="row">
-    <div class="field"><label for="debtBalance">Current balance</label><input type="text" id="debtBalance" value="5000" inputmode="decimal"></div>
-    <div class="field"><label for="debtRate">Annual interest rate / APR (%)</label><input type="text" id="debtRate" value="22.99" inputmode="decimal"></div>
+    <div class="field"><label for="debtBalance" data-help="What you currently owe on the card or loan.">Current balance</label><input type="text" id="debtBalance" value="5000" inputmode="decimal"></div>
+    <div class="field"><label for="debtRate" data-help="The annual rate on the balance. Cash advances and balance transfers usually carry their own higher rates on the same account.">Annual interest rate / APR (%)</label><input type="text" id="debtRate" value="22.99" inputmode="decimal"></div>
   </div>
   <div class="row">
-    <div class="field"><label for="debtPayment">Your monthly payment</label><input type="text" id="debtPayment" value="200" inputmode="decimal"></div>
+    <div class="field"><label for="debtPayment" data-help="What you will actually pay each month. Paying a fixed amount rather than the shrinking minimum is what clears the debt.">Your monthly payment</label><input type="text" id="debtPayment" value="200" inputmode="decimal"></div>
   </div>
   <div class="result" aria-live="polite" aria-atomic="true">
     <div class="result-label">Time to pay off</div>
@@ -138,7 +138,7 @@
     <div class="stat-grid" id="debtStats"></div>
   </div>
   <div id="debtScheduleChart" style="display:none; margin:16px 0;"></div>
-  <div class="actions"><button class="action" id="debtCopyBtn" type="button">Copy result</button><button class="action" id="debtShareBtn" type="button">Copy link to this scenario</button></div>
+  <div class="actions"><button class="action" id="debtCopyBtn" type="button">Copy result</button><button class="action" id="debtShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button></div>
   <p class="note">Assumes no new charges are added to the balance and every payment is made on time. Uses the standard amortization formula, the same math credit card issuers use.</p>
 </div>
 
@@ -230,6 +230,10 @@
   </div>
 </div>
 
+<div class="calc-strip">
+  <p class="label"><a href="financial-calculators.html" style="color:inherit;">Financial calculators</a></p>
+  <div class="calc-strip-links"><a href="mortgage-calculator.html">Mortgage</a><a href="loan-calculator.html">Loan</a><a href="auto-loan-calculator.html">Auto Loan</a><a href="amortization-calculator.html">Amortization</a><a href="refinance-calculator.html">Refinance</a><a href="extra-payment-calculator.html">Extra Payment</a><a href="loan-comparison-calculator.html">Loan Comparison</a><a href="interest-rate-calculator.html">Interest Rate</a><a href="debt-payoff-calculator.html" aria-current="page">Debt Payoff</a><a href="rent-vs-buy-calculator.html">Rent vs. Buy</a><a href="retirement-calculator.html">Retirement</a><a href="401k-calculator.html">401(k)</a><a href="investment-calculator.html">Investment</a><a href="compound-interest-calculator.html">Compound Interest</a><a href="savings-goal-calculator.html">Savings Goal</a><a href="inflation-calculator.html">Inflation</a><a href="salary-calculator.html">Salary</a><a href="tax-calculator.html">Income Tax (US)</a><a href="canada-tax-calculator.html">Income Tax (Canada)</a></div>
+</div>
 </div>
 <footer class="site-footer">
   <div>
@@ -249,6 +253,7 @@
 <script src="finance.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("debt-payoff-calculator.html", "Debt Payoff Calculator");</script>
 <script>
 (function(){
@@ -443,6 +448,12 @@ if (window.ShareState) ShareState.init({
     'rate': 'debtRate',
     'payment': 'debtPayment'
   }
+});
+</script>
+<script>
+// Print buttons: one delegated handler for the whole site.
+document.addEventListener('click', function(e){
+  if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
 </script>
 </body>

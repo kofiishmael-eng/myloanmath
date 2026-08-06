@@ -145,7 +145,7 @@
   <h2 style="margin-top:0;">Copy this code</h2>
   <p class="note" style="margin-top:0;">Paste it into any page. It is a plain iframe with a credit line &mdash; no scripts required.</p>
   <textarea id="embCode" readonly rows="6" style="width:100%; font-family:var(--font-mono); font-size:12.5px; padding:12px; border:1px solid var(--line); border-radius:6px; background:var(--card); color:var(--ink); resize:vertical;"></textarea>
-  <div class="actions"><button class="action" id="embCopy" type="button">Copy embed code</button></div>
+  <div class="actions"><button class="action" id="embCopy" type="button">Copy embed code</button><button class="print-btn" data-print type="button">Print</button></div>
 </div>
 
 <div class="card">
@@ -236,5 +236,11 @@ window.addEventListener('message', function (e) {
 })();
 </script>
 
+<script>
+// Print buttons: one delegated handler for the whole site.
+document.addEventListener('click', function(e){
+  if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
+});
+</script>
 </body>
 </html>

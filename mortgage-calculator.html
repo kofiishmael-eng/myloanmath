@@ -128,31 +128,64 @@
 
 <div class="card">
   <div class="row">
-    <div class="field"><label for="homePrice">Home price</label><input type="text" id="homePrice" value="300000" inputmode="decimal"></div>
-    <div class="field"><label for="downPayment">Down payment</label><input type="text" id="downPayment" value="60000" inputmode="decimal"></div>
+    <div class="field"><label for="homePrice" data-help="The agreed purchase price, before any down payment. Not the amount you are borrowing — that is this figure minus the down payment.">Home price</label><input type="text" id="homePrice" value="400000" inputmode="decimal"></div>
+    <div class="field"><label for="downPayment" data-help="Cash you pay upfront. Below 20% most US lenders require PMI, which this calculator adds automatically and removes once the balance reaches 78% of the purchase price.">Down payment</label><span class="unit-toggle" role="group" aria-label="Units for Down payment"><button type="button" data-unit-for="downPayment" data-unit="pct" aria-pressed="true">%</button><button type="button" data-unit-for="downPayment" data-unit="amt" aria-pressed="false">$</button></span><input type="text" id="downPayment" value="20" inputmode="decimal"></div>
   </div>
   <div class="row">
-    <div class="field"><label for="mortgageRate">Annual interest rate (%)</label><input type="text" id="mortgageRate" value="6" inputmode="decimal"></div>
-    <div class="field"><label for="mortgageTerm">Loan term (years)</label><input type="text" id="mortgageTerm" value="30" inputmode="decimal"></div>
+    <div class="field"><label for="mortgageRate" data-help="The interest rate on the loan, not the APR. APR also folds in lender fees charged at closing, so it is usually slightly higher.">Interest rate (%)</label><input type="text" id="mortgageRate" value="6.5" inputmode="decimal"></div>
+    <div class="field"><label for="mortgageTerm" data-help="How many years the loan runs. A shorter term means a higher payment but far less total interest.">Loan term (years)</label><input type="text" id="mortgageTerm" value="30" inputmode="decimal"></div>
   </div>
   <div class="row">
-    <div class="field"><label for="propertyTax">Property tax (% of home value / year)</label><input type="text" id="propertyTax" value="1.1" inputmode="decimal"></div>
-    <div class="field"><label for="homeInsurance">Home insurance ($ / year)</label><input type="text" id="homeInsurance" value="1500" inputmode="decimal"></div>
+    <div class="field"><label for="propertyTax" data-help="Annual property tax as a share of the home value. Rates vary enormously by state and county — the figure on a recent tax bill for the specific address beats any average.">Property tax</label><span class="unit-toggle" role="group" aria-label="Units for Property tax"><button type="button" data-unit-for="propertyTax" data-unit="pct" aria-pressed="true">%/yr</button><button type="button" data-unit-for="propertyTax" data-unit="amt" aria-pressed="false">$/yr</button></span><input type="text" id="propertyTax" value="1.1" inputmode="decimal"></div>
+    <div class="field"><label for="homeInsurance" data-help="Annual homeowners insurance premium. Collected monthly through escrow alongside your payment on most mortgages.">Home insurance ($ / year)</label><input type="text" id="homeInsurance" value="1800" inputmode="decimal"></div>
   </div>
   <div class="row">
-    <div class="field"><label for="hoaFee">HOA dues ($ / month)</label><input type="text" id="hoaFee" value="0" inputmode="decimal"></div>
+    <div class="field"><label for="hoaFee" data-help="Monthly homeowners association or condo fee, if the property has one. It is not part of the loan and does not build equity.">HOA dues ($ / month)</label><input type="text" id="hoaFee" value="0" inputmode="decimal"></div>
+    <div class="field"><label for="otherCost" data-help="Anything else recurring you want included — maintenance, utilities a landlord used to cover, flood insurance. A common maintenance figure is about 1% of the home value a year.">Other monthly costs ($)</label><input type="text" id="otherCost" value="0" inputmode="decimal"></div>
   </div>
+
+  <details class="more-options">
+    <summary>More options &mdash; extra payments, cost increases, start date</summary>
+    <div class="row" style="margin-top:10px;">
+      <div class="field"><label for="extraMonthly" data-help="An additional amount paid to principal every month. It does not reduce your required payment — it shortens the loan instead.">Extra payment each month ($)</label><input type="text" id="extraMonthly" value="0" inputmode="decimal"></div>
+      <div class="field"><label for="extraAnnual" data-help="A once-a-year extra payment, such as from a bonus or tax refund.">Extra payment each year ($)</label><input type="text" id="extraAnnual" value="0" inputmode="decimal"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label for="extraOneTime" data-help="A single lump sum. The earlier it lands, the more interest it removes, because it stops accruing from that moment.">One-time extra payment ($)</label><input type="text" id="extraOneTime" value="0" inputmode="decimal"></div>
+      <div class="field"><label for="extraOneTimeMonth">Paid at payment number</label><input type="text" id="extraOneTimeMonth" value="12" inputmode="numeric"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label for="taxIncrease" data-help="How fast you expect property tax to rise each year. Assessments generally track home values, so leaving this at zero understates a 30-year total considerably.">Property tax increase (% / year)</label><input type="text" id="taxIncrease" value="0" inputmode="decimal"></div>
+      <div class="field"><label for="insIncrease" data-help="How fast you expect insurance premiums to rise each year. In several states these have risen far faster than general inflation.">Insurance increase (% / year)</label><input type="text" id="insIncrease" value="0" inputmode="decimal"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label for="startMonth" data-help="When the first payment is due. Used to turn payment numbers into real calendar dates and to give you a payoff date.">First payment month</label><select id="startMonth"></select></div>
+      <div class="field"><label for="startYear">First payment year</label><input type="text" id="startYear" value="2026" inputmode="numeric"></div>
+    </div>
+  </details>
+
   <div class="result" aria-live="polite" aria-atomic="true">
-    <div class="result-label">Estimated total monthly payment</div>
+    <div class="result-label">Total monthly payment</div>
     <div class="result-text" id="mortgageOutput">-</div>
+    <div id="mortgageComposition"></div>
     <div class="stat-grid" id="mortgageStats"></div>
   </div>
-  <div class="actions"><button class="action" id="mortgageScheduleBtn" type="button">Show yearly breakdown</button><button class="action" id="mortgageCopyBtn" type="button">Copy result</button><button class="action" id="mortgageShareBtn" type="button">Copy link to this scenario</button></div>
+
+  <div class="actions"><button class="action" id="mortgageScheduleBtn" type="button">Show yearly breakdown</button><button class="action" id="mortgageCopyBtn" type="button">Copy result</button><button class="action" id="mortgageShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" id="mortgagePrintBtn" type="button">Print</button></div>
   <div id="mortgageScheduleChart" style="display:none; margin:16px 0;"></div>
   <div class="schedule-wrap" id="mortgageScheduleWrap" style="display:none;"><table class="schedule-table" id="mortgageScheduleTable"></table></div>
-  <p class="note">Property tax and insurance defaults are rough national-average placeholders — replace them with your actual local rates for an accurate estimate.</p>
+  <p class="note" id="mortgageNote"></p>
 </div>
 
+<div class="card" id="mortgageLifetime">
+  <div class="result-label" style="color:var(--accent);">Monthly and lifetime cost</div>
+  <div class="schedule-wrap"><table class="schedule-table" id="mortgageTotals"></table></div>
+</div>
+
+<div class="card" id="mortgageBiweekly" style="background:var(--brass-soft); border-left:3px solid var(--brass);">
+  <div class="result-label" style="color:var(--brass);">If you paid every two weeks instead</div>
+  <p class="note" id="mortgageBiweeklyText" style="margin-top:6px; margin-bottom:0;"></p>
+</div>
 
 <div class="ad-slot"><!-- AD SLOT: below the tool. Once approved, paste your AdSense ad unit code here. --></div>
 
@@ -201,6 +234,10 @@
   </div>
 </div>
 
+<div class="calc-strip">
+  <p class="label"><a href="financial-calculators.html" style="color:inherit;">Financial calculators</a></p>
+  <div class="calc-strip-links"><a href="mortgage-calculator.html" aria-current="page">Mortgage</a><a href="loan-calculator.html">Loan</a><a href="auto-loan-calculator.html">Auto Loan</a><a href="amortization-calculator.html">Amortization</a><a href="refinance-calculator.html">Refinance</a><a href="extra-payment-calculator.html">Extra Payment</a><a href="loan-comparison-calculator.html">Loan Comparison</a><a href="interest-rate-calculator.html">Interest Rate</a><a href="debt-payoff-calculator.html">Debt Payoff</a><a href="rent-vs-buy-calculator.html">Rent vs. Buy</a><a href="retirement-calculator.html">Retirement</a><a href="401k-calculator.html">401(k)</a><a href="investment-calculator.html">Investment</a><a href="compound-interest-calculator.html">Compound Interest</a><a href="savings-goal-calculator.html">Savings Goal</a><a href="inflation-calculator.html">Inflation</a><a href="salary-calculator.html">Salary</a><a href="tax-calculator.html">Income Tax (US)</a><a href="canada-tax-calculator.html">Income Tax (Canada)</a></div>
+</div>
 </div>
 <footer class="site-footer">
   <div>
@@ -220,115 +257,201 @@
 <script src="finance.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("mortgage-calculator.html", "Mortgage Calculator");</script>
 
 <script>
-
 (function(){
   var mod = window.FinanceTools;
   if (!mod) { document.getElementById('fallbackBanner').style.display='block'; return; }
   function el(id){ return document.getElementById(id); }
-  function fmtMoney(n){ return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
-  function parseNum(str){ var s=String(str).trim().replace(/,/g,''); if(!/^-?\d+(\.\d+)?$/.test(s)) return NaN; return parseFloat(s); }
-  var scheduleVisible = false;
-  var lastLoanInfo = null;
-  function compute(){
-    var out = el('mortgageOutput'); var stats = el('mortgageStats');
-    try {
-      var homePrice = parseNum(el('homePrice').value);
-      var downPayment = parseNum(el('downPayment').value);
-      var rate = parseNum(el('mortgageRate').value);
-      var term = parseNum(el('mortgageTerm').value);
-      var tax = parseNum(el('propertyTax').value);
-      var insurance = parseNum(el('homeInsurance').value);
-      var hoa = parseNum(el('hoaFee').value);
-      if ([homePrice, downPayment, rate, term, tax, insurance, hoa].some(isNaN)) throw new Error('Enter valid numbers in every field.');
-      var r = mod.calculateMortgage({ homePrice: homePrice, downPayment: downPayment, annualRatePercent: rate, termYears: term, propertyTaxAnnualPercent: tax, homeInsuranceAnnual: insurance, hoaMonthly: hoa });
-      out.textContent = fmtMoney(r.totalMonthly) + ' / month'; out.classList.remove('error');
-      stats.innerHTML =
-        '<div class="stat"><div class="stat-label">Principal &amp; interest</div><div class="stat-value">' + fmtMoney(r.principalAndInterest) + '</div></div>' +
-        '<div class="stat"><div class="stat-label">Property tax</div><div class="stat-value">' + fmtMoney(r.propertyTaxMonthly) + '</div></div>' +
-        '<div class="stat"><div class="stat-label">Home insurance</div><div class="stat-value">' + fmtMoney(r.insuranceMonthly) + '</div></div>' +
-        '<div class="stat"><div class="stat-label">PMI</div><div class="stat-value">' + fmtMoney(r.pmiMonthly) + '</div></div>' +
-        '<div class="stat"><div class="stat-label">HOA</div><div class="stat-value">' + fmtMoney(r.hoaMonthly) + '</div></div>' +
-        '<div class="stat"><div class="stat-label">Down payment</div><div class="stat-value">' + r.downPaymentPercent + '%</div></div>';
-      lastLoanInfo = { principal: r.loanPrincipal, rate: rate, termMonths: term * 12 };
-      if (scheduleVisible) { renderMortgageSchedule(lastLoanInfo); }
-      else { el('mortgageScheduleWrap').style.display='none'; if (el('mortgageScheduleChart')) el('mortgageScheduleChart').style.display='none'; }
-    } catch(e) {
-      out.textContent = e.message; out.classList.add('error'); stats.innerHTML='';
-      el('mortgageScheduleWrap').style.display='none'; scheduleVisible=false; lastLoanInfo = null;
-      if (el('mortgageScheduleChart')) el('mortgageScheduleChart').style.display='none';
-    }
-  }
-  function renderMortgageSchedule(loanInfo){
-    var years = mod.amortizationScheduleByYear({ principal: loanInfo.principal, annualRatePercent: loanInfo.rate, termMonths: loanInfo.termMonths });
-    var rows = '<tr><th>Year</th><th>Principal paid</th><th>Interest paid</th><th>Remaining balance</th></tr>';
-    years.forEach(function(y){ rows += '<tr><td>'+y.year+'</td><td>'+fmtMoney(y.principalPaid)+'</td><td>'+fmtMoney(y.interestPaid)+'</td><td>'+fmtMoney(y.remainingBalance)+'</td></tr>'; });
-    el('mortgageScheduleTable').innerHTML = rows; el('mortgageScheduleWrap').style.display='block';
-    renderMortgageBalanceChart(years, loanInfo.principal);
-  }
-  function renderMortgageBalanceChart(years, principal){
-    var container = el('mortgageScheduleChart');
-    if (!container) return;
-    var w = 640, h = 220, padL = 60, padB = 30, padT = 16, padR = 16;
-    var plotW = w - padL - padR, plotH = h - padT - padB;
-    var maxVal = principal;
-    var n = years.length;
-    var barW = Math.max(2, (plotW / n) * 0.7);
-    var gap = (plotW / n) - barW;
-    var svg = '<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:100%; height:auto; font-family:var(--font-mono);" role="img" aria-label="Remaining mortgage balance by year">';
-    for (var g = 0; g <= 4; g++) {
-      var val = maxVal * (g / 4);
-      var y = padT + plotH - (plotH * (g / 4));
-      svg += '<line x1="' + padL + '" y1="' + y + '" x2="' + (w - padR) + '" y2="' + y + '" stroke="var(--line)" stroke-width="1"/>';
-      svg += '<text x="' + (padL - 8) + '" y="' + (y + 4) + '" text-anchor="end" font-size="10" fill="var(--ink-soft)">' + fmtMoney(val).split('.')[0] + '</text>';
-    }
-    years.forEach(function(yr, i) {
-      var barH = (yr.remainingBalance / maxVal) * plotH;
-      var x = padL + i * (barW + gap) + gap / 2;
-      var y = padT + plotH - barH;
-      svg += '<rect x="' + x + '" y="' + y + '" width="' + barW + '" height="' + barH + '" fill="var(--accent)" opacity="0.85"><title>Year ' + yr.year + ': ' + fmtMoney(yr.remainingBalance) + ' remaining</title></rect>';
-      if (n <= 15 || i % Math.ceil(n / 15) === 0) {
-        svg += '<text x="' + (x + barW / 2) + '" y="' + (h - padB + 14) + '" text-anchor="middle" font-size="9" fill="var(--ink-soft)">' + yr.year + '</text>';
+  function money(n){ return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function money0(n){ return n.toLocaleString(undefined,{maximumFractionDigits:0}); }
+  function num(s){ s=String(s).trim().replace(/,/g,''); if(!/^-?\d*\.?\d+$/.test(s)) return NaN; return parseFloat(s); }
+  function dur(m){ var y=Math.floor(m/12), r=m%12;
+    if(y===0) return r+(r===1?' month':' months');
+    if(r===0) return y+(y===1?' year':' years');
+    return y+(y===1?' year':' years')+', '+r+(r===1?' month':' months'); }
+
+  // populate the month picker from the engine's own month names
+  var sm = el('startMonth');
+  mod.MONTH_NAMES.forEach(function(name,i){
+    var o=document.createElement('option'); o.value=String(i+1); o.textContent=name;
+    if(i===new Date().getMonth()) o.selected=true;
+    sm.appendChild(o);
+  });
+
+  // ---- unit toggles -------------------------------------------------------
+  // The canonical stored unit is percent for both fields. Switching only
+  // changes what is displayed and converts using the current home price, so a
+  // later change to the price cannot leave a stale figure behind.
+  var units = { downPayment:'pct', propertyTax:'pct' };
+  Array.prototype.forEach.call(document.querySelectorAll('.unit-toggle button'), function(btn){
+    btn.addEventListener('click', function(){
+      var field = btn.getAttribute('data-unit-for');
+      var to = btn.getAttribute('data-unit');
+      if (units[field] === to) return;
+      var price = num(el('homePrice').value);
+      var v = num(el(field).value);
+      if (!isNaN(price) && !isNaN(v) && price > 0) {
+        el(field).value = (to === 'amt')
+          ? String(Math.round(price * v / 100))
+          : String(Math.round((v / price) * 10000) / 100);
       }
+      units[field] = to;
+      Array.prototype.forEach.call(document.querySelectorAll('.unit-toggle button[data-unit-for="'+field+'"]'), function(b){
+        b.setAttribute('aria-pressed', String(b.getAttribute('data-unit') === to));
+      });
+      compute();
     });
-    svg += '</svg>';
-    container.innerHTML = '<div class="result-label" style="margin-bottom:8px;">Remaining loan balance by year (principal &amp; interest only)</div>' + svg;
-    container.style.display = 'block';
+  });
+
+  function asPercent(field){
+    var v = num(el(field).value);
+    if (isNaN(v)) return NaN;
+    if (units[field] === 'pct') return v;
+    var price = num(el('homePrice').value);
+    return (isNaN(price) || price <= 0) ? NaN : (v / price) * 100;
   }
-  ['homePrice','downPayment','mortgageRate','mortgageTerm','propertyTax','homeInsurance','hoaFee'].forEach(function(id){
-    el(id).addEventListener('input', compute);
-  });
+
+  var last=null, lastResult=null, scheduleOpen=false;
+
+  function composition(r){
+    var parts = [
+      ['Principal & interest', r.principalAndInterest, 'var(--accent)'],
+      ['Property tax', r.propertyTaxMonthly, 'var(--brass)'],
+      ['Insurance', r.insuranceMonthly, '#7B8F7E'],
+      ['PMI', r.pmiMonthly, '#B08968'],
+      ['HOA', r.hoaMonthly, '#9AA79B'],
+      ['Other', r.otherMonthly, '#C4B99A']
+    ].filter(function(p){ return p[1] > 0; });
+    var total = parts.reduce(function(s,p){ return s+p[1]; },0);
+    if (total <= 0) return '';
+    var bar='<div class="comp-bar" role="img" aria-label="Payment composition">';
+    parts.forEach(function(p){
+      var pct=(p[1]/total)*100;
+      bar+='<span style="width:'+pct.toFixed(2)+'%;background:'+p[2]+';" title="'+p[0]+'"></span>';
+    });
+    bar+='</div><div class="comp-key">';
+    parts.forEach(function(p){
+      bar+='<span><i style="background:'+p[2]+'"></i>'+p[0]+' '+Math.round((p[1]/total)*100)+'%</span>';
+    });
+    return bar+'</div>';
+  }
+
+  function compute(){
+    var out=el('mortgageOutput'), stats=el('mortgageStats');
+    try{
+      var price=num(el('homePrice').value), rate=num(el('mortgageRate').value),
+          term=num(el('mortgageTerm').value), ins=num(el('homeInsurance').value),
+          hoa=num(el('hoaFee').value), other=num(el('otherCost').value),
+          exM=num(el('extraMonthly').value), exA=num(el('extraAnnual').value),
+          exO=num(el('extraOneTime').value), exOM=num(el('extraOneTimeMonth').value),
+          taxUp=num(el('taxIncrease').value), insUp=num(el('insIncrease').value),
+          sYear=num(el('startYear').value);
+      var dpPct=asPercent('downPayment'), taxPct=asPercent('propertyTax');
+      if ([price,rate,term,ins,hoa,other,exM,exA,exO,exOM,taxUp,insUp,sYear,dpPct,taxPct].some(isNaN))
+        throw new Error('Enter valid numbers for all fields.');
+
+      var r = mod.calculateMortgageDetailed({
+        homePrice:price, downPayment:price*dpPct/100, annualRatePercent:rate, termYears:term,
+        propertyTaxAnnualPercent:taxPct, homeInsuranceAnnual:ins, hoaMonthly:hoa, otherMonthly:other,
+        taxIncreasePercent:taxUp, insuranceIncreasePercent:insUp,
+        extraMonthly:exM, extraAnnual:exA, extraOneTime:exO, extraOneTimeMonth:exOM,
+        startMonth:parseInt(sm.value,10), startYear:Math.round(sYear)
+      });
+      lastResult = r;
+
+      out.textContent = money(r.totalMonthly) + ' / month';
+      out.classList.remove('error');
+      el('mortgageComposition').innerHTML = composition(r);
+
+      stats.innerHTML =
+        '<div class="stat"><div class="stat-label">Loan amount</div><div class="stat-value">'+money(r.loanPrincipal)+'</div></div>'+
+        '<div class="stat"><div class="stat-label">Principal &amp; interest</div><div class="stat-value">'+money(r.principalAndInterest)+'</div></div>'+
+        '<div class="stat"><div class="stat-label">Down payment</div><div class="stat-value">'+r.downPaymentPercent+'%</div></div>'+
+        '<div class="stat"><div class="stat-label">Payoff date</div><div class="stat-value">'+(r.payoffLabel||'-')+'</div></div>'+
+        '<div class="stat"><div class="stat-label">Total interest</div><div class="stat-value">'+money(r.totalInterest)+'</div></div>'+
+        '<div class="stat"><div class="stat-label">Lifetime cost of ownership</div><div class="stat-value">'+money(r.lifetimeTotal)+'</div></div>';
+
+      // monthly + lifetime table
+      var rows=[['Principal &amp; interest',r.principalAndInterest,r.totalOfPayments-r.loanPrincipal+r.loanPrincipal],
+                ['Property tax',r.propertyTaxMonthly,r.totalTax],
+                ['Home insurance',r.insuranceMonthly,r.totalInsurance]];
+      if(r.pmiMonthly>0) rows.push(['PMI',r.pmiMonthly,r.totalPmi]);
+      if(r.hoaMonthly>0) rows.push(['HOA dues',r.hoaMonthly,r.totalHoa]);
+      if(r.otherMonthly>0) rows.push(['Other costs',r.otherMonthly,r.totalOther]);
+      var t='<tr><th>&nbsp;</th><th>First month</th><th>Over the loan</th></tr>';
+      rows.forEach(function(x){ t+='<tr><td>'+x[0]+'</td><td>'+money(x[1])+'</td><td>'+money(x[2])+'</td></tr>'; });
+      t+='<tr><td><strong>Total</strong></td><td><strong>'+money(r.totalMonthly)+'</strong></td><td><strong>'+money(r.lifetimeTotal)+'</strong></td></tr>';
+      el('mortgageTotals').innerHTML=t;
+
+      // notes
+      var notes=[];
+      notes.push('First payment '+r.firstPaymentLabel+', final payment '+r.payoffLabel+'.');
+      if(r.pmiMonthly>0 && r.pmiEndsLabel) notes.push('PMI of '+money(r.pmiMonthly)+' a month ends around '+r.pmiEndsLabel+', once the balance reaches 78% of the purchase price.');
+      if(r.monthsSaved>0) notes.push('Your extra payments clear the loan '+dur(r.monthsSaved)+' early and save '+money(r.interestSaved)+' in interest.');
+      notes.push('Property tax and insurance are collected through escrow on most mortgages and are not part of the loan itself.');
+      el('mortgageNote').textContent = notes.join(' ');
+
+      // biweekly
+      var bw=r.biweekly;
+      el('mortgageBiweeklyText').textContent =
+        'Paying '+money(bw.paymentPerFortnight)+' every two weeks instead of '+money(r.principalAndInterest)+
+        ' once a month means 26 half-payments a year, which is one extra monthly payment annually. That clears the loan in '+
+        dur(bw.months)+' rather than '+dur(r.baselinePayments)+' \u2014 '+dur(bw.monthsSaved)+' earlier, saving '+
+        money(bw.interestSaved)+' in interest. Check your servicer accepts true biweekly payments rather than just holding the money.';
+
+      last = money(r.totalMonthly)+'/month on a '+money0(price)+' home ('+r.downPaymentPercent+'% down, '+rate+'% over '+term+' years). Payoff '+r.payoffLabel+', total interest '+money(r.totalInterest)+'.';
+
+      if(scheduleOpen) drawSchedule(r);
+    }catch(e){
+      out.textContent='Check your numbers'; out.classList.add('error');
+      el('mortgageComposition').innerHTML='';
+      stats.innerHTML='<div class="stat" style="grid-column:1/-1;"><div class="stat-label">Problem</div><div class="stat-value" style="font-size:14px;">'+e.message+'</div></div>';
+      el('mortgageTotals').innerHTML=''; el('mortgageNote').textContent=''; el('mortgageBiweeklyText').textContent='';
+      last=null; lastResult=null;
+    }
+  }
+
+  function drawSchedule(r){
+    var byYear={}, order=[];
+    r.rows.forEach(function(x){
+      var k=x.year;
+      if(!byYear[k]){ byYear[k]={year:k,interest:0,principal:0,balance:0}; order.push(k); }
+      byYear[k].interest+=x.interest; byYear[k].principal+=x.principal; byYear[k].balance=x.balance;
+    });
+    var t='<tr><th>Year</th><th>Interest</th><th>Principal</th><th>Ending balance</th></tr>';
+    order.forEach(function(k){ var y=byYear[k];
+      t+='<tr><td>'+k+'</td><td>'+money(y.interest)+'</td><td>'+money(y.principal)+'</td><td>'+money(y.balance)+'</td></tr>'; });
+    el('mortgageScheduleTable').innerHTML=t;
+
+    var max=r.loanPrincipal, w=100/order.length, bars='';
+    order.forEach(function(k,i){ var hgt=(byYear[k].balance/max)*100;
+      bars+='<rect x="'+(i*w)+'%" y="'+(100-hgt)+'%" width="'+(w*0.8)+'%" height="'+hgt+'%" fill="var(--accent)" opacity="0.75"></rect>'; });
+    el('mortgageScheduleChart').innerHTML='<svg viewBox="0 0 100 100" preserveAspectRatio="none" style="width:100%;height:150px;" role="img" aria-label="Loan balance falling over time">'+bars+'</svg>';
+  }
+
+  ['homePrice','downPayment','mortgageRate','mortgageTerm','propertyTax','homeInsurance','hoaFee','otherCost',
+   'extraMonthly','extraAnnual','extraOneTime','extraOneTimeMonth','taxIncrease','insIncrease','startMonth','startYear']
+   .forEach(function(id){ el(id).addEventListener('input',compute); el(id).addEventListener('change',compute); });
+
   el('mortgageScheduleBtn').addEventListener('click', function(){
-    scheduleVisible = !scheduleVisible;
-    el('mortgageScheduleBtn').textContent = scheduleVisible ? 'Hide yearly breakdown' : 'Show yearly breakdown';
-    compute();
+    scheduleOpen=!scheduleOpen;
+    el('mortgageScheduleWrap').style.display=scheduleOpen?'block':'none';
+    el('mortgageScheduleChart').style.display=scheduleOpen?'block':'none';
+    this.textContent=scheduleOpen?'Hide yearly breakdown':'Show yearly breakdown';
+    if(scheduleOpen && lastResult) drawSchedule(lastResult);
   });
+  el('mortgagePrintBtn').addEventListener('click', function(){ window.print(); });
   el('mortgageCopyBtn').addEventListener('click', function(){
-    var stats = el('mortgageStats').querySelectorAll('.stat');
-    var lines = ['Mortgage Calculator — myloanmath.com', '', 'Total monthly payment: ' + el('mortgageOutput').textContent];
-    stats.forEach(function(s){ lines.push(s.querySelector('.stat-label').textContent + ': ' + s.querySelector('.stat-value').textContent); });
-    copyToClipboard(lines.join('\n'), el('mortgageCopyBtn'));
+    if(!last) return; var b=this,o=b.textContent;
+    navigator.clipboard.writeText(last).then(function(){b.textContent='Copied!';}).catch(function(){b.textContent='Copy failed';});
+    setTimeout(function(){b.textContent=o;},1600);
   });
+
   compute();
 })();
-function copyToClipboard(text, btn){
-  function showCopied(){ btn.textContent='Copied!'; setTimeout(function(){ btn.textContent='Copy result'; }, 1800); }
-  function showFailed(){ btn.textContent='Copy failed — try manually'; setTimeout(function(){ btn.textContent='Copy result'; }, 2200); }
-  function fallbackCopy(){
-    var ta = document.createElement('textarea');
-    ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
-    document.body.appendChild(ta); ta.focus(); ta.select();
-    document.execCommand('copy'); document.body.removeChild(ta);
-  }
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(showCopied).catch(function(){ try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); } });
-  } else {
-    try { fallbackCopy(); showCopied(); } catch(e) { showFailed(); }
-  }
-}
-
 </script>
 <script>
 // Shareable / bookmarkable scenario. Runs after the calculator above has
@@ -336,13 +459,10 @@ function copyToClipboard(text, btn){
 if (window.ShareState) ShareState.init({
   buttonId: 'mortgageShareBtn',
   fields: {
-    'price': 'homePrice',
-    'down': 'downPayment',
-    'rate': 'mortgageRate',
-    'term': 'mortgageTerm',
-    'proptax': 'propertyTax',
-    'insurance': 'homeInsurance',
-    'hoa': 'hoaFee'
+    'price': 'homePrice', 'down': 'downPayment', 'rate': 'mortgageRate',
+    'term': 'mortgageTerm', 'proptax': 'propertyTax', 'insurance': 'homeInsurance',
+    'hoa': 'hoaFee', 'other': 'otherCost', 'extram': 'extraMonthly', 'extraa': 'extraAnnual',
+    'extrao': 'extraOneTime', 'taxup': 'taxIncrease', 'insup': 'insIncrease'
   }
 });
 </script>

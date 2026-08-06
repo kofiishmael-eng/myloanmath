@@ -1891,7 +1891,219 @@ function retirementProjection(input) {
 
 // ---------------------------------------------------------------------
 
-const FinanceTools = { calculateLoan, amortizationScheduleByYear, calculateMortgage, compoundInterest, requiredMonthlyContribution, calculateFederalIncomeTax, TAX_BRACKETS_2026, STANDARD_DEDUCTION_2026, FILING_STATUS_LABELS, calculateFederalIncomeTaxCRA, CRA_FEDERAL_BRACKETS_2026, CRA_BPA_2026, calculateStateTax, STATE_TAX_2026, getProvinceTaxStatus, PROVINCE_TAX_2026, calculateFICA, FICA_2026, calculateCPPEI, CPP_EI_2026, monthsToPayoff, typicalMinimumPayment, calculateDiscount, findDiscountPercent, calculate401kProjection, employee401kLimit, CONTRIB_401K_2026, calculateTip, PercentageTools, round2, calculateExtraPayment, calculateRefinanceBreakEven, calculateRentVsBuy, rentVsBuyBreakEvenAppreciation, calculateSalesTax, calculateInflation, solveInterestRate, amortizationScheduleMonthly, investmentProjection, retirementProjection };
+const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'];
+const MONTH_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+/**
+ * Full mortgage model: month by month, with everything that actually moves.
+ *
+ * calculateMortgage() above answers "what is the payment" and holds every cost
+ * static forever. That is fine for a headline figure and wrong for a thirty-year
+ * projection, because property tax and insurance rise, PMI falls away, and extra
+ * payments shorten the loan. This runs the whole term and reports what changes.
+ *
+ * Specifically it models:
+ *   - extra payments: monthly, annual, and a one-off in a chosen month
+ *   - PMI terminating automatically once the balance reaches 78% of the
+ *     original purchase price, which is the US federal rule
+ *   - property tax, insurance and HOA escalating by their own annual rates
+ *   - real calendar dates, so a payoff month is a date rather than "month 284"
+ *   - a biweekly comparison, since half a payment every two weeks is 13 monthly
+ *     payments a year rather than 12
+ */
+function calculateMortgageDetailed(input) {
+  const {
+    homePrice,
+    downPayment,
+    annualRatePercent,
+    termYears,
+    propertyTaxAnnualPercent = 1.1,
+    homeInsuranceAnnual = 1800,
+    hoaMonthly = 0,
+    otherMonthly = 0,
+    pmiAnnualPercent = 0.5,
+    // annual escalation of the ownership costs
+    taxIncreasePercent = 0,
+    insuranceIncreasePercent = 0,
+    hoaIncreasePercent = 0,
+    // extra payments
+    extraMonthly = 0,
+    extraAnnual = 0,
+    extraAnnualMonth = 1,      // 1-12, which calendar month the annual extra lands
+    extraOneTime = 0,
+    extraOneTimeMonth = 1,     // payment number the lump sum lands on
+    startMonth = 1,            // 1-12
+    startYear = 2026,
+  } = input;
+
+  if (!(homePrice > 0)) throw new Error('Home price must be greater than zero.');
+  if (!(downPayment >= 0)) throw new Error('Down payment cannot be negative.');
+  if (downPayment >= homePrice) throw new Error('Down payment must be less than the home price.');
+  if (!(termYears > 0)) throw new Error('Loan term must be greater than zero.');
+  assertFiniteNumbers({
+    propertyTaxAnnualPercent, homeInsuranceAnnual, hoaMonthly, otherMonthly,
+    pmiAnnualPercent, taxIncreasePercent, insuranceIncreasePercent, hoaIncreasePercent,
+    extraMonthly, extraAnnual, extraOneTime,
+  });
+  if (extraMonthly < 0 || extraAnnual < 0 || extraOneTime < 0) {
+    throw new Error('Extra payments cannot be negative.');
+  }
+
+  const loanPrincipal = homePrice - downPayment;
+  const termMonths = Math.round(termYears * 12);
+  const base = calculateLoan({ principal: loanPrincipal, annualRatePercent, termMonths });
+  const scheduled = base.monthlyPayment;
+  const r = annualRatePercent / 100 / 12;
+  const downPaymentPercent = (downPayment / homePrice) * 100;
+
+  // PMI applies while the balance exceeds 78% of the ORIGINAL purchase price —
+  // the automatic-termination threshold in the US Homeowners Protection Act.
+  const pmiThreshold = homePrice * 0.78;
+  const pmiMonthlyBase = downPaymentPercent < 20
+    ? (loanPrincipal * pmiAnnualPercent) / 100 / 12
+    : 0;
+
+  let balance = loanPrincipal;
+  let month = 0;
+  let totalInterest = 0;
+  let totalPrincipal = 0;
+  let totalTax = 0, totalInsurance = 0, totalHoa = 0, totalPmi = 0, totalOther = 0;
+  let pmiEndsMonth = pmiMonthlyBase > 0 ? null : 0;
+
+  let taxAnnual = homePrice * (propertyTaxAnnualPercent / 100);
+  let insAnnual = homeInsuranceAnnual;
+  let hoaM = hoaMonthly;
+  let otherM = otherMonthly;
+
+  const rows = [];
+
+  while (balance > 0.005 && month < termMonths) {
+    month++;
+    // calendar position of this payment
+    const monthIndex = (startMonth - 1 + month - 1) % 12;
+    const year = startYear + Math.floor((startMonth - 1 + month - 1) / 12);
+
+    // escalate the ownership costs once per year of the loan
+    if (month > 1 && (month - 1) % 12 === 0) {
+      taxAnnual *= 1 + taxIncreasePercent / 100;
+      insAnnual *= 1 + insuranceIncreasePercent / 100;
+      hoaM *= 1 + hoaIncreasePercent / 100;
+      otherM *= 1 + hoaIncreasePercent / 100;
+    }
+
+    const interest = balance * r;
+    let principalPortion = scheduled - interest;
+
+    let extra = extraMonthly;
+    if (extraAnnual > 0 && monthIndex === (extraAnnualMonth - 1)) extra += extraAnnual;
+    if (extraOneTime > 0 && month === Math.round(extraOneTimeMonth)) extra += extraOneTime;
+    principalPortion += extra;
+
+    // never overpay the balance
+    if (principalPortion > balance) principalPortion = balance;
+
+    balance = balance - principalPortion;
+    totalInterest += interest;
+    totalPrincipal += principalPortion;
+
+    const pmi = (pmiMonthlyBase > 0 && balance > pmiThreshold) ? pmiMonthlyBase : 0;
+    if (pmiMonthlyBase > 0 && pmi === 0 && pmiEndsMonth === null) pmiEndsMonth = month;
+
+    const taxM = taxAnnual / 12;
+    const insM = insAnnual / 12;
+    totalTax += taxM; totalInsurance += insM; totalHoa += hoaM; totalPmi += pmi; totalOther += otherM;
+
+    rows.push({
+      month,
+      label: `${MONTH_SHORT[monthIndex]} ${year}`,
+      monthIndex, year,
+      interest: round2(interest),
+      principal: round2(principalPortion),
+      extra: round2(extra),
+      pmi: round2(pmi),
+      balance: round2(Math.max(0, balance)),
+    });
+  }
+
+  const payoffRow = rows[rows.length - 1];
+  const firstRow = rows[0];
+
+  // --- biweekly: half the payment every two weeks = 26 half-payments a year ---
+  let biweekly = null;
+  {
+    const half = round2(scheduled / 2);
+    let b = loanPrincipal, weeks = 0, bwInterest = 0;
+    // interest accrues monthly on the balance; 26 half-payments land per year
+    const weeklyRate = annualRatePercent / 100 / 52;
+    while (b > 0.005 && weeks < termMonths * 5) {
+      weeks += 2;
+      const i = b * weeklyRate * 2;
+      let pay = Math.min(half, b + i);
+      b = b + i - pay;
+      bwInterest += i;
+    }
+    const bwMonths = Math.ceil(weeks / 4.333333);
+    biweekly = {
+      paymentPerFortnight: half,
+      months: bwMonths,
+      totalInterest: round2(bwInterest),
+      monthsSaved: Math.max(0, base.numberOfPayments - bwMonths),
+      interestSaved: round2(base.totalInterest - bwInterest),
+    };
+  }
+
+  const principalAndInterest = scheduled;
+  const firstMonthTax = round2((homePrice * (propertyTaxAnnualPercent / 100)) / 12);
+  const firstMonthIns = round2(homeInsuranceAnnual / 12);
+  const firstMonthPmi = round2(pmiMonthlyBase);
+  const totalMonthly = round2(principalAndInterest + firstMonthTax + firstMonthIns
+    + hoaMonthly + otherMonthly + firstMonthPmi);
+
+  const lifetimeTotal = round2(loanPrincipal + totalInterest + totalTax + totalInsurance
+    + totalHoa + totalPmi + totalOther);
+
+  return {
+    loanPrincipal: round2(loanPrincipal),
+    downPaymentPercent: round2(downPaymentPercent),
+    principalAndInterest,
+    // first-month figures, which is what a payment breakdown should show
+    propertyTaxMonthly: firstMonthTax,
+    insuranceMonthly: firstMonthIns,
+    hoaMonthly: round2(hoaMonthly),
+    otherMonthly: round2(otherMonthly),
+    pmiMonthly: firstMonthPmi,
+    totalMonthly,
+    // lifetime figures
+    numberOfPayments: month,
+    baselinePayments: base.numberOfPayments,
+    monthsSaved: base.numberOfPayments - month,
+    totalInterest: round2(totalInterest),
+    baselineInterest: base.totalInterest,
+    interestSaved: round2(base.totalInterest - totalInterest),
+    totalTax: round2(totalTax),
+    totalInsurance: round2(totalInsurance),
+    totalHoa: round2(totalHoa),
+    totalPmi: round2(totalPmi),
+    totalOther: round2(totalOther),
+    totalOfPayments: round2(loanPrincipal + totalInterest),
+    lifetimeTotal,
+    // dates
+    firstPaymentLabel: firstRow ? `${MONTH_NAMES[firstRow.monthIndex]} ${firstRow.year}` : null,
+    payoffLabel: payoffRow ? `${MONTH_NAMES[payoffRow.monthIndex]} ${payoffRow.year}` : null,
+    pmiEndsMonth,
+    pmiEndsLabel: (pmiEndsMonth && rows[pmiEndsMonth - 1])
+      ? `${MONTH_NAMES[rows[pmiEndsMonth - 1].monthIndex]} ${rows[pmiEndsMonth - 1].year}` : null,
+    biweekly,
+    rows,
+    MONTH_NAMES, MONTH_SHORT,
+  };
+}
+
+// ---------------------------------------------------------------------
+
+const FinanceTools = { calculateLoan, amortizationScheduleByYear, calculateMortgage, compoundInterest, requiredMonthlyContribution, calculateFederalIncomeTax, TAX_BRACKETS_2026, STANDARD_DEDUCTION_2026, FILING_STATUS_LABELS, calculateFederalIncomeTaxCRA, CRA_FEDERAL_BRACKETS_2026, CRA_BPA_2026, calculateStateTax, STATE_TAX_2026, getProvinceTaxStatus, PROVINCE_TAX_2026, calculateFICA, FICA_2026, calculateCPPEI, CPP_EI_2026, monthsToPayoff, typicalMinimumPayment, calculateDiscount, findDiscountPercent, calculate401kProjection, employee401kLimit, CONTRIB_401K_2026, calculateTip, PercentageTools, round2, calculateExtraPayment, calculateRefinanceBreakEven, calculateRentVsBuy, rentVsBuyBreakEvenAppreciation, calculateSalesTax, calculateInflation, solveInterestRate, amortizationScheduleMonthly, investmentProjection, retirementProjection, calculateMortgageDetailed, MONTH_NAMES, MONTH_SHORT };
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = FinanceTools;

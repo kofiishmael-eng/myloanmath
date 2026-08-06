@@ -143,7 +143,7 @@
     <div class="result-label" id="cvLabel">Result</div>
     <div class="result-text" id="cvOutput">-</div>
   </div>
-  <div class="actions"><button class="action" id="cvCopyBtn" type="button">Copy result</button><button class="action" id="cvShareBtn" type="button">Copy link to this conversion</button></div>
+  <div class="actions"><button class="action" id="cvCopyBtn" type="button">Copy result</button><button class="action" id="cvShareBtn" type="button">Copy link to this conversion</button><button class="print-btn" data-print type="button">Print</button></div>
   <p class="note">Uses the exact factor 1 mile = 1.609344 km. A nautical mile is a different unit entirely at 1.852 km, so marine and aviation distances do not convert with this factor.</p>
 </div>
 
@@ -190,6 +190,10 @@
 <p class="note" style="text-align:center; margin-top:22px;"><a href="embed-calculator.html">Get this calculator for your website</a> &mdash; free, one line of HTML, no sign-up.</p>
 <p class="note" style="text-align:center; margin-top:26px;">Conversion factors last verified 2026-08-02 against the definitions listed in our <a href="methodology.html">methodology</a>. Every correction we have made is public in the <a href="changelog.html">corrections log</a>.</p>
 
+<div class="calc-strip">
+  <p class="label"><a href="unit-converters.html" style="color:inherit;">Unit converters</a></p>
+  <div class="calc-strip-links"><a href="kg-to-lbs-converter.html">kg to lbs</a><a href="cm-to-inches-converter.html">cm to Inches</a><a href="mm-to-inches-converter.html">mm to Inches</a><a href="feet-to-meters-converter.html">Feet to Meters</a><a href="yards-to-meters-converter.html">Yards to Meters</a><a href="miles-to-km-converter.html" aria-current="page">Miles to km</a><a href="grams-to-ounces-converter.html">Grams to Ounces</a><a href="stone-to-kg-converter.html">Stone to kg</a><a href="celsius-to-fahrenheit-converter.html">Celsius to Fahrenheit</a><a href="liters-to-gallons-converter.html">Liters to Gallons</a><a href="ml-to-fl-oz-converter.html">ml to fl oz</a><a href="cups-to-grams-converter.html">Cups to Grams</a><a href="sq-ft-to-sq-m-converter.html">Sq Ft to Sq M</a><a href="acres-to-hectares-converter.html">Acres to Hectares</a><a href="mph-to-kph-converter.html">mph to km/h</a><a href="knots-to-mph-converter.html">Knots to mph</a><a href="mpg-to-l-100km-converter.html">mpg to L/100km</a><a href="psi-to-bar-converter.html">psi to bar</a><a href="calories-to-kilojoules-converter.html">Calories to kJ</a><a href="mb-to-gb-converter.html">MB to GB</a></div>
+</div>
 </div>
 <footer class="site-footer">
   <div>
@@ -245,6 +249,12 @@
 </script>
 <script>
 if (window.ShareState) ShareState.init({ buttonId: 'cvShareBtn', fields: {"v": "cvValue", "dir": "cvDir"} });
+</script>
+<script>
+// Print buttons: one delegated handler for the whole site.
+document.addEventListener('click', function(e){
+  if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
+});
 </script>
 </body>
 </html>

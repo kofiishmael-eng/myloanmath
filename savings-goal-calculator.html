@@ -126,8 +126,8 @@
 
 <div class="card">
   <div class="row">
-    <div class="field"><label for="goalTarget">Savings goal</label><input type="text" id="goalTarget" value="20000" inputmode="decimal"></div>
-    <div class="field"><label for="goalCurrent">Amount already saved</label><input type="text" id="goalCurrent" value="2000" inputmode="decimal"></div>
+    <div class="field"><label for="goalTarget" data-help="The amount you are trying to reach.">Savings goal</label><input type="text" id="goalTarget" value="20000" inputmode="decimal"></div>
+    <div class="field"><label for="goalCurrent" data-help="What you have saved toward it already.">Amount already saved</label><input type="text" id="goalCurrent" value="2000" inputmode="decimal"></div>
   </div>
   <div class="row">
     <div class="field"><label for="goalRate">Expected annual interest rate (%)</label><input type="text" id="goalRate" value="4.5" inputmode="decimal"></div>
@@ -139,7 +139,7 @@
     <div class="stat-grid" id="goalStats"></div>
   </div>
   <p class="note" id="goalMetNote"></p>
-  <div class="actions"><button class="action" id="goalCopyBtn" type="button">Copy result</button><button class="action" id="goalShareBtn" type="button">Copy link to this scenario</button></div>
+  <div class="actions"><button class="action" id="goalCopyBtn" type="button">Copy result</button><button class="action" id="goalShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button></div>
   <p class="note">Assumes interest compounds monthly, and every contribution is made on schedule for the full time period.</p>
 </div>
 
@@ -197,6 +197,10 @@
   </div>
 </div>
 
+<div class="calc-strip">
+  <p class="label"><a href="financial-calculators.html" style="color:inherit;">Financial calculators</a></p>
+  <div class="calc-strip-links"><a href="mortgage-calculator.html">Mortgage</a><a href="loan-calculator.html">Loan</a><a href="auto-loan-calculator.html">Auto Loan</a><a href="amortization-calculator.html">Amortization</a><a href="refinance-calculator.html">Refinance</a><a href="extra-payment-calculator.html">Extra Payment</a><a href="loan-comparison-calculator.html">Loan Comparison</a><a href="interest-rate-calculator.html">Interest Rate</a><a href="debt-payoff-calculator.html">Debt Payoff</a><a href="rent-vs-buy-calculator.html">Rent vs. Buy</a><a href="retirement-calculator.html">Retirement</a><a href="401k-calculator.html">401(k)</a><a href="investment-calculator.html">Investment</a><a href="compound-interest-calculator.html">Compound Interest</a><a href="savings-goal-calculator.html" aria-current="page">Savings Goal</a><a href="inflation-calculator.html">Inflation</a><a href="salary-calculator.html">Salary</a><a href="tax-calculator.html">Income Tax (US)</a><a href="canada-tax-calculator.html">Income Tax (Canada)</a></div>
+</div>
 </div>
 <footer class="site-footer">
   <div>
@@ -216,6 +220,7 @@
 <script src="finance.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("savings-goal-calculator.html", "Savings Goal Calculator");</script>
 <script>
 (function(){
@@ -355,6 +360,12 @@ if (window.ShareState) ShareState.init({
     'rate': 'goalRate',
     'years': 'goalYears'
   }
+});
+</script>
+<script>
+// Print buttons: one delegated handler for the whole site.
+document.addEventListener('click', function(e){
+  if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
 </script>
 </body>

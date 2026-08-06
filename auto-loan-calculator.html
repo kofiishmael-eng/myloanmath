@@ -126,23 +126,23 @@
 
 <div class="card">
   <div class="row">
-    <div class="field"><label for="autoPrice">Vehicle price</label><input type="text" id="autoPrice" value="35000" inputmode="decimal"></div>
-    <div class="field"><label for="autoDownPayment">Down payment</label><input type="text" id="autoDownPayment" value="5000" inputmode="decimal"></div>
+    <div class="field"><label for="autoPrice" data-help="The agreed price of the vehicle before tax, trade-in or deposit.">Vehicle price</label><input type="text" id="autoPrice" value="35000" inputmode="decimal"></div>
+    <div class="field"><label for="autoDownPayment" data-help="Cash you put down upfront. It reduces the amount financed directly.">Down payment</label><input type="text" id="autoDownPayment" value="5000" inputmode="decimal"></div>
   </div>
   <div class="row">
-    <div class="field"><label for="autoTradeIn">Trade-in value</label><input type="text" id="autoTradeIn" value="0" inputmode="decimal"></div>
-    <div class="field"><label for="autoSalesTax">Sales tax rate (%)</label><input type="text" id="autoSalesTax" value="0" inputmode="decimal"></div>
+    <div class="field"><label for="autoTradeIn" data-help="What the dealer allows for your old vehicle. It works like extra deposit.">Trade-in value</label><input type="text" id="autoTradeIn" value="0" inputmode="decimal"></div>
+    <div class="field"><label for="autoSalesTax" data-help="Sales tax rate on the purchase. In most states this is charged on the price after the trade-in allowance, which is worth confirming locally.">Sales tax rate (%)</label><input type="text" id="autoSalesTax" value="0" inputmode="decimal"></div>
   </div>
   <div class="row">
-    <div class="field"><label for="autoRate">Annual interest rate (%)</label><input type="text" id="autoRate" value="6.5" inputmode="decimal"></div>
-    <div class="field"><label for="autoTermMonths">Loan term (months)</label><input type="text" id="autoTermMonths" value="60" inputmode="decimal"></div>
+    <div class="field"><label for="autoRate" data-help="The interest rate quoted by the lender. Dealer finance often quotes only a monthly payment — our interest rate calculator recovers the rate from one.">Annual interest rate (%)</label><input type="text" id="autoRate" value="6.5" inputmode="decimal"></div>
+    <div class="field"><label for="autoTermMonths" data-help="Loan length in months. 72 and 84 month terms lower the payment but often leave you owing more than the vehicle is worth for years.">Loan term (months)</label><input type="text" id="autoTermMonths" value="60" inputmode="decimal"></div>
   </div>
   <div class="result" aria-live="polite" aria-atomic="true">
     <div class="result-label">Monthly payment</div>
     <div class="result-text" id="autoOutput">-</div>
     <div class="stat-grid" id="autoStats"></div>
   </div>
-  <div class="actions"><button class="action" id="autoScheduleBtn" type="button">Show yearly breakdown</button><button class="action" id="autoCopyBtn" type="button">Copy result</button><button class="action" id="autoShareBtn" type="button">Copy link to this scenario</button></div>
+  <div class="actions"><button class="action" id="autoScheduleBtn" type="button">Show yearly breakdown</button><button class="action" id="autoCopyBtn" type="button">Copy result</button><button class="action" id="autoShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button></div>
   <div id="autoScheduleChart" style="display:none; margin-bottom:16px;"></div>
   <div class="schedule-wrap" id="autoScheduleWrap" style="display:none;"><table class="schedule-table" id="autoScheduleTable"></table></div>
   <p class="note">Uses the same standard amortization formula as our <a href="loan-calculator.html">general loan calculator</a>. Sales tax, if entered, is added to the amount financed — most buyers roll vehicle tax into the loan rather than paying it separately. Trade-in value reduces the amount financed directly.</p>
@@ -185,6 +185,10 @@
   </div>
 </div>
 
+<div class="calc-strip">
+  <p class="label"><a href="financial-calculators.html" style="color:inherit;">Financial calculators</a></p>
+  <div class="calc-strip-links"><a href="mortgage-calculator.html">Mortgage</a><a href="loan-calculator.html">Loan</a><a href="auto-loan-calculator.html" aria-current="page">Auto Loan</a><a href="amortization-calculator.html">Amortization</a><a href="refinance-calculator.html">Refinance</a><a href="extra-payment-calculator.html">Extra Payment</a><a href="loan-comparison-calculator.html">Loan Comparison</a><a href="interest-rate-calculator.html">Interest Rate</a><a href="debt-payoff-calculator.html">Debt Payoff</a><a href="rent-vs-buy-calculator.html">Rent vs. Buy</a><a href="retirement-calculator.html">Retirement</a><a href="401k-calculator.html">401(k)</a><a href="investment-calculator.html">Investment</a><a href="compound-interest-calculator.html">Compound Interest</a><a href="savings-goal-calculator.html">Savings Goal</a><a href="inflation-calculator.html">Inflation</a><a href="salary-calculator.html">Salary</a><a href="tax-calculator.html">Income Tax (US)</a><a href="canada-tax-calculator.html">Income Tax (Canada)</a></div>
+</div>
 </div>
 <footer class="site-footer">
   <div>
@@ -204,6 +208,7 @@
 <script src="finance.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("auto-loan-calculator.html", "Auto Loan Calculator");</script>
 <script>
 (function(){
@@ -328,6 +333,12 @@ if (window.ShareState) ShareState.init({
     'rate': 'autoRate',
     'months': 'autoTermMonths'
   }
+});
+</script>
+<script>
+// Print buttons: one delegated handler for the whole site.
+document.addEventListener('click', function(e){
+  if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
 </script>
 </body>

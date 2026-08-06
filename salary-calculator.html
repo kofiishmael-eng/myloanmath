@@ -126,7 +126,7 @@
 
 <div class="card">
   <div class="row">
-    <div class="field"><label for="salAnnual">Annual salary</label><input type="text" id="salAnnual" value="65000" inputmode="decimal"></div>
+    <div class="field"><label for="salAnnual" data-help="Your gross annual salary, before tax and deductions.">Annual salary</label><input type="text" id="salAnnual" value="65000" inputmode="decimal"></div>
     <div class="field" style="max-width:200px;"><label for="salFrequency">Paid</label>
       <select id="salFrequency">
         <option value="52">Weekly</option>
@@ -156,7 +156,7 @@
     <div class="result-text" id="salPeriodOutput" style="color:#fff;">-</div>
   </div>
   <div class="stat-grid" id="salStats"></div>
-  <div class="actions"><button class="action" id="salCopyBtn" type="button">Copy result</button><button class="action" id="salShareBtn" type="button">Copy link to this scenario</button></div>
+  <div class="actions"><button class="action" id="salCopyBtn" type="button">Copy result</button><button class="action" id="salShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button></div>
   <p class="note">Subtracts federal income tax, state tax (if applicable), and FICA (Social Security + Medicare) from each paycheck. Does not yet include pre-tax deductions like 401(k) contributions or health insurance premiums, which would reduce take-home pay further.</p>
 </div>
 
@@ -203,6 +203,10 @@
   </div>
 </div>
 
+<div class="calc-strip">
+  <p class="label"><a href="financial-calculators.html" style="color:inherit;">Financial calculators</a></p>
+  <div class="calc-strip-links"><a href="mortgage-calculator.html">Mortgage</a><a href="loan-calculator.html">Loan</a><a href="auto-loan-calculator.html">Auto Loan</a><a href="amortization-calculator.html">Amortization</a><a href="refinance-calculator.html">Refinance</a><a href="extra-payment-calculator.html">Extra Payment</a><a href="loan-comparison-calculator.html">Loan Comparison</a><a href="interest-rate-calculator.html">Interest Rate</a><a href="debt-payoff-calculator.html">Debt Payoff</a><a href="rent-vs-buy-calculator.html">Rent vs. Buy</a><a href="retirement-calculator.html">Retirement</a><a href="401k-calculator.html">401(k)</a><a href="investment-calculator.html">Investment</a><a href="compound-interest-calculator.html">Compound Interest</a><a href="savings-goal-calculator.html">Savings Goal</a><a href="inflation-calculator.html">Inflation</a><a href="salary-calculator.html" aria-current="page">Salary</a><a href="tax-calculator.html">Income Tax (US)</a><a href="canada-tax-calculator.html">Income Tax (Canada)</a></div>
+</div>
 </div>
 <footer class="site-footer">
   <div>
@@ -222,6 +226,7 @@
 <script src="finance.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("salary-calculator.html", "Salary Calculator");</script>
 <script>
 (function(){
@@ -319,6 +324,12 @@ if (window.ShareState) ShareState.init({
     'status': 'salFilingStatus',
     'state': 'salState'
   }
+});
+</script>
+<script>
+// Print buttons: one delegated handler for the whole site.
+document.addEventListener('click', function(e){
+  if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
 </script>
 </body>

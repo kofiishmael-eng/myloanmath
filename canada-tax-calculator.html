@@ -132,7 +132,7 @@
 
 <div class="card">
   <div class="row">
-    <div class="field"><label for="craIncome">Gross annual income (CAD)</label><input type="text" id="craIncome" value="75000" inputmode="decimal"></div>
+    <div class="field"><label for="craIncome" data-help="Gross annual income before deductions, in Canadian dollars.">Gross annual income (CAD)</label><input type="text" id="craIncome" value="75000" inputmode="decimal"></div>
   </div>
   <div class="row">
     <div class="field"><label for="craAdditionalDeductions">Additional deductions (RRSP contributions, etc.)</label><input type="text" id="craAdditionalDeductions" value="0" inputmode="decimal"></div>
@@ -168,7 +168,7 @@
     </div>
   </div>
   <div class="opts">
-    <label class="opt"><input type="checkbox" id="includeCPPEI"> Also subtract CPP &amp; EI for a real paycheque estimate</label>
+    <label class="opt"><input type="checkbox" id="includeCPPEI" aria-label="Include CPP and EI contributions"> Also subtract CPP &amp; EI for a real paycheque estimate</label>
   </div>
   <div class="result" id="cppEiResultBox" style="display:none;">
     <div class="result-label">Estimated payroll deductions (CPP + EI)</div>
@@ -186,7 +186,7 @@
     <p class="note" id="netPayNote"></p>
   </div>
 
-  <div class="actions"><button class="action" id="craBreakdownBtn" type="button">Show bracket-by-bracket breakdown</button><button class="action" id="craCopyBtn" type="button">Copy result</button><button class="action" id="craShareBtn" type="button">Copy link to this scenario</button></div>
+  <div class="actions"><button class="action" id="craBreakdownBtn" type="button">Show bracket-by-bracket breakdown</button><button class="action" id="craCopyBtn" type="button">Copy result</button><button class="action" id="craShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button></div>
   <div class="schedule-wrap" id="craBreakdownWrap" style="display:none;"><table class="schedule-table" id="craBreakdownTable"></table></div>
   <p class="note" id="craPhaseOutNote"></p>
   <p class="note">Federal tax only — does not include provincial/territorial tax (which stacks on top and varies by province), CPP, or EI. Figures use 2026 CRA federal brackets and Basic Personal Amount. For your actual filing, consult a CPA or tax professional — this is an estimate, not tax advice.</p>
@@ -229,6 +229,10 @@
   </div>
 </div>
 
+<div class="calc-strip">
+  <p class="label"><a href="financial-calculators.html" style="color:inherit;">Financial calculators</a></p>
+  <div class="calc-strip-links"><a href="mortgage-calculator.html">Mortgage</a><a href="loan-calculator.html">Loan</a><a href="auto-loan-calculator.html">Auto Loan</a><a href="amortization-calculator.html">Amortization</a><a href="refinance-calculator.html">Refinance</a><a href="extra-payment-calculator.html">Extra Payment</a><a href="loan-comparison-calculator.html">Loan Comparison</a><a href="interest-rate-calculator.html">Interest Rate</a><a href="debt-payoff-calculator.html">Debt Payoff</a><a href="rent-vs-buy-calculator.html">Rent vs. Buy</a><a href="retirement-calculator.html">Retirement</a><a href="401k-calculator.html">401(k)</a><a href="investment-calculator.html">Investment</a><a href="compound-interest-calculator.html">Compound Interest</a><a href="savings-goal-calculator.html">Savings Goal</a><a href="inflation-calculator.html">Inflation</a><a href="salary-calculator.html">Salary</a><a href="tax-calculator.html">Income Tax (US)</a><a href="canada-tax-calculator.html" aria-current="page">Income Tax (Canada)</a></div>
+</div>
 </div>
 <footer class="site-footer">
   <div>
@@ -248,6 +252,7 @@
 <script src="finance.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("canada-tax-calculator.html", "Tax Calculator (Canada - CRA)");</script>
 
 <script>
@@ -425,6 +430,12 @@ if (window.ShareState) ShareState.init({
     'frequency': 'craPayFrequency',
     'cppei': 'includeCPPEI'
   }
+});
+</script>
+<script>
+// Print buttons: one delegated handler for the whole site.
+document.addEventListener('click', function(e){
+  if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
 </script>
 </body>

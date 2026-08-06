@@ -132,7 +132,7 @@
     <div class="result-text" id="stOutput">-</div>
     <div class="stat-grid" id="stStats"></div>
   </div>
-  <div class="actions"><button class="action" id="stCopyBtn" type="button">Copy result</button><button class="action" id="stShareBtn" type="button">Copy link to this scenario</button></div>
+  <div class="actions"><button class="action" id="stCopyBtn" type="button">Copy result</button><button class="action" id="stShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button></div>
   <p class="note">Enter the combined rate you actually pay. In most US states that is a state rate plus county and city rates, which is why the figure on your receipt rarely matches the state rate alone.</p>
 </div>
 
@@ -169,6 +169,10 @@
 <p class="note" style="text-align:center; margin-top:22px;"><a href="embed-calculator.html">Get this calculator for your website</a> &mdash; free, one line of HTML, no sign-up.</p>
 <p class="note" style="text-align:center; margin-top:26px;">Calculations last verified 2026-08-02 against the sources listed in our <a href="methodology.html">methodology</a>. Every correction we have made is public in the <a href="changelog.html">corrections log</a>.</p>
 
+<div class="calc-strip">
+  <p class="label"><a href="everyday-math-calculators.html" style="color:inherit;">Everyday math</a></p>
+  <div class="calc-strip-links"><a href="percentage-calculator.html">Percentage</a><a href="discount-calculator.html">Discount</a><a href="sales-tax-calculator.html" aria-current="page">Sales Tax</a><a href="tip-calculator.html">Tip</a><a href="numbers-to-words.html">Numbers to Words</a><a href="words-to-numbers.html">Words to Numbers</a><a href="currency-to-words.html">Currency to Words</a></div>
+</div>
 </div>
 <footer class="site-footer">
   <div>
@@ -226,6 +230,12 @@
 </script>
 <script>
 if (window.ShareState) ShareState.init({ buttonId: 'stShareBtn', fields: {"amount": "stAmount", "rate": "stRate", "mode": "stMode"} });
+</script>
+<script>
+// Print buttons: one delegated handler for the whole site.
+document.addEventListener('click', function(e){
+  if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
+});
 </script>
 </body>
 </html>

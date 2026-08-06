@@ -138,7 +138,7 @@
     <div class="stat-grid" id="discStats"></div>
   </div>
   <p class="note" id="discStackNote"></p>
-  <div class="actions"><button class="action" id="discCopyBtn" type="button">Copy result</button><button class="action" id="discShareBtn" type="button">Copy link to this scenario</button></div>
+  <div class="actions"><button class="action" id="discCopyBtn" type="button">Copy result</button><button class="action" id="discShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button></div>
 </div>
 
 <div class="card">
@@ -189,6 +189,10 @@
   </div>
 </div>
 
+<div class="calc-strip">
+  <p class="label"><a href="everyday-math-calculators.html" style="color:inherit;">Everyday math</a></p>
+  <div class="calc-strip-links"><a href="percentage-calculator.html">Percentage</a><a href="discount-calculator.html" aria-current="page">Discount</a><a href="sales-tax-calculator.html">Sales Tax</a><a href="tip-calculator.html">Tip</a><a href="numbers-to-words.html">Numbers to Words</a><a href="words-to-numbers.html">Words to Numbers</a><a href="currency-to-words.html">Currency to Words</a></div>
+</div>
 </div>
 <footer class="site-footer">
   <div>
@@ -295,6 +299,12 @@ if (window.ShareState) ShareState.init({
     'original': 'revOriginal',
     'sale': 'revSale'
   }
+});
+</script>
+<script>
+// Print buttons: one delegated handler for the whole site.
+document.addEventListener('click', function(e){
+  if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
 </script>
 </body>

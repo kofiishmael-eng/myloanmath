@@ -134,8 +134,8 @@
     </div>
   </div>
   <div class="opts">
-    <label class="opt"><input type="checkbox" id="indianSystem"> Indian numbering (Lakh / Crore)</label>
-    <label class="opt"><input type="checkbox" id="includeAnd"> British "and" (one hundred <em>and</em> twenty)</label>
+    <label class="opt"><input type="checkbox" id="indianSystem" aria-label="Use Indian numbering (lakh, crore)"> Indian numbering (Lakh / Crore)</label>
+    <label class="opt"><input type="checkbox" id="includeAnd" aria-label="Include the word "and""> British "and" (one hundred <em>and</em> twenty)</label>
   </div>
   <div class="result" aria-live="polite" aria-atomic="true">
     <div class="result-label">In words</div>
@@ -144,7 +144,7 @@
   <div class="actions">
     <button class="action" id="copyBtn" type="button">Copy</button>
     <button class="action" id="clearBtn" type="button">Clear</button>
-  </div>
+  <button class="print-btn" data-print type="button">Print</button></div>
 </div>
 
 
@@ -195,6 +195,10 @@
   </div>
 </div>
 
+<div class="calc-strip">
+  <p class="label"><a href="everyday-math-calculators.html" style="color:inherit;">Everyday math</a></p>
+  <div class="calc-strip-links"><a href="percentage-calculator.html">Percentage</a><a href="discount-calculator.html">Discount</a><a href="sales-tax-calculator.html">Sales Tax</a><a href="tip-calculator.html">Tip</a><a href="numbers-to-words.html" aria-current="page">Numbers to Words</a><a href="words-to-numbers.html">Words to Numbers</a><a href="currency-to-words.html">Currency to Words</a></div>
+</div>
 </div>
 <footer class="site-footer">
   <div>
@@ -254,6 +258,12 @@
   compute();
 })();
 
+</script>
+<script>
+// Print buttons: one delegated handler for the whole site.
+document.addEventListener('click', function(e){
+  if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
+});
 </script>
 </body>
 </html>

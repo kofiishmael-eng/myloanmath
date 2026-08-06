@@ -353,3 +353,74 @@ footer.site-footer a:hover{color:var(--accent);}
   background:var(--accent-soft); color:var(--accent); white-space:nowrap;
 }
 .az-desc{display:block; font-size:13px; color:var(--ink-soft); line-height:1.55; margin-top:3px;}
+
+
+/* ---- Inline help tooltips ----------------------------------------------
+   A real button with aria-expanded rather than a title= attribute, because
+   title text is unreachable by keyboard, invisible on touch, and unreliably
+   announced by screen readers. */
+.help-toggle{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:17px; height:17px; margin-left:6px; padding:0; vertical-align:middle;
+  font-family:var(--font-mono); font-size:11px; font-weight:700; line-height:1;
+  color:var(--brass); background:var(--brass-soft);
+  border:1px solid var(--brass-soft); border-radius:50%; cursor:pointer;
+}
+.help-toggle:hover{background:var(--brass); color:var(--paper); border-color:var(--brass);}
+.help-toggle:focus-visible{outline:2px solid var(--brass); outline-offset:2px;}
+.help-panel{
+  display:none; margin-top:7px; padding:10px 12px; font-size:13px; line-height:1.6;
+  color:var(--ink-soft); background:var(--brass-soft);
+  border-left:3px solid var(--brass); border-radius:5px;
+}
+.help-panel.is-open{display:block;}
+
+/* ---- Unit toggle (percent or amount) ----------------------------------- */
+.unit-toggle{display:inline-flex; margin-left:8px; border:1px solid var(--line); border-radius:5px; overflow:hidden;}
+.unit-toggle button{
+  font-family:var(--font-mono); font-size:11px; font-weight:700; padding:3px 9px;
+  border:0; background:var(--card); color:var(--ink-soft); cursor:pointer; min-height:26px;
+}
+.unit-toggle button[aria-pressed="true"]{background:var(--accent); color:#fff;}
+.unit-toggle button + button{border-left:1px solid var(--line);}
+
+/* ---- Progressive disclosure -------------------------------------------- */
+.more-options{margin:14px 0 0; border-top:1px solid var(--line); padding-top:12px;}
+.more-options > summary{
+  list-style:none; cursor:pointer; font-family:var(--font-mono); font-size:12px;
+  font-weight:600; color:var(--accent); padding:6px 0; min-height:34px;
+  display:flex; align-items:center; gap:7px;
+}
+.more-options > summary::-webkit-details-marker{display:none;}
+.more-options > summary::before{content:"+"; font-size:14px;}
+.more-options[open] > summary::before{content:"\2212";}
+.more-options > summary:focus-visible{outline:2px solid var(--brass); outline-offset:2px;}
+
+/* ---- Payment composition bar ------------------------------------------- */
+.comp-bar{display:flex; height:26px; border-radius:5px; overflow:hidden; margin:14px 0 10px; border:1px solid var(--line);}
+.comp-bar span{display:block; height:100%;}
+.comp-key{display:flex; flex-wrap:wrap; gap:12px; font-size:12px; color:var(--ink-soft);}
+.comp-key i{display:inline-block; width:11px; height:11px; border-radius:2px; margin-right:5px; vertical-align:-1px;}
+
+/* ---- Print button ------------------------------------------------------ */
+.print-btn{
+  font-family:var(--font-mono); font-size:12px; font-weight:600; padding:8px 14px;
+  min-height:38px; border:1px solid var(--line); border-radius:5px;
+  background:var(--card); color:var(--ink-soft); cursor:pointer;
+}
+.print-btn:hover{border-color:var(--brass); color:var(--ink);}
+
+/* ---- Sitewide calculator strip ----------------------------------------- */
+.calc-strip{margin:34px 0 0; padding-top:16px; border-top:1px solid var(--line);}
+.calc-strip .label{
+  font-family:var(--font-mono); font-size:10.5px; font-weight:700; letter-spacing:0.1em;
+  text-transform:uppercase; color:var(--brass); margin:0 0 10px;
+}
+.calc-strip-links{display:flex; flex-wrap:wrap; gap:6px 10px;}
+.calc-strip-links a{
+  font-size:13px; color:var(--ink-soft); text-decoration:none;
+  padding:4px 9px; border:1px solid var(--line); border-radius:4px; background:var(--card);
+}
+.calc-strip-links a:hover{border-color:var(--accent); color:var(--accent); background:var(--accent-soft);}
+
+@media print{ .help-toggle,.unit-toggle,.more-options>summary,.print-btn,.calc-strip{display:none !important;} .help-panel{display:none !important;} }

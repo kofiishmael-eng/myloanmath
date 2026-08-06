@@ -132,7 +132,7 @@
 
 <div class="card">
   <div class="row">
-    <div class="field"><label for="taxIncome">Gross annual income</label><input type="text" id="taxIncome" value="85000" inputmode="decimal"></div>
+    <div class="field"><label for="taxIncome" data-help="Gross annual income before any deductions.">Gross annual income</label><input type="text" id="taxIncome" value="85000" inputmode="decimal"></div>
     <div class="field" style="max-width:240px;"><label for="taxFilingStatus">Filing status</label>
       <select id="taxFilingStatus">
         <option value="single" selected>Single</option>
@@ -143,7 +143,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="field"><label for="taxAdditionalDeductions">Additional deductions (optional, beyond the standard deduction)</label><input type="text" id="taxAdditionalDeductions" value="0" inputmode="decimal"></div>
+    <div class="field"><label for="taxAdditionalDeductions" data-help="Deductions beyond the standard deduction. Leave at zero if you take the standard deduction, which most filers now do.">Additional deductions (optional, beyond the standard deduction)</label><input type="text" id="taxAdditionalDeductions" value="0" inputmode="decimal"></div>
     <div class="field" style="max-width:240px;"><label for="taxState">State (optional)</label>
       <select id="taxState">
         <option value="">— Federal only —</option>
@@ -176,7 +176,7 @@
     </div>
   </div>
   <div class="opts">
-    <label class="opt"><input type="checkbox" id="includeFICA"> Also subtract Social Security &amp; Medicare (FICA) for a real paycheck estimate</label>
+    <label class="opt"><input type="checkbox" id="includeFICA" aria-label="Include FICA (Social Security and Medicare)"> Also subtract Social Security &amp; Medicare (FICA) for a real paycheck estimate</label>
   </div>
   <div class="result" id="ficaResultBox" style="display:none;">
     <div class="result-label">Estimated payroll taxes (FICA)</div>
@@ -193,7 +193,7 @@
     <p class="note" id="netPayNote"></p>
   </div>
 
-  <div class="actions"><button class="action" id="taxBreakdownBtn" type="button">Show bracket-by-bracket breakdown</button><button class="action" id="taxCopyBtn" type="button">Copy result</button><button class="action" id="taxShareBtn" type="button">Copy link to this scenario</button></div>
+  <div class="actions"><button class="action" id="taxBreakdownBtn" type="button">Show bracket-by-bracket breakdown</button><button class="action" id="taxCopyBtn" type="button">Copy result</button><button class="action" id="taxShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button></div>
   <div class="schedule-wrap" id="taxBreakdownWrap" style="display:none;"><table class="schedule-table" id="taxBreakdownTable"></table></div>
   <p class="note">Federal income tax only — does not include state tax, FICA/Social Security, Medicare, or tax credits. Assumes the standard deduction (not itemized). Figures use IRS tax year 2026 brackets (Revenue Procedure 2025-32). For your actual filing, consult a CPA or tax professional — this is an estimate, not tax advice.</p>
 </div>
@@ -249,6 +249,10 @@
   </div>
 </div>
 
+<div class="calc-strip">
+  <p class="label"><a href="financial-calculators.html" style="color:inherit;">Financial calculators</a></p>
+  <div class="calc-strip-links"><a href="mortgage-calculator.html">Mortgage</a><a href="loan-calculator.html">Loan</a><a href="auto-loan-calculator.html">Auto Loan</a><a href="amortization-calculator.html">Amortization</a><a href="refinance-calculator.html">Refinance</a><a href="extra-payment-calculator.html">Extra Payment</a><a href="loan-comparison-calculator.html">Loan Comparison</a><a href="interest-rate-calculator.html">Interest Rate</a><a href="debt-payoff-calculator.html">Debt Payoff</a><a href="rent-vs-buy-calculator.html">Rent vs. Buy</a><a href="retirement-calculator.html">Retirement</a><a href="401k-calculator.html">401(k)</a><a href="investment-calculator.html">Investment</a><a href="compound-interest-calculator.html">Compound Interest</a><a href="savings-goal-calculator.html">Savings Goal</a><a href="inflation-calculator.html">Inflation</a><a href="salary-calculator.html">Salary</a><a href="tax-calculator.html" aria-current="page">Income Tax (US)</a><a href="canada-tax-calculator.html">Income Tax (Canada)</a></div>
+</div>
 </div>
 <footer class="site-footer">
   <div>
@@ -268,6 +272,7 @@
 <script src="finance.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
+<script src="tooltips.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("tax-calculator.html", "Tax Calculator (US - IRS)");</script>
 
 <script>
@@ -437,6 +442,12 @@ if (window.ShareState) ShareState.init({
     'frequency': 'taxPayFrequency',
     'fica': 'includeFICA'
   }
+});
+</script>
+<script>
+// Print buttons: one delegated handler for the whole site.
+document.addEventListener('click', function(e){
+  if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
 </script>
 </body>
