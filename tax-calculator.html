@@ -192,6 +192,8 @@
     </div>
     <p class="note" id="netPayNote"></p>
   </div>
+  <div id="toolChart"></div>
+
 
   <div class="actions"><button class="action" id="taxBreakdownBtn" type="button">Show bracket-by-bracket breakdown</button><button class="action" id="taxCopyBtn" type="button">Copy result</button><button class="action" id="taxShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button></div>
   <div class="schedule-wrap" id="taxBreakdownWrap" style="display:none;"><table class="schedule-table" id="taxBreakdownTable"></table></div>
@@ -270,6 +272,7 @@
 </footer>
 <script src="numberToWords.js"></script>
 <script src="finance.js"></script>
+<script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
 <script src="tooltips.js"></script>
@@ -449,6 +452,43 @@ if (window.ShareState) ShareState.init({
 document.addEventListener('click', function(e){
   if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
+</script>
+<script>
+// Where the income actually goes. Computed from the engine directly rather than
+// scraped from the stat grid — these pages show rates and deductions there,
+// not tax amounts, so scraping found nothing to chart.
+(function(){
+  var F=window.FinanceTools, C=window.Charts, box=document.getElementById('toolChart');
+  if(!F||!C||!box) return;
+  function n(id){var e=document.getElementById(id); if(!e) return NaN;
+    var s=String(e.value).trim().replace(/,/g,''); if(!/^-?\d*\.?\d+$/.test(s)) return NaN; return parseFloat(s);}
+  function draw(){
+    try{
+      var inc=n('taxIncome'); if(isNaN(inc)||inc<=0) throw 0;
+      var status=document.getElementById('taxFilingStatus').value;
+      var extra=n('taxAdditionalDeductions'); if(isNaN(extra)) extra=0;
+      var fed=F.calculateFederalIncomeTax({grossIncome:inc, filingStatus:status, additionalDeductions:extra});
+      var parts=[{label:'Federal tax',value:fed.totalTax}];
+      var stEl=document.getElementById('taxState');
+      if(stEl && stEl.value){
+        var s=F.calculateStateTax(stEl.value, fed.taxableIncome, status);
+        if(s.available && s.stateTax>0) parts.push({label:s.stateName+' tax',value:s.stateTax});
+      }
+      var fica=document.getElementById('includeFICA');
+      if(fica && fica.checked){
+        var fi=F.calculateFICA(inc,status);
+        if(fi.totalFICA>0) parts.push({label:'FICA',value:fi.totalFICA});
+      }
+      var taken=parts.reduce(function(a,b){return a+b.value;},0);
+      parts.push({label:'Take-home',value:Math.max(0,inc-taken)});
+      box.innerHTML=C.composition(parts,{title:'Where your income goes'});
+    }catch(e){ box.innerHTML=''; }
+  }
+  ['taxIncome','taxFilingStatus','taxAdditionalDeductions','taxState','taxPayFrequency','includeFICA']
+    .forEach(function(id){var e=document.getElementById(id); if(!e) return;
+      e.addEventListener('input',draw); e.addEventListener('change',draw);});
+  draw();
+})();
 </script>
 </body>
 </html>

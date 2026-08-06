@@ -144,6 +144,8 @@
     <div class="result-label" id="cvLabel">Result</div>
     <div class="result-text" id="cvOutput">-</div>
   </div>
+  <div id="cvChart"></div>
+
   <div class="actions"><button class="action" id="cvCopyBtn" type="button">Copy result</button><button class="action" id="cvShareBtn" type="button">Copy link to this conversion</button><button class="print-btn" data-print type="button">Print</button></div>
   <p class="note">A US fluid ounce is 29.5735295625 ml; an Imperial fluid ounce is 28.4130625 ml. The Imperial one is smaller — the opposite of the gallon relationship, which catches people out.</p>
 </div>
@@ -211,6 +213,7 @@
   <p style="margin-top:8px; max-width:62ch; margin-left:auto; margin-right:auto;">Built and maintained by <a href="about.html">Ishmael</a>, an accountant. Educational information only &mdash; not financial, tax, or accounting advice. See <a href="terms-of-use.html">Terms &amp; Disclaimer</a>.</p>
 </footer>
 <script src="units.js"></script>
+<script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("ml-to-fl-oz-converter.html", "ml to fl oz Converter");</script>
@@ -256,6 +259,34 @@ if (window.ShareState) ShareState.init({ buttonId: 'cvShareBtn', fields: {"v": "
 document.addEventListener('click', function(e){
   if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
+</script>
+<script>
+// Unit-comparison chart. Deliberately separate from the converter's own logic:
+// it listens to the same inputs and draws independently, so a fault here can
+// never stop the conversion itself working.
+(function(){
+  var U = window.UnitTools, C = window.Charts, box = document.getElementById('cvChart');
+  if (!U || !C || !box) return;
+  var KEY = 'ml_flozUS', A = 'millilitre', B = 'US fluid ounce';
+  function draw(){
+    try{
+      // how much of B is one A worth
+      var perA = U.convertLinear(KEY, 1);
+      box.innerHTML = C.unitCompare(
+        { label: '1 ' + A, value: 1, display: '1 ' + A },
+        { label: '1 ' + B, value: 1 / perA, display: U.smartRound(1 / perA, 4) + ' ' + A },
+        {}
+      );
+    }catch(e){ box.innerHTML = ''; }
+  }
+  draw();
+  var sys = document.getElementById('cvSystem');
+  if (sys) sys.addEventListener('change', function(){
+    KEY = sys.value === 'uk' ? 'ml_flozUK' : 'ml_flozUS';
+    B = sys.value === 'uk' ? 'Imperial fluid ounce' : 'US fluid ounce';
+    draw();
+  });
+})();
 </script>
 </body>
 </html>

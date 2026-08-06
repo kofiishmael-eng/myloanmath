@@ -143,6 +143,8 @@
     <div class="result-label" id="cvLabel">Result</div>
     <div class="result-text" id="cvOutput">-</div>
   </div>
+  <div id="cvChart"></div>
+
   <div class="actions"><button class="action" id="cvCopyBtn" type="button">Copy result</button><button class="action" id="cvShareBtn" type="button">Copy link to this conversion</button><button class="print-btn" data-print type="button">Print</button></div>
   <p class="note">Decimal is what storage manufacturers and SI use. Binary is what most operating systems report. The gap grows with size — 2.4% at KB, 10% at TB.</p>
 </div>
@@ -211,6 +213,7 @@
   <p style="margin-top:8px; max-width:62ch; margin-left:auto; margin-right:auto;">Built and maintained by <a href="about.html">Ishmael</a>, an accountant. Educational information only &mdash; not financial, tax, or accounting advice. See <a href="terms-of-use.html">Terms &amp; Disclaimer</a>.</p>
 </footer>
 <script src="units.js"></script>
+<script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("mb-to-gb-converter.html", "MB to GB Converter");</script>
@@ -252,6 +255,23 @@ if (window.ShareState) ShareState.init({ buttonId: 'cvShareBtn', fields: {"v": "
 document.addEventListener('click', function(e){
   if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
+</script>
+<script>
+// Decimal against binary: the gap that makes a 1 TB drive read as 931 GB.
+(function(){
+  var U = window.UnitTools, C = window.Charts, box = document.getElementById('cvChart');
+  if (!U || !C || !box) return;
+  var units = ['KB','MB','GB','TB'];
+  var h = '<div class="unit-compare" role="img" aria-label="Gap between decimal and binary units">';
+  units.forEach(function(u,i){
+    var gap = (Math.pow(1024, i+1) / Math.pow(1000, i+1) - 1) * 100;
+    h += '<div class="uc-row"><span class="uc-label">1 ' + u + '</span>' +
+         '<span class="uc-track"><span class="uc-fill" style="width:' + (gap/12*100).toFixed(1) +
+         '%;background:var(--brass)"></span></span><span class="uc-value">' +
+         U.smartRound(gap,1) + '% gap</span></div>';
+  });
+  box.innerHTML = h + '</div><p class="uc-note">The gap between the decimal and binary meanings widens with size: about <strong>2.4%</strong> at kilobytes and <strong>10%</strong> at terabytes. That is the whole reason a 1 TB drive shows as 931 GB.</p>';
+})();
 </script>
 </body>
 </html>

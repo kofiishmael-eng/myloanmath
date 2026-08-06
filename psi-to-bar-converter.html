@@ -143,6 +143,8 @@
     <div class="result-label" id="cvLabel">Result</div>
     <div class="result-text" id="cvOutput">-</div>
   </div>
+  <div id="cvChart"></div>
+
   <div class="actions"><button class="action" id="cvCopyBtn" type="button">Copy result</button><button class="action" id="cvShareBtn" type="button">Copy link to this conversion</button><button class="print-btn" data-print type="button">Print</button></div>
   <p class="note">1 bar = 100 kPa exactly, and 1 bar is about 14.504 psi. Tyre pressures are gauge pressure — measured above atmospheric, not absolute.</p>
 </div>
@@ -210,6 +212,7 @@
   <p style="margin-top:8px; max-width:62ch; margin-left:auto; margin-right:auto;">Built and maintained by <a href="about.html">Ishmael</a>, an accountant. Educational information only &mdash; not financial, tax, or accounting advice. See <a href="terms-of-use.html">Terms &amp; Disclaimer</a>.</p>
 </footer>
 <script src="units.js"></script>
+<script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("psi-to-bar-converter.html", "psi to bar Converter");</script>
@@ -255,6 +258,34 @@ if (window.ShareState) ShareState.init({ buttonId: 'cvShareBtn', fields: {"v": "
 document.addEventListener('click', function(e){
   if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
+</script>
+<script>
+// Unit-comparison chart. Deliberately separate from the converter's own logic:
+// it listens to the same inputs and draws independently, so a fault here can
+// never stop the conversion itself working.
+(function(){
+  var U = window.UnitTools, C = window.Charts, box = document.getElementById('cvChart');
+  if (!U || !C || !box) return;
+  var KEY = 'bar_psi', A = 'bar', B = 'psi';
+  function draw(){
+    try{
+      // how much of B is one A worth
+      var perA = U.convertLinear(KEY, 1);
+      box.innerHTML = C.unitCompare(
+        { label: '1 ' + A, value: 1, display: '1 ' + A },
+        { label: '1 ' + B, value: 1 / perA, display: U.smartRound(1 / perA, 4) + ' ' + A },
+        {}
+      );
+    }catch(e){ box.innerHTML = ''; }
+  }
+  draw();
+  var sys = document.getElementById('cvSystem');
+  if (sys) sys.addEventListener('change', function(){
+    KEY = sys.value === 'uk' ? 'bar_psi' : 'bar_psi';
+    B = sys.value === 'uk' ? 'psi' : 'psi';
+    draw();
+  });
+})();
 </script>
 </body>
 </html>

@@ -143,6 +143,8 @@
     <div class="result-label" id="cvLabel">Result</div>
     <div class="result-text" id="cvOutput">-</div>
   </div>
+  <div id="cvChart"></div>
+
   <div class="actions"><button class="action" id="cvCopyBtn" type="button">Copy result</button><button class="action" id="cvShareBtn" type="button">Copy link to this conversion</button><button class="print-btn" data-print type="button">Print</button></div>
   <p class="note">Celsius and Fahrenheit have different zero points as well as different degree sizes, so this is the one everyday conversion that is not a simple multiplication.</p>
 </div>
@@ -211,6 +213,7 @@
   <p style="margin-top:8px; max-width:62ch; margin-left:auto; margin-right:auto;">Built and maintained by <a href="about.html">Ishmael</a>, an accountant. Educational information only &mdash; not financial, tax, or accounting advice. See <a href="terms-of-use.html">Terms &amp; Disclaimer</a>.</p>
 </footer>
 <script src="units.js"></script>
+<script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("celsius-to-fahrenheit-converter.html", "Celsius to Fahrenheit Converter");</script>
@@ -254,6 +257,28 @@ if (window.ShareState) ShareState.init({ buttonId: 'cvShareBtn', fields: {"v": "
 document.addEventListener('click', function(e){
   if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
+</script>
+<script>
+// Temperature has an offset as well as a scale factor, so a size comparison is
+// meaningless. This shows where common reference points sit on both scales.
+(function(){
+  var U = window.UnitTools, C = window.Charts, box = document.getElementById('cvChart');
+  if (!U || !C || !box) return;
+  var pts = [
+    ['Water freezes', 0], ['Cold day', 5], ['Room temperature', 20],
+    ['Body temperature', 37], ['Hot day', 40], ['Water boils', 100]
+  ];
+  var h = '<div class="unit-compare" role="img" aria-label="Reference temperatures on both scales">';
+  pts.forEach(function(p){
+    var f = U.celsiusToFahrenheit(p[1]);
+    var pct = ((p[1] + 20) / 130) * 100;
+    h += '<div class="uc-row"><span class="uc-label">' + p[0] + '</span>' +
+         '<span class="uc-track"><span class="uc-fill" style="width:' + pct.toFixed(1) +
+         '%;background:var(--accent)"></span></span>' +
+         '<span class="uc-value">' + p[1] + '\u00B0C = ' + U.smartRound(f,1) + '\u00B0F</span></div>';
+  });
+  box.innerHTML = h + '</div><p class="uc-note">The two scales cross at <strong>\u221240\u00B0</strong>, the only temperature where both read the same number.</p>';
+})();
 </script>
 </body>
 </html>

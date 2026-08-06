@@ -155,6 +155,12 @@
 <div class="log-date">2026-08-02 <span class="log-count">5 corrections</span></div>
 <div class="log-item log-change">
   <span class="log-tag tag-change">Change</span>
+  <div class="log-title">Charts added to 37 more calculators</div>
+  <p class="log-detail">Only six of the forty-six tools had any visual; forty-three do now. Chart type follows what the tool computes rather than being applied uniformly: loans get a falling balance, growth tools stack contributions against the growth they generate, tax tools break income into each deduction and the remainder, and each converter shows how big one unit is against the other. The three number-to-words converters were deliberately left alone, because a chart there would be decoration rather than information. Charts are inline SVG with no library, so they add about six kilobytes in total, print correctly, and carry an aria-label describing what they show rather than being invisible to a screen reader.</p>
+</div>
+
+<div class="log-item log-change">
+  <span class="log-tag tag-change">Change</span>
   <div class="log-title">Eleven improvements, and two accessibility defects fixed</div>
   <p class="log-detail">An audit found eight checkboxes with no accessible name &mdash; a screen reader announced them as "checkbox, unchecked" with nothing else &mdash; and three pages that skipped a heading level. Both are fixed. The mortgage calculator was then rebuilt: down payment and property tax can be entered as a percentage or a dollar amount, extra payments and annual cost increases are modelled, PMI now stops automatically once the balance reaches 78% of the purchase price, payment numbers are shown as calendar dates with a payoff month, monthly and lifetime costs appear side by side, and a biweekly comparison shows what twenty-six half-payments a year would save. Inline help was added to every significant input, print buttons to forty-seven pages, and a full calculator strip to the foot of every tool page.</p>
 </div>

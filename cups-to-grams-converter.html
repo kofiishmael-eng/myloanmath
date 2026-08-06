@@ -143,6 +143,8 @@
     <div class="result-label" id="cvLabel">Result</div>
     <div class="result-text" id="cvOutput">-</div>
   </div>
+  <div id="cvChart"></div>
+
   <div class="actions"><button class="action" id="cvCopyBtn" type="button">Copy result</button><button class="action" id="cvShareBtn" type="button">Copy link to this conversion</button><button class="print-btn" data-print type="button">Print</button></div>
   <p class="note">Based on the US customary cup of 236.59 ml. Values are typical rather than exact — how flour is packed can change its weight by 20%, which is precisely why weighing beats measuring by volume.</p>
 </div>
@@ -209,6 +211,7 @@
   <p style="margin-top:8px; max-width:62ch; margin-left:auto; margin-right:auto;">Built and maintained by <a href="about.html">Ishmael</a>, an accountant. Educational information only &mdash; not financial, tax, or accounting advice. See <a href="terms-of-use.html">Terms &amp; Disclaimer</a>.</p>
 </footer>
 <script src="units.js"></script>
+<script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("cups-to-grams-converter.html", "Cups to Grams Converter");</script>
@@ -250,6 +253,27 @@ if (window.ShareState) ShareState.init({ buttonId: 'cvShareBtn', fields: {"v": "
 document.addEventListener('click', function(e){
   if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
+</script>
+<script>
+// Cups to grams has no single factor, so the useful visual is the spread across
+// ingredients - which is the whole point of the page.
+(function(){
+  var U = window.UnitTools, C = window.Charts, box = document.getElementById('cvChart');
+  if (!U || !C || !box) return;
+  var show = ['water','flour (all-purpose, spooned)','sugar (granulated)','butter','honey','rolled oats'];
+  var max = 0;
+  show.forEach(function(k){ if (U.CUP_GRAMS[k] > max) max = U.CUP_GRAMS[k]; });
+  var h = '<div class="unit-compare" role="img" aria-label="Weight of one cup of different ingredients">';
+  show.forEach(function(k){
+    var g = U.CUP_GRAMS[k];
+    h += '<div class="uc-row"><span class="uc-label">' + k.split(' (')[0] + '</span>' +
+         '<span class="uc-track"><span class="uc-fill" style="width:' + ((g/max)*100).toFixed(1) +
+         '%;background:var(--accent)"></span></span><span class="uc-value">' + g + ' g</span></div>';
+  });
+  box.innerHTML = h + '</div><p class="uc-note">One cup ranges from <strong>' +
+    Math.min.apply(null, show.map(function(k){return U.CUP_GRAMS[k];})) + ' g</strong> to <strong>' +
+    max + ' g</strong> depending on what is in it. That is why this converter asks for the ingredient.</p>';
+})();
 </script>
 </body>
 </html>

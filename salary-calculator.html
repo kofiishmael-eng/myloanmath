@@ -156,6 +156,8 @@
     <div class="result-text" id="salPeriodOutput" style="color:#fff;">-</div>
   </div>
   <div class="stat-grid" id="salStats"></div>
+  <div id="toolChart"></div>
+
   <div class="actions"><button class="action" id="salCopyBtn" type="button">Copy result</button><button class="action" id="salShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button></div>
   <p class="note">Subtracts federal income tax, state tax (if applicable), and FICA (Social Security + Medicare) from each paycheck. Does not yet include pre-tax deductions like 401(k) contributions or health insurance premiums, which would reduce take-home pay further.</p>
 </div>
@@ -224,6 +226,7 @@
 </footer>
 <script src="numberToWords.js"></script>
 <script src="finance.js"></script>
+<script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
 <script src="tooltips.js"></script>
@@ -331,6 +334,40 @@ if (window.ShareState) ShareState.init({
 document.addEventListener('click', function(e){
   if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
+</script>
+<script>
+// Gross salary split into each deduction and the remainder.
+(function(){
+  var F = window.FinanceTools, C = window.Charts, box = document.getElementById('toolChart');
+  if (!F || !C || !box) return;
+  function n(id){ var e=document.getElementById(id); if(!e) return NaN;
+    var s=String(e.value).trim().replace(/,/g,''); if(!/^-?\d*\.?\d+$/.test(s)) return NaN; return parseFloat(s); }
+  function v(id){ var e=document.getElementById(id); return e ? e.value : ''; }
+  function draw(){
+    try{
+      var inc=n('salAnnual'); if(isNaN(inc)||inc<=0) throw 0;
+      var st=document.querySelectorAll('.stat');
+      var parts=[], take=inc;
+      Array.prototype.forEach.call(st,function(s){
+        var lab=s.querySelector('.stat-label'), val=s.querySelector('.stat-value');
+        if(!lab||!val) return;
+        var t=lab.textContent.trim(), num=parseFloat(val.textContent.replace(/[^0-9.\-]/g,''));
+        if(isNaN(num)||num<=0) return;
+        if(/federal tax|provincial|state tax|FICA|CPP|EI/i.test(t) && !/rate|%/i.test(t)){
+          parts.push({label:t,value:num}); take-=num;
+        }
+      });
+      if(!parts.length) throw 0;
+      parts.push({label:'Take-home',value:Math.max(0,take)});
+      box.innerHTML = C.composition(parts,{title:'Where your income goes'});
+    }catch(e){ box.innerHTML=''; }
+  }
+  ['salAnnual', 'salFrequency', 'salFilingStatus', 'salState'].forEach(function(id){
+    var e=document.getElementById(id); if(!e) return;
+    e.addEventListener('input',draw); e.addEventListener('change',draw);
+  });
+  draw();
+})();
 </script>
 </body>
 </html>

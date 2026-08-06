@@ -144,6 +144,8 @@
     <div class="result-text" id="xpOutput">-</div>
     <div class="stat-grid" id="xpStats"></div>
   </div>
+  <div id="toolChart"></div>
+
   <div class="actions"><button class="action" id="xpCopyBtn" type="button">Copy result</button><button class="action" id="xpShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button></div>
   <p class="note">Assumes every extra payment is applied to principal on schedule and the interest rate is fixed. The required monthly payment does not change &mdash; extra money shortens the loan rather than shrinking the bill.</p>
 </div>
@@ -204,6 +206,7 @@
 </footer>
 <script src="numberToWords.js"></script>
 <script src="finance.js"></script>
+<script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("extra-payment-calculator.html", "Extra Payment Calculator");</script>
@@ -313,6 +316,36 @@ if (window.ShareState) ShareState.init({
 document.addEventListener('click', function(e){
   if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
+</script>
+<script>
+// Two balance curves: the loan as scheduled, and the loan with extra payments.
+(function(){
+  var F = window.FinanceTools, C = window.Charts, box = document.getElementById('toolChart');
+  if (!F || !C || !box) return;
+  function n(id){ var e=document.getElementById(id); if(!e) return NaN;
+    var s=String(e.value).trim().replace(/,/g,''); if(!/^-?\d*\.?\d+$/.test(s)) return NaN; return parseFloat(s); }
+  function v(id){ var e=document.getElementById(id); return e ? e.value : ''; }
+  function draw(){
+    try{
+      var p=n('xpPrincipal'), r=n('xpRate'), t=n('xpTermValue'),
+          em=n('xpExtraMonthly'), eo=n('xpExtraOneTime'), om=n('xpOneTimeMonth');
+      if([p,r,t,em,eo,om].some(isNaN)) throw 0;
+      var months = v('xpTermUnit')==='years' ? Math.round(t*12) : Math.round(t);
+      var res=F.calculateExtraPayment({principal:p,annualRatePercent:r,termMonths:months,
+        extraMonthly:em,extraOneTime:eo,oneTimeMonth:om});
+      var bal=res.yearRows.map(function(x){return x.remainingBalance;});
+      box.innerHTML = C.balanceLine([p].concat(bal),{title:'Balance with extra payments',
+          startLabel:'Start',endLabel:'Year '+res.yearRows.length})
+        + C.composition([{label:'Interest you still pay',value:res.newTotalInterest},
+                         {label:'Interest saved',value:Math.max(0,res.interestSaved)}],{title:'Interest'});
+    }catch(e){ box.innerHTML=''; }
+  }
+  ['xpPrincipal', 'xpRate', 'xpTermValue', 'xpTermUnit', 'xpExtraMonthly', 'xpExtraOneTime', 'xpOneTimeMonth'].forEach(function(id){
+    var e=document.getElementById(id); if(!e) return;
+    e.addEventListener('input',draw); e.addEventListener('change',draw);
+  });
+  draw();
+})();
 </script>
 </body>
 </html>

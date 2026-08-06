@@ -146,6 +146,8 @@
     <div class="result-label">Result</div>
     <div class="result-text" id="pctOutput">-</div>
   </div>
+  <div id="toolChart"></div>
+
   <div class="actions"><button class="action" id="pctCopyBtn" type="button">Copy result</button><button class="action" id="pctShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button></div>
 </div>
 
@@ -229,6 +231,7 @@
 </footer>
 <script src="numberToWords.js"></script>
 <script src="finance.js"></script>
+<script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("percentage-calculator.html", "Percentage Calculator");</script>
@@ -302,6 +305,32 @@ if (window.ShareState) ShareState.init({
 document.addEventListener('click', function(e){
   if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
+</script>
+<script>
+// The part against the whole.
+(function(){
+  var F = window.FinanceTools, C = window.Charts, box = document.getElementById('toolChart');
+  if (!F || !C || !box) return;
+  function n(id){ var e=document.getElementById(id); if(!e) return NaN;
+    var s=String(e.value).trim().replace(/,/g,''); if(!/^-?\d*\.?\d+$/.test(s)) return NaN; return parseFloat(s); }
+  function v(id){ var e=document.getElementById(id); return e ? e.value : ''; }
+  function draw(){
+    try{
+      var x=n('pctX'), y=n('pctY'); if([x,y].some(isNaN)) throw 0;
+      var mode=v('pctMode');
+      if(mode==='percentOf'){
+        var part=x*y/100;
+        box.innerHTML=C.composition([{label:x+'% of '+y,value:Math.abs(part)},
+          {label:'Remainder',value:Math.max(0,Math.abs(y)-Math.abs(part))}],{title:'Part of the whole'});
+      } else { box.innerHTML=''; }
+    }catch(e){ box.innerHTML=''; }
+  }
+  ['pctMode', 'pctX', 'pctY'].forEach(function(id){
+    var e=document.getElementById(id); if(!e) return;
+    e.addEventListener('input',draw); e.addEventListener('change',draw);
+  });
+  draw();
+})();
 </script>
 </body>
 </html>

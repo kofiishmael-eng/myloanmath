@@ -127,6 +127,8 @@
     <div class="result-text" id="ivOutput">-</div>
     <div class="stat-grid" id="ivStats"></div>
   </div>
+  <div id="toolChart"></div>
+
   <div class="actions"><button class="action" id="ivCopyBtn" type="button">Copy result</button><button class="action" id="ivShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button></div>
   <p class="note">A projection at a constant rate, not a forecast. Real returns arrive unevenly, and the order in which good and bad years fall changes the outcome — especially once you start withdrawing.</p>
 </div>
@@ -185,6 +187,7 @@
 </footer>
 <script src="numberToWords.js"></script>
 <script src="finance.js"></script>
+<script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("investment-calculator.html", "Investment Calculator");</script>
@@ -232,6 +235,36 @@ if (window.ShareState) ShareState.init({ buttonId: 'ivShareBtn', fields: {"initi
 document.addEventListener('click', function(e){
   if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
+</script>
+<script>
+// Contributions against growth, plus what the final figure is worth in today\u2019s money.
+(function(){
+  var F = window.FinanceTools, C = window.Charts, box = document.getElementById('toolChart');
+  if (!F || !C || !box) return;
+  function n(id){ var e=document.getElementById(id); if(!e) return NaN;
+    var s=String(e.value).trim().replace(/,/g,''); if(!/^-?\d*\.?\d+$/.test(s)) return NaN; return parseFloat(s); }
+  function v(id){ var e=document.getElementById(id); return e ? e.value : ''; }
+  function draw(){
+    try{
+      var i=n('ivInitial'), m=n('ivMonthly'), r=n('ivReturn'), y=n('ivYears'), inf=n('ivInflation');
+      if([i,m,r,y,inf].some(isNaN)||y<=0) throw 0;
+      var res=F.investmentProjection({initialAmount:i,monthlyContribution:m,
+        annualReturnPercent:r,years:y,inflationPercent:inf});
+      var step=Math.max(1,Math.ceil(res.yearRows.length/12));
+      var rows=res.yearRows.filter(function(_,x){return x%step===0||x===res.yearRows.length-1;})
+        .map(function(x){return {label:'Yr '+x.year,parts:[x.contributed,Math.max(0,x.growth)]};});
+      box.innerHTML = C.stackedColumns(rows,['What you put in','Growth'],{title:'Balance over time'})
+        + C.composition([{label:'Worth in today\u2019s money',value:res.realFinalBalance},
+            {label:'Lost to inflation',value:Math.max(0,res.finalBalance-res.realFinalBalance)}],
+            {title:'Real value of the final balance'});
+    }catch(e){ box.innerHTML=''; }
+  }
+  ['ivInitial', 'ivMonthly', 'ivReturn', 'ivYears', 'ivInflation'].forEach(function(id){
+    var e=document.getElementById(id); if(!e) return;
+    e.addEventListener('input',draw); e.addEventListener('change',draw);
+  });
+  draw();
+})();
 </script>
 </body>
 </html>

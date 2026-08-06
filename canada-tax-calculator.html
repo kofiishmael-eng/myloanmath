@@ -185,6 +185,8 @@
     </div>
     <p class="note" id="netPayNote"></p>
   </div>
+  <div id="toolChart"></div>
+
 
   <div class="actions"><button class="action" id="craBreakdownBtn" type="button">Show bracket-by-bracket breakdown</button><button class="action" id="craCopyBtn" type="button">Copy result</button><button class="action" id="craShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button></div>
   <div class="schedule-wrap" id="craBreakdownWrap" style="display:none;"><table class="schedule-table" id="craBreakdownTable"></table></div>
@@ -250,6 +252,7 @@
 </footer>
 <script src="numberToWords.js"></script>
 <script src="finance.js"></script>
+<script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
 <script src="tooltips.js"></script>
@@ -437,6 +440,45 @@ if (window.ShareState) ShareState.init({
 document.addEventListener('click', function(e){
   if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
+</script>
+<script>
+// Where the income goes, computed from the engine. Note the CRA functions use
+// different property names from the US ones — netTax rather than totalTax,
+// provinceTax rather than provincialTax — which is what broke the first
+// attempt at this chart.
+(function(){
+  var F=window.FinanceTools, C=window.Charts, box=document.getElementById('toolChart');
+  if(!F||!C||!box) return;
+  function n(id){var e=document.getElementById(id); if(!e) return NaN;
+    var s=String(e.value).trim().replace(/,/g,''); if(!/^-?\d*\.?\d+$/.test(s)) return NaN; return parseFloat(s);}
+  function draw(){
+    try{
+      var inc=n('craIncome'); if(isNaN(inc)||inc<=0) throw 0;
+      var extra=n('craAdditionalDeductions'); if(isNaN(extra)) extra=0;
+      var fed=F.calculateFederalIncomeTaxCRA({grossIncome:inc, additionalDeductions:extra});
+      var parts=[];
+      if(fed.netTax>0) parts.push({label:'Federal tax',value:fed.netTax});
+      var prov=document.getElementById('craProvince');
+      if(prov && prov.value){
+        var ps=F.getProvinceTaxStatus(prov.value, fed.taxableIncome);
+        if(ps && ps.available && ps.provinceTax>0) parts.push({label:ps.provinceName+' tax',value:ps.provinceTax});
+      }
+      var cb=document.getElementById('includeCPPEI');
+      if(cb && cb.checked){
+        var ce=F.calculateCPPEI(inc);
+        if(ce.available && ce.totalCPPEI>0) parts.push({label:'CPP & EI',value:ce.totalCPPEI});
+      }
+      if(!parts.length) throw 0;
+      var taken=parts.reduce(function(a,b){return a+b.value;},0);
+      parts.push({label:'Take-home',value:Math.max(0,inc-taken)});
+      box.innerHTML=C.composition(parts,{title:'Where your income goes'});
+    }catch(e){ box.innerHTML=''; }
+  }
+  ['craIncome','craAdditionalDeductions','craProvince','craPayFrequency','includeCPPEI']
+    .forEach(function(id){var e=document.getElementById(id); if(!e) return;
+      e.addEventListener('input',draw); e.addEventListener('change',draw);});
+  draw();
+})();
 </script>
 </body>
 </html>

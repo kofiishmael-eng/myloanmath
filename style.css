@@ -424,3 +424,28 @@ footer.site-footer a:hover{color:var(--accent);}
 .calc-strip-links a:hover{border-color:var(--accent); color:var(--accent); background:var(--accent-soft);}
 
 @media print{ .help-toggle,.unit-toggle,.more-options>summary,.print-btn,.calc-strip{display:none !important;} .help-panel{display:none !important;} }
+
+
+/* ---- Shared chart styles ------------------------------------------------
+   All charts are inline SVG using CSS custom properties, so they follow the
+   theme and survive printing. */
+.chart-wrap{margin:16px 0 8px;}
+.chart-svg{width:100%; height:150px; display:block; overflow:visible;}
+.chart-axis{
+  display:flex; justify-content:space-between; font-family:var(--font-mono);
+  font-size:10.5px; color:var(--ink-soft); margin-top:5px; padding-bottom:8px;
+  border-bottom:1px solid var(--line);
+}
+.unit-compare{margin:14px 0 6px;}
+.uc-row{display:grid; grid-template-columns:minmax(70px,auto) 1fr minmax(78px,auto); gap:10px; align-items:center; margin-bottom:9px;}
+.uc-label{font-family:var(--font-mono); font-size:11.5px; color:var(--ink-soft); white-space:nowrap;}
+.uc-track{display:block; height:16px; background:var(--line); border-radius:3px; overflow:hidden;}
+.uc-fill{display:block; height:100%; border-radius:3px;}
+.uc-value{font-family:var(--font-mono); font-size:11.5px; color:var(--ink); text-align:right; white-space:nowrap;}
+.uc-note{font-size:13px; color:var(--ink-soft); margin:6px 0 0; line-height:1.6;}
+@media (max-width:520px){
+  .uc-row{grid-template-columns:minmax(56px,auto) 1fr; }
+  .uc-value{grid-column:2; text-align:left; margin-top:-4px;}
+  .chart-svg{height:120px;}
+}
+@media print{ .chart-svg{height:110px;} }

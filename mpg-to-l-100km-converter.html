@@ -144,6 +144,8 @@
     <div class="result-label" id="cvLabel">Result</div>
     <div class="result-text" id="cvOutput">-</div>
   </div>
+  <div id="cvChart"></div>
+
   <div class="actions"><button class="action" id="cvCopyBtn" type="button">Copy result</button><button class="action" id="cvShareBtn" type="button">Copy link to this conversion</button><button class="print-btn" data-print type="button">Print</button></div>
   <p class="note">An inverse conversion: L/100km = 235.215 divided by US mpg, or 282.481 divided by UK mpg. Doubling one halves the other.</p>
 </div>
@@ -211,6 +213,7 @@
   <p style="margin-top:8px; max-width:62ch; margin-left:auto; margin-right:auto;">Built and maintained by <a href="about.html">Ishmael</a>, an accountant. Educational information only &mdash; not financial, tax, or accounting advice. See <a href="terms-of-use.html">Terms &amp; Disclaimer</a>.</p>
 </footer>
 <script src="units.js"></script>
+<script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("mpg-to-l-100km-converter.html", "mpg to L/100km Converter");</script>
@@ -254,6 +257,27 @@ if (window.ShareState) ShareState.init({ buttonId: 'cvShareBtn', fields: {"v": "
 document.addEventListener('click', function(e){
   if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
+</script>
+<script>
+// Fuel economy is inverse, so a bar chart of the two units side by side would
+// mislead. This shows how L/100km falls as mpg rises, which is the actual shape.
+(function(){
+  var U = window.UnitTools, C = window.Charts, box = document.getElementById('cvChart');
+  if (!U || !C || !box) return;
+  function draw(){
+    var uk = (document.getElementById('cvSystem')||{}).value === 'uk';
+    var mpgs = [15,20,25,30,35,40,50,60];
+    var rows = mpgs.map(function(m){
+      return { label: m + ' mpg', parts: [U.mpgToL100km(m, uk ? 'uk' : 'us')] };
+    });
+    box.innerHTML = C.stackedColumns(rows, ['Litres per 100 km'],
+      { title: 'Fuel used per 100 km as mpg rises' }) +
+      '<p class="uc-note">Doubling mpg <strong>halves</strong> the fuel used, which is why the bars fall away rather than rising. Gains at the thirsty end are worth far more.</p>';
+  }
+  draw();
+  var sys = document.getElementById('cvSystem');
+  if (sys) sys.addEventListener('change', draw);
+})();
 </script>
 </body>
 </html>

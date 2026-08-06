@@ -126,6 +126,8 @@
     <div class="result-text" id="infOutput">-</div>
     <div class="stat-grid" id="infStats"></div>
   </div>
+  <div id="toolChart"></div>
+
   <div class="actions"><button class="action" id="infCopyBtn" type="button">Copy result</button><button class="action" id="infShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button></div>
   <p class="note">Rate-based rather than driven by a published price index. You choose the rate, so you can judge the result against your own view rather than accepting an assumption buried in the code.</p>
 </div>
@@ -184,6 +186,7 @@
 </footer>
 <script src="numberToWords.js"></script>
 <script src="finance.js"></script>
+<script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
 <script>if (window.RecentTools) window.RecentTools.recordVisit("inflation-calculator.html", "Inflation Calculator");</script>
@@ -230,6 +233,34 @@ if (window.ShareState) ShareState.init({ buttonId: 'infShareBtn', fields: {"amou
 document.addEventListener('click', function(e){
   if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
+</script>
+<script>
+// Purchasing power draining away year by year.
+(function(){
+  var F = window.FinanceTools, C = window.Charts, box = document.getElementById('toolChart');
+  if (!F || !C || !box) return;
+  function n(id){ var e=document.getElementById(id); if(!e) return NaN;
+    var s=String(e.value).trim().replace(/,/g,''); if(!/^-?\d*\.?\d+$/.test(s)) return NaN; return parseFloat(s); }
+  function v(id){ var e=document.getElementById(id); return e ? e.value : ''; }
+  function draw(){
+    try{
+      var a=n('infAmount'), r=n('infRate'), y=n('infYears');
+      if([a,r,y].some(isNaN)||y<=0) throw 0;
+      var vals=[], step=Math.max(1,Math.ceil(y/40));
+      for(var t=0;t<=y;t+=step) vals.push(a/Math.pow(1+r/100,t));
+      box.innerHTML = C.balanceLine(vals,{title:'Real value over time',
+        startLabel:'Today',endLabel:'In '+y+' years'})
+        + '<p class="uc-note">At '+r+'% a year, the same sum buys what <strong>'
+        + (a/Math.pow(1+r/100,y)).toLocaleString(undefined,{maximumFractionDigits:0})
+        + '</strong> buys today.</p>';
+    }catch(e){ box.innerHTML=''; }
+  }
+  ['infAmount', 'infRate', 'infYears', 'infDirection'].forEach(function(id){
+    var e=document.getElementById(id); if(!e) return;
+    e.addEventListener('input',draw); e.addEventListener('change',draw);
+  });
+  draw();
+})();
 </script>
 </body>
 </html>

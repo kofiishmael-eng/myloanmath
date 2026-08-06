@@ -137,6 +137,7 @@
     <div class="result-label">Monthly savings needed</div>
     <div class="result-text" id="goalOutput">-</div>
     <div class="stat-grid" id="goalStats"></div>
+    <div id="toolChart"></div>
   </div>
   <p class="note" id="goalMetNote"></p>
   <div class="actions"><button class="action" id="goalCopyBtn" type="button">Copy result</button><button class="action" id="goalShareBtn" type="button">Copy link to this scenario</button><button class="print-btn" data-print type="button">Print</button></div>
@@ -218,6 +219,7 @@
 </footer>
 <script src="numberToWords.js"></script>
 <script src="finance.js"></script>
+<script src="charts.js"></script>
 <script src="recentTools.js"></script>
 <script src="shareState.js"></script>
 <script src="tooltips.js"></script>
@@ -367,6 +369,36 @@ if (window.ShareState) ShareState.init({
 document.addEventListener('click', function(e){
   if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-print')) window.print();
 });
+</script>
+<script>
+// Progress toward the target, split into what you save and what it earns.
+(function(){
+  var F = window.FinanceTools, C = window.Charts, box = document.getElementById('toolChart');
+  if (!F || !C || !box) return;
+  function n(id){ var e=document.getElementById(id); if(!e) return NaN;
+    var s=String(e.value).trim().replace(/,/g,''); if(!/^-?\d*\.?\d+$/.test(s)) return NaN; return parseFloat(s); }
+  function v(id){ var e=document.getElementById(id); return e ? e.value : ''; }
+  function draw(){
+    try{
+      var t=n('goalTarget'), c=n('goalCurrent'), r=n('goalRate'), y=n('goalYears');
+      if([t,c,r,y].some(isNaN)||y<=0) throw 0;
+      var need=F.requiredMonthlyContribution({targetAmount:t,currentSavings:c,
+        annualRatePercent:r,years:y});
+      var monthly = (typeof need==='number') ? need : (need.monthlyContribution||need.required||0);
+      var res=F.investmentProjection({initialAmount:c,monthlyContribution:monthly,
+        annualReturnPercent:r,years:y,inflationPercent:0});
+      var step=Math.max(1,Math.ceil(res.yearRows.length/12));
+      var rows=res.yearRows.filter(function(_,i){return i%step===0||i===res.yearRows.length-1;})
+        .map(function(x){return {label:'Yr '+x.year,parts:[x.contributed,Math.max(0,x.growth)]};});
+      box.innerHTML = C.stackedColumns(rows,['What you save','Interest earned'],{title:'Progress to your goal'});
+    }catch(e){ box.innerHTML=''; }
+  }
+  ['goalTarget', 'goalCurrent', 'goalRate', 'goalYears'].forEach(function(id){
+    var e=document.getElementById(id); if(!e) return;
+    e.addEventListener('input',draw); e.addEventListener('change',draw);
+  });
+  draw();
+})();
 </script>
 </body>
 </html>
