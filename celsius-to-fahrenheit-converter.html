@@ -174,6 +174,10 @@
 <h2>Kelvin, and why science uses it</h2>
 <p>Kelvin uses the same degree size as Celsius but starts at absolute zero, so K = &deg;C + 273.15 with no multiplication needed. The tool above shows the Kelvin equivalent alongside Fahrenheit when converting from Celsius.</p>
 <p>The reason it matters is that Kelvin has no negative values and a true zero, which means ratios are meaningful: 200 K really is twice as hot as 100 K in a way that 20&deg;C is not twice 10&deg;C. Any calculation involving gas laws or thermal radiation requires absolute temperature, and using Celsius in those formulas is a classic and severe error.
+<h2>What people get wrong</h2>
+<p><strong>Multiplying without adding the offset.</strong> The two scales start in different places as well as using different degree sizes. Scaling by 1.8 and forgetting the 32 leaves the answer wrong by thirty-two degrees at every point.</p>
+<p><strong>Relying on double-and-add-30 at the extremes.</strong> It is close enough for weather and drifts badly beyond it &mdash; at 100&deg;C it gives 230 against a true 212.</p>
+<p><strong>Using Celsius in physics formulas.</strong> Gas laws and thermal radiation require absolute temperature. Kelvin has a true zero; Celsius does not, and substituting it is a severe error.</p>
 <h2>Frequently asked questions</h2>
 <div class="faq-item"><h3>What is 20 degrees Celsius in Fahrenheit?</h3><p>68°F exactly. Multiply by 9/5 to get 36, then add 32. The common double-and-add-30 shortcut gives 70, which is two degrees high.</p></div>
 <div class="faq-item"><h3>Why do I have to add 32?</h3><p>Because the scales have different zero points as well as different degree sizes. Water freezes at 0°C but 32°F, so the 9/5 handles the degree size and the 32 handles the offset.</p></div>
