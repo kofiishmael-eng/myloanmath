@@ -155,6 +155,12 @@
 <div class="log-date">2026-08-02 <span class="log-count">5 corrections</span></div>
 <div class="log-item log-change">
   <span class="log-tag tag-change">Change</span>
+  <div class="log-title">Each page now has exactly one crawlable URL</div>
+  <p class="log-detail">The host served both /about and /about.html with a 200, so every page was being discovered and crawled twice. The canonical tag meant the right version was indexed, but the duplicate still consumed a crawl and appeared in Search Console as an alternate page. Extensionless paths now redirect to their .html version, generated from the site itself so new pages are covered automatically. This was previously left alone because a redirect could have caused a loop if the host redirected the other way; crawl data confirmed both forms returned 200, so no loop is possible, and the generator checks for one before writing.</p>
+</div>
+
+<div class="log-item log-change">
+  <span class="log-tag tag-change">Change</span>
   <div class="log-title">Structured data completed across all tools</div>
   <p class="log-detail">Twenty-nine tool pages were missing the WebApplication entry that the other seventeen carried, so search engines had no machine-readable statement that those pages are free interactive tools. All forty-six now declare it, with the page URL, description, publisher and a zero price, and every JSON-LD block on the site validates.</p>
 </div>
